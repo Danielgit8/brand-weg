@@ -214,6 +214,10 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .lex-img i{position:absolute;left:0;right:0;bottom:0;padding:28px 10px 10px;font-style:normal;font:700 13px var(--fd);font-stretch:110%;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75))}
 .lex-img[style*="url("] i{display:none}
 .lex-big{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px;margin-top:14px;max-width:420px}
+.road{display:flex;gap:6px;margin:4px 0 6px}
+.road span{flex:1;min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 85%,#fff),var(--acc));color:var(--acc-ink);box-shadow:0 8px 24px -10px var(--acc)}
+.road span b{display:block;font:800 20px var(--fd)} .road span small{display:block;font-size:10.5px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.road span.blur small{filter:blur(4px)}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
 #nav .in{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
@@ -451,7 +455,7 @@ function fillTpl(tpl){ return esc(tpl).replace(/\{(\w+)\}/g, (_, k) => { const v
 const fillPlain = tpl => tpl.replace(/\{(\w+)\}/g, (_, k) => (ST.prof[k] || "").trim().replace(/\n+/g, " ") || `[${flabel(k)}]`);
 function newVideo(typ, extra = {}){
   const t = D.types[typ] || D.types.freund;
-  const v = {id:uid(), typ, title:extra.title || t.label, stage:extra.stage || 0, idee:extra.idee || "", fuer:"", pillar:"", hook:extra.hook || "", skript:extra.skript ?? t.tpl, checks:{}, step:extra.step || null, version:extra.version || null,
+  const v = {id:uid(), typ, yt:typ === "youtube" ? ytBlank() : undefined, title:extra.title || t.label, stage:extra.stage || 0, idee:extra.idee || "", fuer:"", pillar:"", hook:extra.hook || "", skript:extra.skript ?? t.tpl, checks:{}, step:extra.step || null, version:extra.version || null,
     created:dkey(), posted:null, platforms:[], link:"", views:"", follows:"", ret:"", len:"", react:""};
   ST.videos.unshift(v); save(true); return v;
 }
@@ -814,6 +818,62 @@ function typeSheet(){
   return `<span class="kick acc">Neues Video</span><h2 class="h-l" style="margin:8px 0 4px">Welche Art Video?</h2><p class="muted small" style="margin:0 0 14px">Am Anfang meistens das Freund-Video: Du gibst Wert als Begleiter, nicht als Experte (Mino).</p>
     ${Object.entries(D.types).map(([k, t]) => `<button class="type" data-act="mkvideo" data-typ="${k}"><b>${esc(t.label)}</b><small>${esc(t.tip)} · ${esc(t.src)}</small></button>`).join("")}`;
 }
+/* --- YouTube-Skript nach Sam Gaudets Vorlage --- */
+const ytBlank = () => ({research:"", titles:["", "", ""], thumbs:["", "", ""], promise:"", proof:"", plan:"", points:[{}, {}, {}], cta:{}, end:{}});
+const ytGet = v => (v.yt ||= ytBlank());
+function ytCompile(y){
+  const L = [], n = y.points.length;
+  L.push("HOOK (20 bis 50 Sekunden)");
+  if (y.promise) L.push(y.promise); if (y.proof) L.push(y.proof); if (y.plan) L.push(y.plan);
+  y.points.forEach((p, i) => {
+    L.push("", `PUNKT ${i + 1}`);
+    L.push((i ? `Was uns zu Punkt ${i + 1} bringt: ` : `Punkt 1: `) + (p.p || "[Punkt]"));
+    if (p.e) L.push(p.e); if (p.i) L.push(p.i); if (p.l) L.push(p.l);
+    if (i === 1 && Object.values(y.cta || {}).some(x => x && x.trim())) { L.push("", "AUFRUF"); ["pain", "effort", "free", "action"].forEach(k => y.cta[k] && L.push(y.cta[k])); }
+    if (i < n - 1) L.push(p.t || `[Überleitung zu Punkt ${i + 2}: Jetzt, wo du …, musst du, wenn du wirklich … willst, …]`);
+  });
+  L.push("", "ENDE");
+  if (y.end.remind) L.push(y.end.remind);
+  L.push(y.end.next || "Wenn du mehr über [verwandtes Thema] lernen willst, klick hier. Wir sehen uns auf der anderen Seite.");
+  return L.join("\n");
+}
+function ytField(path, label, ph, rows = 2){
+  const val = path.split(".").reduce((o, k) => (o || {})[k], UI.ytCur || {}) || "";
+  return `<div class="fld" style="margin:10px 0"><label class="small">${label}</label><textarea rows="${rows}" data-yt="${path}" placeholder="${esc(ph)}">${esc(val)}</textarea></div>`;
+}
+function ytRoad(y){
+  return `<div class="road">${y.points.map((p, i) => `<span class="${i ? "blur" : ""}"><b>${i + 1}</b><small>${esc(p.p || "Punkt " + (i + 1))}</small></span>`).join("")}</div>`;
+}
+function ytBuilder(v){
+  const y = ytGet(v); UI.ytCur = y;
+  const sec = (k, t) => `<div class="kick acc" style="margin:22px 0 4px">${t}</div>`;
+  let h = `<span class="kick acc">3 Skript nach Sams Vorlage</span><p class="muted small" style="margin:6px 0 0">Seine Vorlage für lange YouTube-Videos. Alles hier wird unten automatisch zum Skript zusammengesetzt, das du im Teleprompter nutzen kannst.</p>`;
+  h += sec("r", "Vorher: Recherche") + `<p class="tiny muted" style="margin:0">4/2/4-Regel: 4 Ausreißer-Videos aus den letzten 4 Monaten zu deinem Thema. Links oder Notizen hier rein.</p>` + ytField("research", "Ausreißer-Videos", "Link und warum es lief …", 3);
+  h += sec("t", "Titel") + `<p class="tiny muted" style="margin:0">An Hoffnungen, Träumen, Ängsten oder Blockaden deiner Zuschauer ausrichten.</p>` + [0, 1, 2].map(i => ytField(`titles.${i}`, `Titel ${i + 1}`, "")).join("");
+  h += sec("b", "Thumbnail") + [0, 1, 2].map(i => ytField(`thumbs.${i}`, `Konzept ${"ABC"[i]}`, "Bildidee und Text auf dem Bild")).join("");
+  h += sec("h", "Hook: 20 bis 50 Sekunden") + `<p class="tiny muted" style="margin:0">Versprechen, Beweis, Plan. Notiz der Vorlage: asymmetrisches Tempo und bei der heiligen Zeitlinie bleiben.</p>`
+    + ytField("promise", "Versprechen", "Ich zeige dir die 3 Schritte, mit denen du …")
+    + ytField("proof", "Beweis", "Mit diesen Schritten habe ich …")
+    + ytField("plan", "Plan", "Also ohne lange Vorrede, das sind die 3 Schritte.")
+    + `<div class="tiny muted" style="margin:6px 0 6px">So zeigst du den Plan im Bild (Road Mapping): alle Schritte, die späteren verschwommen.</div>${ytRoad(y)}`;
+  y.points.forEach((p, i) => {
+    h += sec("p" + i, `Punkt ${i + 1}`)
+      + ytField(`points.${i}.p`, "Punkt", i ? "Was uns zu Punkt " + (i + 1) + " bringt: …" : "Das Ding, um das es geht")
+      + ytField(`points.${i}.e`, "Erklären: Warum ist das wichtig?", "")
+      + ytField(`points.${i}.i`, "Veranschaulichen: Geschichte, Vergleich oder Beispiel", "", 3)
+      + ytField(`points.${i}.l`, "Lektion", "Wenn du das selbst machen willst, musst du …")
+      + (i < y.points.length - 1 ? ytField(`points.${i}.t`, "Überleitung", "Jetzt, wo du …, musst du, wenn du wirklich … willst, …") : "");
+    if (i === 1) h += sec("c", "Aufruf nach Punkt 2") + `<p class="tiny muted" style="margin:0">Mitten im Video, nicht erst am Ende.</p>`
+      + ytField("cta.pain", "Schmerz: welches Problem es löst", "") + ytField("cta.effort", "Aufwand: was es dir erspart", "")
+      + ytField("cta.free", "Kostenlos für dich", "") + ytField("cta.action", "Aktion", "Link klicken, QR-Code scannen oder mir auf Instagram schreiben");
+  });
+  h += `<div class="row" style="margin:12px 0">${y.points.length < 6 ? `<button class="chip" data-act="ytadd">+ Punkt</button>` : ""}${y.points.length > 1 ? `<button class="chip" data-act="ytdel">Letzten Punkt entfernen</button>` : ""}<span class="tiny muted">Die Vorlage hat 6 Punkte.</span></div>`;
+  h += sec("e", "Ende") + ytField("end.remind", "Erinnerung an den Aufruf", "") + ytField("end.next", "Aufs nächste Video schicken", "Wenn du mehr über … lernen willst, klick hier. Wir sehen uns auf der anderen Seite.");
+  h += sec("s", "Dein fertiges Skript") + `<div class="script" id="ytout" style="font-size:14.5px">${esc(ytCompile(y))}</div>
+    <div class="row" style="margin-top:12px"><button class="btn" data-act="tp">${IC.play} Teleprompter</button><button class="btn ghost" data-act="copyscript">Kopieren</button></div>
+    <div id="vscript" style="margin-top:12px">${scriptPanel(v.skript)}</div>`;
+  return h;
+}
 function videoView(id){
   const v = ST.videos.find(x => x.id === id); if (!v) return pageHead("Studio", "Video nicht gefunden");
   const t = D.types[v.typ] || D.types.freund, stages = D.stages, cur = v.posted ? (v.view ?? stages.length) : v.stage;
@@ -837,6 +897,8 @@ function videoView(id){
     body = `<span class="kick acc">2 Hook</span><div class="fld"><textarea rows="2" data-v="hook" data-live="hook" placeholder="Dein erster Satz …">${esc(v.hook)}</textarea></div>
       <div class="meter" id="vhook">${ringSVG(c.score)}<div style="flex:1">${rulesHTML(c.R)}</div></div>
       ${bank.length ? `<div class="tiny muted" style="margin:14px 0 8px">Aus deiner Hook-Bank:</div><div class="chips">${bank.map((x, i) => `<button class="chip" data-act="usehook" data-i="${i}" style="white-space:normal;text-align:left">${esc(x)}</button>`).join("")}</div>` : `<p class="tiny muted">Hook-Bank leer: Weg, Schritt 11.</p>`}`;
+  } else if (s.id === "skript" && v.typ === "youtube") {
+    body = ytBuilder(v);
   } else if (s.id === "skript") {
     body = `<span class="kick acc">3 Skript</span><p class="muted small" style="margin:6px 0 0">${esc(t.tip)}</p><div class="fld"><textarea rows="13" data-v="skript" data-live="script">${esc(v.skript)}</textarea></div>
       <div id="vscript">${scriptPanel(v.skript)}</div>
@@ -1106,6 +1168,8 @@ document.addEventListener("click", async e => {
     const auto = v.step && !isDone(v.step); if (auto) ST.done[v.step] = dkey();
     save(); return toast(`Gepostet! Video Nummer ${postedTotal()}.${auto ? " Schritt abgehakt." : ""}`);
   }
+  if (act === "ytadd") { const y = ytGet(v); if (y.points.length < 6) y.points.push({}); v.skript = ytCompile(y); return save(); }
+  if (act === "ytdel") { const y = ytGet(v); if (y.points.length > 1) y.points.pop(); v.skript = ytCompile(y); return save(); }
   if (act === "pillar") { v.pillar = v.pillar === b.dataset.p ? "" : b.dataset.p; return save(); }
   if (act === "useidea") { v.idee = b.dataset.t; return save(); }
   if (act === "vplat") { const a = v.platforms || (v.platforms = []), p = b.dataset.p; a.includes(p) ? a.splice(a.indexOf(p), 1) : a.push(p); return save(); }
@@ -1135,6 +1199,14 @@ document.addEventListener("input", e => {
   if (t.dataset.mult) { const m = ST.brand.mult ||= {}, k = t.dataset.mult; if (k === "topic") m.topic = t.value; else (m.angles ||= ["", "", ""])[+k.slice(1)] = t.value; save(true); $("#multgrid").innerHTML = multGrid(); return; }
   if (t.dataset.tree) { (ST.tree ||= [])[+t.dataset.tree] = t.value; save(true); return; }
   if (t.dataset.bchk) { ST.brand[t.dataset.bchk] = t.checked; save(true); return; }
+  if (t.dataset.yt) {
+    const v = curVideo(); if (!v) return; const y = ytGet(v), ks = t.dataset.yt.split(".");
+    let o = y; for (let i = 0; i < ks.length - 1; i++) o = (o[ks[i]] ??= (/^\d+$/.test(ks[i + 1]) ? [] : {}));
+    o[ks[ks.length - 1]] = t.value; v.skript = ytCompile(y); save(true);
+    const out = $("#ytout"); if (out) out.textContent = v.skript; const sp = $("#vscript"); if (sp) sp.innerHTML = scriptPanel(v.skript);
+    if (/^points\.\d+\.p$/.test(t.dataset.yt)) { const r = $(".road"); if (r) r.outerHTML = ytRoad(y); }
+    return;
+  }
   if (t.dataset.v) {
     const v = curVideo(); if (!v) return; v[t.dataset.v] = t.value; save(true);
     if (t.dataset.live === "hook") { const c = hookCheck(t.value); $("#vhook").innerHTML = `${ringSVG(c.score)}<div style="flex:1">${rulesHTML(c.R)}</div>`; }

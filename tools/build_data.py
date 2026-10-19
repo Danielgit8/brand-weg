@@ -85,6 +85,8 @@ TYPES = {
                 "tpl": "Im letzten Jahr habe ich …\n\nUnd mir wurde klar, ich musste nur …\n\nJetzt denkst du wahrscheinlich: …\n\nAber …\n\nAlso …"},
     "heit": {"label": "Hook, Explain, Illustrate, Teach", "src": "Sam Gaudet", "tip": "Sams Aufbau für Kurzvideos. Als Gliederung schreiben und frei sprechen, nicht Wort für Wort ablesen.",
              "tpl": "Hook (Kontext, Gegenposition, offene Schleife):\n\nExplain, worum es geht und warum es für dich zählt:\n\nIllustrate, Geschichte, Vergleich oder Beispiel:\n\nTeach, eine Sache zum Mitnehmen:"},
+    "youtube": {"label": "YouTube-Video (Sams Vorlage)", "src": "Sam Gaudet, YouTube-Skript-Vorlage", "tip": "Langes Video: Recherche, Titel, Thumbnail, Hook mit Versprechen, Beweis, Plan, dann Punkt für Punkt.",
+             "tpl": ""},
     "vlog": {"label": "Ohne Skript (Vlog)", "src": "Mino, Minimum Viable Vlog", "tip": "Für volle Tage: zwei Fragen beantworten und frei erzählen.",
              "tpl": "Hook, meine Lektion in 1 bis 2 Sätzen:\n\nWas heute passiert ist (frei erzählen):\n\nPraktischer Tipp und positives Ende:"},
 }
