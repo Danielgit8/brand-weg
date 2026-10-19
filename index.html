@@ -265,6 +265,7 @@ const WORLDS = [
 
 // Ronny Mitchells 25 Formate (Aufrufe, Geld je 1 bis 10, Bereiche als Mittelwert)
 const FORMATS = [["Podcast",8.5,5.5,"Thema muss sehr viele interessieren"],["FaceTime",5,5.5,"Mit BEST-Aufbau, sonst Gelaber"],["Green Screen",7.5,8,"Artikel oder Notiz hinter dir"],["Split Screen",7,7,"Oben du, unten das, was du erklärst"],["Demonstration",8,10,"Dein Können live zeigen"],["Bühne",7,10,"Höchste Autorität, schwer zu bekommen"],["Q&A",9.5,10,"Echte Fragen schlagen gestellte"],["Sketch",7,6,"Kundenproblem nachspielen und lösen"],["Direkt in die Kamera",3,7,"Nur, wenn du sehr witzig oder neu bist"],["Debatte",8.5,6,"Du musst dein Thema beherrschen (Geld: keine Zahl)"],["Rating / Ranking",7.5,7,"Etwas Unerwartetes auf Platz 1"],["Schlecht, gut, am besten",9,3,"Aufrufe, aber du siehst aus wie alle"],["Klon",7,6,"Viel genutzt"],["Liste",8,6,"Neugier bis zum letzten Punkt"],["T-Tabelle",8,6,"Zeigt deine Meinung"],["Animationen",7,8,"Braucht guten Editor"],["Vlog",4.5,9,"Baut Nähe auf, Aufrufe erst mit Publikum"],["Requisiten",4.5,8,"Bild muss sofort Sinn ergeben"],["Whiteboard",7.5,10,"Braucht eine Methode mit Ergebnissen"],["B-Roll mit Text",10,3,"Viele Aufrufe, kaum neue Follower"],["Voiceover über B-Roll",6.5,8,"Gut für Geschichten"],["Meme",8.5,3,"Bringt kaum Follower"],["Karussell",6.5,7,"Gelaufenes Video in Slides umbauen"],["Zoom-Aufnahme",5,6,"Läuft selten groß"],["Reaktion",8.5,8,"Nur mit eigener, durchdachter Meinung"]];
+const SAM15 = ["Klon", "Red Flag / Green Flag", "Liste", "Schnelle Liste", "Tier-Liste", "Top 10", "This or That", "Schlecht, gut, super", "Yap", "Reaktion", "Don't / Do", "Split Screen", "Bildschirm teilen", "Haftnotiz", "Überbewertet / unterbewertet"];
 const RONNY6 = ["Vorreiter", "Inspiration", "Ähnlichkeit", "Sicherheit", "Sympathie", "Hebel"];
 const SPCL = [["s", "Status", "Du hast etwas, das andere wollen"], ["p", "Macht", "Du sagst etwas, sie machen es, es geht gut aus"], ["c", "Glaubwürdigkeit", "Beweise von außen"], ["l", "Ähnlichkeit", "Sie erkennen sich in dir wieder"]];
 const PLATFORMS = ["Instagram", "TikTok", "YouTube Shorts"];
@@ -588,6 +589,7 @@ function statsForm(){
     <input type="number" inputmode="numeric" name="best" placeholder="Beste Aufrufe der Woche">
     <input type="number" inputmode="decimal" name="ret" placeholder="Nach 5 Sek. in %">
     <input type="number" inputmode="decimal" name="eur" placeholder="Einnahmen in €">
+    <input type="number" inputmode="numeric" name="leads" placeholder="Neue Leads (E-Mails)" style="grid-column:1/-1">
     <button class="btn" type="submit" style="grid-column:1/-1">Zahlen speichern</button></form>`;
 }
 function videoRow(v){
@@ -710,6 +712,10 @@ function distView(){
       <li>In der Instagram- oder TikTok-App hochladen, nicht direkt aus CapCut (Mino).</li>
       <li>Wenn du nicht wächst, liegt es an deinen Videos, nicht an Algorithmus, Uhrzeit oder Hashtags (Mino).</li>
       <li>Shorts führen oft zu langen Videos. Zwei Stunden mit dir entsprechen etwa 480 Shorts (Alex Hormozi).</li></ul></section>
+    <section class="glass reveal"><span class="kick acc">See statt Wasserfall</span><ul class="tips" style="color:var(--ink)">
+      <li><b>Nicht nur umverteilen:</b> ein großes Video zerschneiden und überall posten optimiert nur für eine Plattform. Besser für jede Plattform eigene Videos. Was irgendwo gut läuft, wandert dann weiter (Sam Gaudet).</li>
+      <li><b>Omnipräsenz gezielt bauen:</b> Leute mit einem Anreiz auf deine andere Plattform schicken, zum Beispiel „Schreib mir X auf Instagram, dann bekommst du …“ (Sam).</li>
+      <li><b>Menge schlägt Glück.</b> Instagram-Trick Doppelpost: dasselbe Video als Testreel (geht nur an Nicht-Follower) und zusätzlich normal posten (Sam).</li></ul></section>
     <section class="glass reveal"><span class="kick acc">Feed umprogrammieren</span><p class="muted small" style="margin:6px 0 8px">Ronny Mitchell, dauert 90 Sekunden. Danach zeigt dir der Feed fast nur noch deine Nische, gut für Ideen und Hooks.</p>
       <div class="checks">${["Nach deinem Nischen-Begriff suchen", "Bei rund 12 Videos auf „Link kopieren“ tippen", "Neu laden und beim Scrollen weiter Links von Nischen-Videos kopieren"].map((c, i) => `<label><input type="checkbox" data-bchk="feed${i}" ${ST.brand["feed" + i] ? "checked" : ""}><span>${c}</span></label>`).join("")}</div></section>
     <section class="glass reveal"><span class="kick acc">Verdoppeln und wiederverwerten</span>
@@ -809,6 +815,8 @@ function kernView(){
     ${RONNY6.map(l => `<div class="between small" style="margin-top:8px"><span>${l}</span><span class="num muted" data-rv="${l}">${rv[l] ?? 0}</span></div><input type="range" min="0" max="10" value="${rv[l] ?? 0}" data-radar="${l}">`).join("")}</section>
     <section class="glass reveal"><span class="kick acc">SPCL nach Alex Hormozi</span><p class="muted small" style="margin:6px 0 4px">Einfluss heißt: Wie wahrscheinlich folgen Leute deiner Bitte? Alle vier zusammen geben am meisten.</p>
     ${SPCL.map(([k, l, d]) => `<div class="fld" style="margin:12px 0"><div class="between small"><b>${l}</b><span class="num muted" data-sv="${k}">${sp[k] ?? 0}/10</span></div><span class="hint" style="margin:2px 0 6px">${d}</span><input type="range" min="0" max="10" value="${sp[k] ?? 0}" data-spcl="${k}"></div>`).join("")}</section>
+    <section class="glass reveal"><span class="kick acc">Die vier P</span><p class="muted small" style="margin:6px 0 0">Versprechen, Beweis, Blickwinkel, Persönlichkeit. Das ist deine Positionierung (Sam Gaudet).</p>
+    ${["versprechen", "proofstack"].map(k => fieldHTML(k, "brand")).join("")}</section>
     <section class="glass reveal"><span class="kick acc">Woran du glaubst</span><p class="muted small" style="margin:6px 0 0">Dogma und Gegenposition machen aus Followern Fans (Ronny). Tipp: das Dogma-Interview mit Claude aus dem Weg, Schritt 25.</p>
     ${["glaube", "gegen", "selten", "interessen", "ton"].map(k => fieldHTML(k, "brand")).join("")}</section>
     <section class="glass reveal"><span class="kick acc">Später zum Experten</span>${["beweise", "grenze"].map(k => fieldHTML(k, "brand")).join("")}</section>`;
@@ -823,12 +831,23 @@ function strategyView(){
     <section class="glass reveal"><span class="kick acc">Content-Säulen</span><p class="muted small" style="margin:6px 0 0">Marke ist wiederholte Verbindung: dieselben 3 bis 5 Themen immer wieder (Sam Gaudet). Im Studio ordnest du jedes Video einer Säule zu.</p>
     ${pil.length ? `<div style="margin-top:14px">${pil.map(p => `<div class="between small" style="margin-top:10px"><span>${esc(p)}</span><span class="num muted">${cnt(p)} Videos</span></div><div class="bar"><i style="width:${cnt(p) / tot * 100}%"></i></div>`).join("")}</div>` : ""}
     ${fieldHTML("saeulen", "brand")}${fieldHTML("nische", "brand")}</section>
+    <section class="glass reveal"><span class="kick acc">Ideen-Multiplikator</span><p class="muted small" style="margin:6px 0 12px">Eine Idee hat drei Teile: Thema, Blickwinkel, Format. 1 Thema × 3 Blickwinkel × 3 Formate = 9 Videos (Sam Gaudet). Prüf das Thema auf Nachfrage, Passung und dein eigenes Interesse.</p>
+      <input type="text" data-mult="topic" value="${esc((ST.brand.mult || {}).topic || "")}" placeholder="Thema, z. B. Angst vorm ersten Video">
+      <div class="tree" style="margin-top:10px">${[0, 1, 2].map(i => `<div class="node"><span class="n">B${i + 1}</span><input type="text" data-mult="a${i}" value="${esc(((ST.brand.mult || {}).angles || [])[i] || "")}" placeholder="Blickwinkel ${i + 1}"></div>`).join("")}</div>
+      <div class="tiny muted" style="margin:14px 0 8px">Bis zu 3 Formate wählen (Sams 15 für Kurzvideos):</div>
+      <div class="chips">${SAM15.map(f => `<button class="chip ${((ST.brand.mult || {}).formats || []).includes(f) ? "on" : ""}" data-act="multfmt" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div>
+      <div id="multgrid" style="margin-top:14px">${multGrid()}</div></section>
     <section class="glass reveal"><span class="kick acc">Format-Karte</span><p class="muted small" style="margin:6px 0 10px">Ronny Mitchells 25 Formate: rechts mehr Aufrufe, oben mehr Geld. Zeigen schlägt erzählen. Tipp einen Punkt an.</p>
     <svg class="chart matrix" viewBox="0 0 ${W} ${H}"><line class="ax" x1="26" y1="${H - 26}" x2="${W - 8}" y2="${H - 26}"/><line class="ax" x1="26" y1="8" x2="26" y2="${H - 26}"/><text x="${W - 8}" y="${H - 10}" text-anchor="end">Aufrufe →</text><text x="30" y="16">Geld ↑</text>
       ${FORMATS.map((f, i) => `<circle cx="${px(f[1]).toFixed(1)}" cy="${py(f[2]).toFixed(1)}" r="${f[0] === UI.fmt || f[0] === fm ? 8 : 5.5}" class="${f[0] === UI.fmt || f[0] === fm ? "on" : ""}" data-act="fmt" data-i="${i}"><title>${esc(f[0])}</title></circle>`).join("")}</svg>
     <div id="fmtinfo">${fmtInfo()}</div></section>
     <section class="glass reveal"><span class="kick acc">Serie „Road to …“</span><p class="muted small" style="margin:6px 0 10px">Ein messbares Ziel und täglich die Reise dorthin zeigen (Mino). Als Rahmen in Bio und Serie gut, aber jeder Hook muss auch allein neugierig machen.</p>
       ${fieldHTML("ziel", "brand")}<div class="script">Tag ${postedTotal() + 1} auf dem Weg zu ${filled("ziel") ? esc(ST.prof.ziel) : "<span class='miss'>[dein Ziel]</span>"}.</div></section>`;
+}
+function multGrid(){
+  const m = ST.brand.mult || {}, an = (m.angles || []).filter(x => x && x.trim()), fm = m.formats || [];
+  if (!m.topic || !an.length || !fm.length) return `<p class="tiny muted">Thema, mindestens einen Blickwinkel und ein Format eintragen, dann stehen hier deine Video-Ideen.</p>`;
+  return `<span class="kick">${an.length * fm.length} Ideen</span><div class="list" style="margin-top:4px">${an.map((a, i) => fm.map(f => `<div class="item"><span class="t"><b>${esc(a)}</b><small>${esc(m.topic)} · ${esc(f)}</small></span><button class="chip" data-act="mult2video" data-a="${i}" data-f="${esc(f)}">Video</button></div>`).join("")).join("")}</div>`;
 }
 function fmtInfo(){
   const f = FORMATS.find(x => x[0] === (UI.fmt || ST.prof.format)); if (!f) return `<p class="tiny muted">Für den Anfang gut machbar: Q&A, Demonstration, Split Screen, Green Screen (Ronny).</p>`;
@@ -890,8 +909,8 @@ function zahlenView(){
     <p class="muted small" style="margin:0">Reaktionen im echten Leben zählen mehr als Zahlen. Rechne grob aus, wie groß deine Zielgruppe ist: Ist sie klein, sind wenige Aufrufe schon viel. Vergleich dich nicht mit MrBeast (Alex Hormozi).</p>
     ${fieldHTML("markt", "brand")}</section>`;
   // Wochenzahlen
-  h += `<section class="glass reveal"><span class="kick acc">Zahlen der Woche</span>${last ? `<p class="small" style="margin:8px 0 0">Zuletzt am ${fmtD(last.d)}: ${esc(last.fol || "–")} Follower · beste Aufrufe ${esc(last.best || "–")} · nach 5 Sek. ${esc(last.ret || "–")} % · ${esc(last.eur || "0")} €</p>` : ""}${statsForm()}
-    ${ST.stats.length ? `<details style="margin-top:12px"><summary class="small muted">Alle Wochen</summary><div class="md"><table><thead><tr><th>Datum</th><th>Follower</th><th>Beste</th><th>5 Sek.</th><th>€</th></tr></thead><tbody>${ST.stats.slice().reverse().map(x => `<tr><td>${fmtD(x.d)}</td><td>${esc(x.fol)}</td><td>${esc(x.best)}</td><td>${esc(x.ret)}</td><td>${esc(x.eur)}</td></tr>`).join("")}</tbody></table></div></details>` : ""}</section>`;
+  h += `<section class="glass reveal"><span class="kick acc">Zahlen der Woche</span><p class="muted small" style="margin:6px 0 0">Sams vier Zahlen: Aufrufe, Follower, Leads (E-Mails, die dir gehören) und Umsatz. Kommt kein Geld rein, stimmt die Positionierung nicht.</p>${last ? `<p class="small" style="margin:8px 0 0">Zuletzt am ${fmtD(last.d)}: ${esc(last.fol || "–")} Follower · beste Aufrufe ${esc(last.best || "–")} · nach 5 Sek. ${esc(last.ret || "–")} % · ${esc(last.eur || "0")} €</p>` : ""}${statsForm()}
+    ${ST.stats.length ? `<details style="margin-top:12px"><summary class="small muted">Alle Wochen</summary><div class="md"><table><thead><tr><th>Datum</th><th>Follower</th><th>Beste</th><th>5 Sek.</th><th>Leads</th><th>€</th></tr></thead><tbody>${ST.stats.slice().reverse().map(x => `<tr><td>${fmtD(x.d)}</td><td>${esc(x.fol)}</td><td>${esc(x.best)}</td><td>${esc(x.ret)}</td><td>${esc(x.leads || "")}</td><td>${esc(x.eur)}</td></tr>`).join("")}</tbody></table></div></details>` : ""}</section>`;
   h += `<section class="glass flat reveal"><span class="kick">Was du daraus machst</span>${fieldHTML("laeuft", "brand")}${fieldHTML("naechstes", "brand")}</section>`;
   return h + `</div>`;
 }
@@ -983,6 +1002,8 @@ document.addEventListener("click", async e => {
   if (act === "capfont") { (ST.brand.look ||= {}).font = b.dataset.f; return save(); }
   if (act === "fmt") { UI.fmt = FORMATS[+b.dataset.i][0]; $$(".matrix circle").forEach((c, i) => { const on = FORMATS[i][0] === UI.fmt || FORMATS[i][0] === ST.prof.format; c.classList.toggle("on", on); c.setAttribute("r", on ? 8 : 5.5); }); $("#fmtinfo").innerHTML = fmtInfo(); return; }
   if (act === "fmtpick") { if (UI.fmt) { ST.prof.format = UI.fmt; save(true); $("#fmtinfo").innerHTML = fmtInfo(); toast("Als dein Format gespeichert"); } return; }
+  if (act === "multfmt") { const m = ST.brand.mult ||= {}, a = m.formats ||= [], f = b.dataset.f; if (a.includes(f)) a.splice(a.indexOf(f), 1); else { if (a.length >= 3) return toast("Höchstens 3 Formate"); a.push(f); } save(true); b.classList.toggle("on", a.includes(f)); $("#multgrid").innerHTML = multGrid(); return; }
+  if (act === "mult2video") { const m = ST.brand.mult || {}, an = (m.angles || []).filter(x => x && x.trim()), a = an[+b.dataset.a]; const nv = newVideo("heit", {title:a, idee:`${m.topic}: ${a} (Format: ${b.dataset.f})`}); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "tree2video") { const t = (ST.tree || [])[+b.dataset.i]; if (!t) return; const nv = newVideo("lern", {title:t, idee:t}); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "savehook") { const t = (UI.hook || "").trim(); if (!t) return toast("Erst einen Hook eintippen"); ST.prof.hooks = [...lines(ST.prof.hooks), t].join("\n"); UI.hook = ""; save(); return toast("In der Hook-Bank"); }
   if (act === "testhook") { UI.hook = lines(ST.prof.hooks)[+b.dataset.i] || ""; render(); scrollTo({top:0, behavior:"smooth"}); return; }
@@ -1022,6 +1043,7 @@ document.addEventListener("input", e => {
   if (t.dataset.actIn === "capcol") { (ST.brand.look ||= {}).color = t.value; save(true); const c = $(".sub-prev .cap"); if (c) c.style.color = t.value; return; }
   if (t.dataset.radar) { (ST.brand.radar ||= {})[t.dataset.radar] = +t.value; save(true); $("#radar").innerHTML = radarSVG(ST.brand.radar); $(`[data-rv="${t.dataset.radar}"]`).textContent = t.value; return; }
   if (t.dataset.spcl) { (ST.brand.spcl ||= {})[t.dataset.spcl] = +t.value; save(true); $(`[data-sv="${t.dataset.spcl}"]`).textContent = t.value + "/10"; return; }
+  if (t.dataset.mult) { const m = ST.brand.mult ||= {}, k = t.dataset.mult; if (k === "topic") m.topic = t.value; else (m.angles ||= ["", "", ""])[+k.slice(1)] = t.value; save(true); $("#multgrid").innerHTML = multGrid(); return; }
   if (t.dataset.tree) { (ST.tree ||= [])[+t.dataset.tree] = t.value; save(true); return; }
   if (t.dataset.bchk) { ST.brand[t.dataset.bchk] = t.checked; save(true); return; }
   if (t.dataset.v) {
@@ -1036,7 +1058,7 @@ document.addEventListener("submit", async e => {
   e.preventDefault();
   if (e.target.id === "stats") {
     const fd = new FormData(e.target), x = {d:dkey()}; for (const [k, val] of fd) x[k] = String(val).trim();
-    if (!x.fol && !x.best && !x.ret && !x.eur) return toast("Trag mindestens eine Zahl ein.");
+    if (!x.fol && !x.best && !x.ret && !x.eur && !x.leads) return toast("Trag mindestens eine Zahl ein.");
     ST.stats.push(x); save(); return toast("Zahlen gespeichert");
   }
   if (e.target.id === "login") {

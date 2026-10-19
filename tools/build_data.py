@@ -36,6 +36,8 @@ for s in TPL["sections"]:
 FIELDS["helfen"] = {"label": "Wie ich mit meinem Content Menschen helfe", "hint": "Ein Satz. Dein Anker an Tagen ohne Aufrufe (Mino, Kurs-Tag 4).", "rows": 2, "sec": "weg"}
 FIELDS["einwaende"] = {"label": "Ihre typischen Einwände und meine Antwort", "hint": "Zum Beispiel „keine Zeit“, „kenne ich schon“. Die kommen später direkt ins Skript (Mino).", "rows": 3, "sec": "fuerwen"}
 FIELDS["keywords"] = {"label": "Meine Keyword-Bank", "hint": "Wörter, die deine Zuschauer selbst benutzen. Mit Google Trends prüfen, welches mehr Menschen interessiert (Mino).", "rows": 3, "sec": "hooks"}
+FIELDS["versprechen"] = {"label": "Mein eines Versprechen", "hint": "Wobei hilfst du, in einem Satz? Eins, nicht zehn (Sam Gaudet, die vier P).", "rows": 2, "sec": "themen"}
+FIELDS["proofstack"] = {"label": "Woran ich gerade öffentlich arbeite (Proof Stacking)", "hint": "Ein laufendes Ziel, das du offen zeigst und mit jedem Ergebnis weiter belegst. Sam baut gerade öffentlich einen Account nur mit dem iPhone auf 100.000 Follower.", "rows": 2, "sec": "experte"}
 SECTIONS.insert(1, {"id": "dran", "title": "Dranbleiben", "why": "Die meisten scheitern nicht am Wissen, sondern daran, dass sie aufhören (Leitfaden Kapitel 1)."})
 FIELDS["zahlziel"] = {"label": "Mein Zahlenziel für 6 Monate", "hint": "Eins, nicht zwei: entweder 100.000 Follower oder 10.000 $ im Monat. Sichtbar aufschreiben, z. B. als Hintergrundbild (Mino).", "rows": 2, "sec": "dran"}
 FIELDS["huerden"] = {"label": "Meine Hürden und wie ich sie umdeute", "hint": "Pro Hürde: die schlimmste realistische Folge und warum sich das Posten trotzdem lohnt.", "rows": 4, "sec": "dran"}
@@ -81,6 +83,8 @@ TYPES = {
                 "tpl": "Bait, starke Aussage:\n\nElaborate, warum:\n\nStory, wo ich das gelernt habe:\n\nTakeaway, was du jetzt tun sollst:"},
     "frueher": {"label": "Botschaft an dein früheres Ich", "src": "Mino", "tip": "Fast alle viralen Videos von Mino sind Botschaften an sein jüngeres Ich.",
                 "tpl": "Im letzten Jahr habe ich …\n\nUnd mir wurde klar, ich musste nur …\n\nJetzt denkst du wahrscheinlich: …\n\nAber …\n\nAlso …"},
+    "heit": {"label": "Hook, Explain, Illustrate, Teach", "src": "Sam Gaudet", "tip": "Sams Aufbau für Kurzvideos. Als Gliederung schreiben und frei sprechen, nicht Wort für Wort ablesen.",
+             "tpl": "Hook (Kontext, Gegenposition, offene Schleife):\n\nExplain, worum es geht und warum es für dich zählt:\n\nIllustrate, Geschichte, Vergleich oder Beispiel:\n\nTeach, eine Sache zum Mitnehmen:"},
     "vlog": {"label": "Ohne Skript (Vlog)", "src": "Mino, Minimum Viable Vlog", "tip": "Für volle Tage: zwei Fragen beantworten und frei erzählen.",
              "tpl": "Hook, meine Lektion in 1 bis 2 Sätzen:\n\nWas heute passiert ist (frei erzählen):\n\nPraktischer Tipp und positives Ende:"},
 }
@@ -388,7 +392,8 @@ STAGES = [
         "Direkt in die Kamera geschaut, Teleprompter in CapCut",
         "Hook zuletzt aufgenommen, dann ist die Stimme warm",
         "B-Roll gefilmt (Tätigkeit 30 Sek., Gehen oder Bildschirm 10 Sek.)"],
-     "src": "Mino · Julian Treasure"},
+     "src": "Mino · Julian Treasure",
+     "tips": ["Pfad statt Schiene: die Gliederung ist ein Wegweiser, nicht Wort für Wort ablesen. Vorher einprägen, frei erzählen, dieselben Gedanken oft wiederholen (Sam Gaudet). Mino nutzt dagegen oft den Teleprompter, probier beides."]},
     {"id": "schnitt", "label": "Schnitt", "checks": [
         "Rohschnitt über das Transkript: Versprecher als Text gelöscht",
         "Feinschnitt: jede Pause bis direkt ans letzte Wort weg",
