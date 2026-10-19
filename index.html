@@ -135,6 +135,9 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;paddin
 .md h3{font:720 18px/1.25 var(--fd);font-stretch:108%;margin:24px 0 8px;color:var(--ink)} .md h4{font-size:15.5px;margin:18px 0 6px}
 .md p{margin:9px 0} .md p.lbl{margin:18px 0 2px;color:var(--ink)}
 .md ul,.md ol{margin:6px 0;padding-left:22px} .md li{margin:5px 0} .md li::marker{color:var(--acc)}
+.md ol{list-style:none;padding-left:0}
+.md ol li{display:grid;grid-template-columns:2.1em 1fr;gap:4px}
+.md ol .nr{font:500 .95em var(--fm);color:var(--acc);font-variant-numeric:tabular-nums;padding-top:.08em}
 .md li.box{list-style:none;margin-left:-22px;padding-left:28px;position:relative}
 .md li.box::before{content:"";position:absolute;left:2px;top:4px;width:15px;height:15px;border-radius:5px;box-shadow:inset 0 0 0 2px var(--line-2)}
 .md blockquote{margin:12px 0;padding:10px 16px;border-left:2px solid var(--acc);background:rgba(255,255,255,.04);border-radius:0 14px 14px 0}
@@ -326,7 +329,7 @@ function md(src){
     if (t.startsWith("&gt;")) { flushP(); closeL(); out.push(`<blockquote>${inline(t.replace(/^&gt;\s?/, ""))}</blockquote>`); continue; }
     if ((m = t.match(/^[-*]\s+\[[ xX]\]\s+(.*)/))) { flushP(); if (list !== "ul") { closeL(); out.push("<ul>"); list = "ul"; } out.push(`<li class="box">${inline(m[1])}</li>`); continue; }
     if ((m = t.match(/^[-*]\s+(.*)/))) { flushP(); if (list !== "ul") { closeL(); out.push("<ul>"); list = "ul"; } out.push(`<li>${inline(m[1])}</li>`); continue; }
-    if ((m = t.match(/^(\d+)\.\s+(.*)/))) { flushP(); if (list !== "ol") { closeL(); out.push(`<ol start="${m[1]}">`); list = "ol"; } out.push(`<li>${inline(m[2])}</li>`); continue; }
+    if ((m = t.match(/^(\d+)\.\s+(.*)/))) { flushP(); if (list !== "ol") { closeL(); out.push(`<ol>`); list = "ol"; } out.push(`<li><span class="nr">${m[1]}</span><span>${inline(m[2])}</span></li>`); continue; }
     closeL(); para.push(t);
   }
   flushP(); closeL();
