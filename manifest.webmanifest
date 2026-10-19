@@ -1,0 +1,17 @@
+{
+  "id": "/brand-weg/",
+  "name": "Brand-Weg",
+  "short_name": "Brand-Weg",
+  "description": "Dein Personal-Brand-Plan nach Mino Lee, Schritt für Schritt.",
+  "start_url": "/brand-weg/",
+  "scope": "/brand-weg/",
+  "display": "standalone",
+  "background_color": "#F4F2EE",
+  "theme_color": "#B4530F",
+  "lang": "de",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
