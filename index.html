@@ -218,6 +218,7 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .road span{flex:1;min-width:0;border-radius:12px;padding:10px 6px;text-align:center;background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 85%,#fff),var(--acc));color:var(--acc-ink);box-shadow:0 8px 24px -10px var(--acc)}
 .road span b{display:block;font:800 20px var(--fd)} .road span small{display:block;font-size:10.5px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .road span.blur small{filter:blur(4px)}
+.en{color:var(--faint);font-weight:400;font-size:.92em}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
 #nav .in{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
@@ -320,6 +321,110 @@ const LEX = [
  {de:"Haftnotizen", en:"Sticky Note", img:["s_sticky"], by:"Sam", at:[SV + 514], d:"Du schreibst Punkte auf Haftnotizen und klebst sie beim Erklären nacheinander an eine Wand.", tip:"Aus Sams 15 Formaten für Kurzvideos."},
  {de:"Überbewertet oder unterbewertet", en:"Overrated / Underrated", img:["s_overrated"], by:"Sam", at:[SV + 514], d:"Du ordnest Dinge ein, zum Beispiel KI-Tools, als überbewertet oder unterbewertet und sagst, warum.", tip:"Aus Sams 15 Formaten für Kurzvideos."}
 ];
+
+// Begriffe Deutsch ↔ Englisch, so wie sie in den Videos von Mino, Ronny, Sam und Hormozi vorkommen.
+// [deutsche Formen, englischer Begriff, kurze Erklärung, Bereich]
+const GLOSS = [
+ [["Thema", "Themen"], "Topic", "Worüber das Video geht.", "Ideen"],
+ [["Blickwinkel"], "Angle", "Deine Sicht auf das Thema. Dasselbe Thema mit anderem Blickwinkel kann floppen oder viral gehen (Sam).", "Ideen"],
+ [["Nachfrage"], "Demand", "Wie viele Menschen sich für ein Thema interessieren.", "Ideen"],
+ [["Passung"], "Fit", "Ob das Thema zu deinem Publikum passt (Sam).", "Ideen"],
+ [["Verpackung"], "Packaging", "Wie ein Thema gesagt und gezeigt wird (Ronny).", "Ideen"],
+ [["Ausreißer", "Ausreißer-Videos"], "Outlier", "Ein Video, das weit über deinem Durchschnitt läuft.", "Ideen"],
+ [["Themenbaum"], "Topic Tree", "Das große Ergebnis in viele kleine Video-Themen zerlegt.", "Ideen"],
+ [["Nische"], "Niche", "Das Themenfeld, in dem du Videos machst.", "Positionierung"],
+ [["Positionierung"], "Positioning", "Wofür du bekannt sein willst (Sam).", "Positionierung"],
+ [["Versprechen"], "Promise", "Was der Zuschauer von dir bekommt. Eins, nicht zehn (Sam).", "Positionierung"],
+ [["Beweis", "Beweise"], "Proof", "Warum man dir zuhören sollte: Ergebnisse, Zahlen, Erfahrung.", "Positionierung"],
+ [["Beweise stapeln"], "Proof Stacking", "Ständig neue Beweise auf die alten setzen (Sam).", "Positionierung"],
+ [["Persönlichkeit"], "Personality", "Wer du bist, nicht nur was du sagst (Sam).", "Positionierung"],
+ [["idealer Zuschauer", "idealen Zuschauer", "Ideal Viewer"], "Ideal Viewer / Avatar", "Die eine Person, für die du Videos machst (Mino).", "Positionierung"],
+ [["Zielgruppe"], "Target Audience", "Die Menschen, die du erreichen willst.", "Positionierung"],
+ [["Säulen", "Content-Säulen"], "Content Pillars", "Die 3 bis 5 Themen, die du immer wieder bringst.", "Positionierung"],
+ [["Begleiter"], "Friend (statt Expert)", "Mino: Man gibt Wert als Experte oder als Freund. Am Anfang bist du der Freund.", "Positionierung"],
+ [["Gegenposition"], "Contrarian Take", "Wo du anders denkst als die meisten.", "Positionierung"],
+ [["Ähnlichkeit"], "Likeness / Relatability", "Leute folgen dir, wenn sie sich in dir wiedererkennen.", "Positionierung"],
+ [["Glaubwürdigkeit"], "Credibility", "Beweise von außen (Hormozi, SPCL).", "Positionierung"],
+ [["Einfluss"], "Influence", "Wie wahrscheinlich Leute deiner Bitte folgen (Hormozi).", "Positionierung"],
+ [["Aufrufe"], "Views", "Wie oft ein Video angesehen wurde.", "Zahlen"],
+ [["Retention", "Zuschauer nach 3 Sek.", "Zuschauer nach 5 Sek."], "Retention", "Wie viel Prozent nach den ersten Sekunden noch zuschauen.", "Zahlen"],
+ [["Umsatz", "Einnahmen"], "Revenue", "Geld, das reinkommt.", "Zahlen"],
+ [["Hook"], "Hook", "Der erste Satz, der Fremde am Weiterwischen hindert.", "Skript"],
+ [["Gliederung"], "Outline", "Stichpunkte statt Wort-für-Wort-Skript (Sam).", "Skript"],
+ [["Überleitung"], "Tease / Transition", "Der Satz, der zum nächsten Punkt führt.", "Skript"],
+ [["Lektion"], "Lesson / Takeaway", "Was der Zuschauer mitnimmt und selbst tun soll.", "Skript"],
+ [["Veranschaulichen"], "Illustrate", "Mit Geschichte, Vergleich oder Beispiel zeigen.", "Skript"],
+ [["Erklären"], "Explain", "Warum etwas wichtig ist.", "Skript"],
+ [["Aufruf"], "Call to Action (CTA)", "Die Bitte an den Zuschauer: folgen, Link klicken, schreiben.", "Skript"],
+ [["Einwand", "Einwände"], "Objection", "Der Zweifel, den der Zuschauer im Kopf hat.", "Skript"],
+ [["Wendepunkt"], "Turning Point", "Der eine Moment, an dem sich in der Geschichte etwas ändert (Mino).", "Skript"],
+ [["Vorgeschichte"], "Backstory / Context", "Kurze, konkrete Einleitung einer Geschichte (Mino).", "Skript"],
+ [["asymmetrisches Tempo", "Asymmetrisches Tempo"], "Asymmetric Pacing", "Erste Punkte schnell, spätere länger (Sam).", "Skript"],
+ [["eigene Begriffe", "Eigene Begriffe"], "Unique Mechanisms", "Neue, eingängige Namen für deine Ideen (Sam).", "Skript"],
+ [["heilige Zeitlinie", "heiligen Zeitlinie"], "Sacred Timeline", "Alles, was nicht zum Versprechen gehört, fliegt raus (Sam).", "Skript"],
+ [["offene Schleife"], "Open Loop", "Eine Frage, die erst später beantwortet wird, damit man dranbleibt.", "Skript"],
+ [["Vorlage"], "Template", "Ein Gerüst, das du ausfüllst.", "Skript"],
+ [["Rohschnitt"], "Rough Cut", "Erster Schnitt: Versprecher raus.", "Schnitt"],
+ [["Feinschnitt"], "Jump Cuts / Fine Cut", "Jede Pause bis ans letzte Wort wegschneiden (Mino).", "Schnitt"],
+ [["Untertitel"], "Captions", "Der eingeblendete Text zum Gesprochenen.", "Schnitt"],
+ [["Zwischenschnitte"], "B-Roll", "Kurze Clips über deiner Stimme.", "Schnitt"],
+ [["Vorschaubild"], "Thumbnail", "Das Bild, das man vor dem Klick sieht.", "Schnitt"],
+ [["Wiederverwerten", "Umverteilen"], "Repurposing", "Ein Video auf andere Plattformen oder neu verwenden.", "Verteilen"],
+ [["See-Methode"], "Lake Method", "Für jede Plattform eigene Videos (Sam).", "Verteilen"],
+ [["Wasserfall"], "Waterfall Method", "Ein großes Video zerschneiden und überall posten.", "Verteilen"],
+ [["Testreel"], "Trial Reel", "Instagram-Reel, das nur an Nicht-Follower geht.", "Verteilen"],
+ [["Omnipräsenz"], "Omnipresence", "Auf allen Plattformen gefunden werden (Sam).", "Verteilen"],
+ [["Verdoppeln", "verdoppeln"], "Double Down", "Das, was lief, immer wieder machen.", "Verteilen"],
+ [["Schlüsselwort", "Schlüsselwörter", "Schlüsselwörtern"], "Keyword", "Wort, das zeigt, worum es geht (Geld, Fitness …).", "Verteilen"],
+ [["Markendeal", "Markendeals"], "Brand Deal", "Bezahlte Zusammenarbeit mit einer Marke.", "Geld"],
+ [["eigenes Angebot", "Eigenes Angebot"], "Offer", "Dein eigenes Produkt oder deine Dienstleistung.", "Geld"],
+ [["Hochstapler-Gefühl"], "Impostor Syndrome", "Das Gefühl, nicht gut genug zu sein.", "Haltung"]
+];
+const GL_RE = (() => {
+  const L = "A-Za-zÄÖÜäöüß", list = [];
+  GLOSS.forEach((g, i) => g[0].forEach(f => list.push([f, i])));
+  list.sort((a, b) => b[0].length - a[0].length);
+  return list.map(([f, i]) => [new RegExp(`(?<![${L}-])${f.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![${L}])`), i]);
+})();
+// Hängt beim ersten Vorkommen eines Begriffs pro Ansicht den englischen Begriff an
+function annotate(root){
+  if (!root || ST.open.noEn) return;
+  const seen = new Set(), walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode(n){
+    const p = n.parentElement; if (!p || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+    if (p.closest("h1,textarea,input,script,style,svg,.display,.en,.num,.kick,code,[data-noen],.script,.chip,.badge,#nav")) return NodeFilter.FILTER_REJECT;
+    return NodeFilter.FILTER_ACCEPT; }});
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const n of nodes) {
+    let txt = n.nodeValue, hits = [];
+    for (const [re, i] of GL_RE) {
+      if (seen.has(i)) continue;
+      const m = re.exec(txt); if (!m) continue;
+      const en = GLOSS[i][1], de = m[0];
+      if (de.toLowerCase() === en.toLowerCase()) { seen.add(i); continue; }
+      const around = txt.slice(Math.max(0, m.index - 40), m.index + de.length + 40).toLowerCase();
+      if (around.includes(en.split(/[ /(]/)[0].toLowerCase())) { seen.add(i); continue; }
+      if (hits.some(h => m.index < h.end && m.index + de.length > h.start)) continue;
+      hits.push({start:m.index, end:m.index + de.length, en}); seen.add(i);
+    }
+    if (!hits.length) continue;
+    hits.sort((a, b) => a.start - b.start);
+    const frag = document.createDocumentFragment(); let pos = 0;
+    for (const h of hits) {
+      frag.append(txt.slice(pos, h.end));
+      const sp = document.createElement("span"); sp.className = "en"; sp.textContent = ` (${h.en})`; frag.append(sp); pos = h.end;
+    }
+    frag.append(txt.slice(pos)); n.replaceWith(frag);
+  }
+}
+function begriffeView(){
+  const q = (UI.gq || "").toLowerCase(), cats = [...new Set(GLOSS.map(g => g[3]))];
+  const hit = g => !q || (g[0].join(" ") + " " + g[1] + " " + g[2]).toLowerCase().includes(q);
+  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Wissen</a><span class="kick acc" style="display:block;margin-top:16px">Deutsch und Englisch</span><h1 class="h-xl" style="margin-top:8px">Begriffe</h1></div>
+    <div class="wrap" data-noen><section class="glass reveal"><p style="margin:0 0 12px">Die Videos sind auf Englisch, die App auf Deutsch. Hier stehen beide Wörter nebeneinander. In der App steht der englische Begriff außerdem in Klammern dahinter, wenn er zum ersten Mal auf einer Seite vorkommt.</p>
+    <input type="text" id="gq" placeholder="Suchen, z. B. Angle, Hook, Ausreißer" value="${esc(UI.gq || "")}">
+    <label class="row small" style="margin-top:12px;gap:8px"><input type="checkbox" data-act-in="noen" ${ST.open.noEn ? "" : "checked"} style="width:18px;height:18px;accent-color:var(--acc)"> Englische Begriffe in der App anzeigen</label></section>
+    ${cats.map(c => { const gs = GLOSS.filter(hit).filter(g => g[3] === c); return gs.length ? `<section class="glass"><span class="kick acc">${esc(c)}</span><div class="list" style="margin-top:4px">${gs.map(g => `<div class="item"><span class="t"><b>${esc(g[0][0])} <span class="en" style="font-weight:600">· ${esc(g[1])}</span></b><small>${esc(g[2])}</small></span></div>`).join("")}</div></section>` : ""; }).join("")}</div>`;
+}
 const RONNY6 = ["Vorreiter", "Inspiration", "Ähnlichkeit", "Sicherheit", "Sympathie", "Hebel"];
 const SPCL = [["s", "Status", "Du hast etwas, das andere wollen"], ["p", "Macht", "Du sagst etwas, sie machen es, es geht gut aus"], ["c", "Glaubwürdigkeit", "Beweise von außen"], ["l", "Ähnlichkeit", "Sie erkennen sich in dir wieder"]];
 const PLATFORMS = ["Instagram", "TikTok", "YouTube Shorts"];
@@ -584,13 +689,13 @@ function render(){
   const app = $("#app"), [r, a, b] = route();
   if (sb && authChecked && !user && !skipLogin) { app.innerHTML = loginView(); after(); return; }
   setAcc(curWorld());
-  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, wissen:() => a ? kapView(a) : wissenView()}[r] || heuteView;
+  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, wissen:() => a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
   app.innerHTML = v();
   if (lastRoute !== location.hash) { window.scrollTo(0, 0); lastRoute = location.hash; }
   after();
 }
 function after(){
-  fitWords(); countUp();
+  fitWords(); countUp(); annotate($("#app"));
   $$("canvas.dust").forEach(dust);
   if (route()[0] === "weg" && !route()[1]) wegScroll();
   const tf = $("#hooktest"); if (tf) hookLive(tf.value);
@@ -1067,7 +1172,7 @@ function zahlenView(){
 function wissenView(){
   const q = (UI.q || "").toLowerCase().trim(), hit = w => !q || (w.title + " " + w.body).toLowerCase().includes(q);
   let h = pageHead("Zum Nachschlagen", "Wissen") + `<div class="wrap"><section class="glass reveal"><p style="margin:0 0 12px">Wenn du bei einem Schritt hängst. Hier steht, was Mino Lee, Ronny Mitchell, Sam Gaudet und Alex Hormozi sagen, nach Themen sortiert.</p>
-    <input type="text" id="q" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"></section>`;
+    <input type="text" id="q" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><a class="chip" href="#/wissen/begriffe" style="margin-top:12px">Begriffe Deutsch und Englisch</a></section>`;
   h += `<section class="glass reveal" style="padding:6px 18px">${D.wissen.filter(hit).map(w => `<a class="item" href="#/wissen/${w.id}"><span class="num acc" style="color:var(--acc);width:24px">${w.n ? pad(w.n) : "··"}</span><span class="t"><b>${esc(w.title)}</b>${q ? `<small>${esc(snip(w.body, q))}</small>` : ""}</span></a>`).join("") || `<div class="empty" style="padding:12px 0">Nichts gefunden.</div>`}</section>`;
   const srcs = Object.values(D.sources).filter(s => !q || (s.t + " " + s.sum + " " + s.who).toLowerCase().includes(q));
   for (const g of [...new Set(srcs.map(s => s.who))]) h += `<section class="glass reveal"><span class="kick acc">${esc(g)}</span>${srcs.filter(s => s.who === g).map(s => `<a class="src-card" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b>${s.sum ? `<small>${esc(s.sum)}</small>` : ""}</a>`).join("")}</section>`;
@@ -1090,13 +1195,13 @@ function helpHTML(){
     <li><b>Studio</b> ist für Content Creation und Verteilen: Videos von der Idee bis zum Posten, das Hook-Labor, der Teleprompter und alles zum Algorithmus.</li>
     <li><b>Brand</b> ist deine Identität und Strategie: Profil, Look, Markenkern, Themenbaum, Säulen und Formate. Dort steht auch alles, was du in den Schritten einträgst.</li>
     <li><b>Zahlen</b> ist Analytics: Aufrufe, Ausreißer, bestes gegen schwächstes Video, Retention.</li>
-    <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen.</li></ul>
+    <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
     <h4>Am Android-Handy</h4><p>In Chrome danielgit8.github.io/brand-weg/ öffnen und mit deinem Cockpit-Konto anmelden. Dann „Als App installieren“ tippen. Kommt der Knopf nicht, oben rechts auf die drei Punkte und „App installieren“ oder „Zum Startbildschirm hinzufügen“. Laptop und Handy bleiben gleich, ein eigenes Konto brauchst du nicht.</p></div>
     ${installEv ? `<button class="btn block" data-act="install" style="margin-top:12px">Als App installieren</button>` : ""}
     <p class="tiny muted" style="margin:16px 0 8px">${user ? `Angemeldet als ${esc(user.email)}.` : "Nicht angemeldet, nur auf diesem Gerät."}</p>
     ${user ? `<button class="chip" data-act="logout">Abmelden</button>` : sb ? `<button class="chip" data-act="relogin">Anmelden</button>` : ""}`;
 }
-function openSheet(html){ $("#sheet .pane").innerHTML = html; $("#sheet").classList.add("open"); }
+function openSheet(html){ $("#sheet .pane").innerHTML = html; annotate($("#sheet .pane")); $("#sheet").classList.add("open"); }
 function closeSheet(){ $("#sheet").classList.remove("open"); }
 
 /* --- Teleprompter --- */
@@ -1190,6 +1295,8 @@ document.addEventListener("input", e => {
     return;
   }
   if (t.id === "q") { UI.q = t.value; const pos = t.selectionStart; render(); const q = $("#q"); q.focus(); q.setSelectionRange(pos, pos); return; }
+  if (t.id === "gq") { UI.gq = t.value; const pos = t.selectionStart; render(); const q = $("#gq"); q.focus(); q.setSelectionRange(pos, pos); return; }
+  if (t.dataset.actIn === "noen") { ST.open.noEn = !t.checked; saveLocal(); return render(); }
   if (t.id === "fq") { UI.fq = t.value; const pos = t.selectionStart; render(); const q = $("#fq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.id === "hooktest") { UI.hook = t.value; hookLive(t.value); return; }
   if (t.dataset.b) { ST.brand[t.dataset.b] = t.value.trim(); save(true); const el = $("#pv-user"); if (el) el.textContent = t.value || "dein.name"; return; }
