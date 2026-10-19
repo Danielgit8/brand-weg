@@ -13,7 +13,7 @@ def clean(t):
     t = re.split(r"\n## (Deine Antwort|Weitere Antworten)", t)[0]
     t = re.sub(r"(\d\.?)\s?–\s?(\d)", r"\1 bis \2", t)
     t = t.replace(" – ", ", ").replace(" — ", ", ")
-    t = t.replace("Brand-Profil", "„Ich“").replace("im „Ich“", "unter „Ich“")
+    t = t.replace("Brand-Profil", "„Brand“").replace("im „Brand“", "unter „Brand“")
     t = t.replace("Content-Werkzeugkasten", "Video-Werkstatt")
     t = t.replace("Gewohnheit „Video gepostet“ abhaken", "In der Werkstatt auf „Gepostet“ stellen")
     return t.strip()
@@ -24,7 +24,7 @@ def task(tid):
 
 
 # ---------- Felder: alles, was du einträgst ----------
-# sec = Abschnitt unter „Ich“. Die Profil-Felder kommen aus der Vorlage im Cockpit (brandtpl-main).
+# sec = Abschnitt unter „Brand“. Die Profil-Felder kommen aus der Vorlage im Cockpit (brandtpl-main).
 TPL = IT["brandtpl-main"]["tpl"]
 SECTIONS, FIELDS = [], {}
 for s in TPL["sections"]:
@@ -326,7 +326,7 @@ step(id="s27", ph="p4", title="Meilenstein: 100.000 Aufrufe und 10.000 Follower"
      why="Danach kommt Phase 4: Geld.",
      body="""- Hattest du ein Video mit 100.000 Aufrufen?
 - Hast du 10.000 Follower?
-- Was läuft bei dir? Unter „Ich“ bei „Was ich gelernt habe“ ergänzen.""",
+- Was läuft bei dir? Unter „Brand“ bei „Was ich gelernt habe“ ergänzen.""",
      fields=["laeuft", "naechstes"])
 
 step(id="s28", ph="p5", title="Die ersten 1.000 $: UGC und Markendeals",
