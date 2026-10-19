@@ -205,6 +205,15 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .tree .node input{padding:10px 12px}
 .matrix circle{fill:rgba(255,255,255,.35);transition:r 200ms var(--ease-out),fill 200ms ease;cursor:pointer}
 .matrix circle.on{fill:var(--acc)}
+.lex{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+@media (min-width:640px){.lex{grid-template-columns:repeat(3,1fr)}}
+.lex-c{display:block;text-align:left;border-radius:22px;padding:8px 8px 12px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--line);transition:transform 160ms var(--ease-out)}
+.lex-c:active{transform:scale(.97)}
+.lex-c b{display:block;margin:10px 4px 2px;font-size:15px;line-height:1.25} .lex-c small{display:block;margin:0 4px;color:var(--muted);font-size:12px;line-height:1.35}
+.lex-img{position:relative;display:block;aspect-ratio:9/13;border-radius:16px;overflow:hidden;background-color:#1c1b20;background-image:linear-gradient(160deg,#26242c,#141317);background-size:cover;background-position:center top}
+.lex-img i{position:absolute;left:0;right:0;bottom:0;padding:28px 10px 10px;font-style:normal;font:700 13px var(--fd);font-stretch:110%;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75))}
+.lex-img[style*="url("] i{display:none}
+.lex-big{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px;margin-top:14px;max-width:420px}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
 #nav .in{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
@@ -266,6 +275,47 @@ const WORLDS = [
 // Ronny Mitchells 25 Formate (Aufrufe, Geld je 1 bis 10, Bereiche als Mittelwert)
 const FORMATS = [["Podcast",8.5,5.5,"Thema muss sehr viele interessieren"],["FaceTime",5,5.5,"Mit BEST-Aufbau, sonst Gelaber"],["Green Screen",7.5,8,"Artikel oder Notiz hinter dir"],["Split Screen",7,7,"Oben du, unten das, was du erklärst"],["Demonstration",8,10,"Dein Können live zeigen"],["Bühne",7,10,"Höchste Autorität, schwer zu bekommen"],["Q&A",9.5,10,"Echte Fragen schlagen gestellte"],["Sketch",7,6,"Kundenproblem nachspielen und lösen"],["Direkt in die Kamera",3,7,"Nur, wenn du sehr witzig oder neu bist"],["Debatte",8.5,6,"Du musst dein Thema beherrschen (Geld: keine Zahl)"],["Rating / Ranking",7.5,7,"Etwas Unerwartetes auf Platz 1"],["Schlecht, gut, am besten",9,3,"Aufrufe, aber du siehst aus wie alle"],["Klon",7,6,"Viel genutzt"],["Liste",8,6,"Neugier bis zum letzten Punkt"],["T-Tabelle",8,6,"Zeigt deine Meinung"],["Animationen",7,8,"Braucht guten Editor"],["Vlog",4.5,9,"Baut Nähe auf, Aufrufe erst mit Publikum"],["Requisiten",4.5,8,"Bild muss sofort Sinn ergeben"],["Whiteboard",7.5,10,"Braucht eine Methode mit Ergebnissen"],["B-Roll mit Text",10,3,"Viele Aufrufe, kaum neue Follower"],["Voiceover über B-Roll",6.5,8,"Gut für Geschichten"],["Meme",8.5,3,"Bringt kaum Follower"],["Karussell",6.5,7,"Gelaufenes Video in Slides umbauen"],["Zoom-Aufnahme",5,6,"Läuft selten groß"],["Reaktion",8.5,8,"Nur mit eigener, durchdachter Meinung"]];
 const SAM15 = ["Klon", "Red Flag / Green Flag", "Liste", "Schnelle Liste", "Tier-Liste", "Top 10", "This or That", "Schlecht, gut, super", "Yap", "Reaktion", "Don't / Do", "Split Screen", "Bildschirm teilen", "Haftnotiz", "Überbewertet / unterbewertet"];
+
+// Format-Lexikon: Ronny Mitchells 25 Formate (Aufrufe/Geld von 1 bis 10) und Sam Gaudets 15 Formate für Kurzvideos.
+// img = Standbild aus dem Video der Quelle, privat in Supabase-Storage (files/<user>/brandweg/formats/), nicht im öffentlichen Repo.
+const RV = "https://youtu.be/6SwBn8QBMLs?t=", SV = "https://youtu.be/XiCGdzwJ-jc?t=";
+const LEX = [
+ {de:"Podcast", en:"Podcast", img:["r01"], v:"8 bis 9", g:"5 bis 6", by:"Ronny", at:[RV + 0], d:"Zwei Leute sitzen sich gegenüber und reden, seitlich gefilmt, meist mit Mikrofonen. Für Kurzvideos schneidest du die stärksten 30 bis 60 Sekunden heraus.", tip:"Das Thema muss sehr viele Menschen interessieren (Ronny)."},
+ {de:"FaceTime", en:"FaceTime", img:["r02"], v:"5", g:"5 bis 6", by:"Ronny", at:[RV + 87], d:"Du hältst das Handy wie bei einem Videoanruf und redest direkt hinein, oft im Auto oder beim Gehen.", tip:"Leicht, darum machen es viele. Ohne klaren Aufbau (BEST) wird es Gelaber (Ronny)."},
+ {de:"Green Screen", en:"Green Screen", img:["r03"], v:"7,5", g:"8", by:"Ronny", at:[RV + 164], d:"Hinter dir wird ein Bild eingeblendet, zum Beispiel ein Artikel, ein Screenshot oder eine Notiz. Du zeigst darauf und sagst deine Meinung dazu.", tip:"Funktioniert, weil der Zuschauer etwas sieht, während du redest (Ronny). Geht direkt in TikTok und CapCut."},
+ {de:"Geteilter Bildschirm", en:"Split Screen", img:["r04", "s_split"], v:"7", g:"7", by:"Ronny, Sam", at:[RV + 236, SV + 512], d:"Der Bildschirm ist geteilt: oben du, unten das, worüber du redest, zum Beispiel ein Video oder ein Beispiel. Bei Sam auch mehrere Ausschnitte von dir übereinander.", tip:"Gut für den Anfang ohne Team (Leitfaden Kap. 6)."},
+ {de:"Vorführung", en:"Demonstration", img:["r05"], v:"8", g:"10", by:"Ronny", at:[RV + 298], d:"Du zeigst dein Können live: Statt zu erklären, wie etwas geht, bringst du es jemandem bei und filmst das.", tip:"Zeigen schlägt erzählen. Eins der Formate, die am meisten Geld bringen (Ronny)."},
+ {de:"Bühne", en:"Stage", img:["r06"], v:"7", g:"10", by:"Ronny", at:[RV + 347], d:"Ein Ausschnitt von dir, wie du vor Publikum sprichst, zum Beispiel bei einem Vortrag oder Event.", tip:"Höchste Autorität, aber schwer zu bekommen (Ronny)."},
+ {de:"Fragen und Antworten", en:"Q&A", img:["r07"], v:"9,5", g:"10", by:"Ronny", at:[RV + 400], d:"Jemand stellt dir echte Fragen, zum Beispiel Freunde, Familie oder Leute bei einem Event, und du antwortest direkt.", tip:"Echte Fragen schlagen gestellte. Dan Martell wuchs damit in unter 6 Monaten auf über eine Million Follower (Ronny)."},
+ {de:"Sketch", en:"Skit", img:["r08"], v:"7", g:"6", by:"Ronny", at:[RV + 481], d:"Eine kurze gespielte Szene: Du spielst ein Problem deiner Zuschauer nach und zeigst danach die Lösung.", tip:"Braucht Skript und Drehliste, also viel Aufwand (Ronny)."},
+ {de:"Direkt in die Kamera", en:"Direct to Camera", img:["r09"], v:"3", g:"7", by:"Ronny", at:[RV + 528], d:"Du sitzt ruhig vor einer festen Kamera und redest, ohne viele Schnitte oder Effekte.", tip:"Läuft nur, wenn du sehr witzig, auffällig oder neu bist. Wer bleibt, bleibt aber wegen dir (Ronny)."},
+ {de:"Debatte", en:"Debate", img:["r10"], v:"8,5", g:"–", by:"Ronny", at:[RV + 576], d:"Zwei Leute mit unterschiedlicher Meinung streiten sachlich über ein Thema.", tip:"Unterschätzt: Konflikt ist spannend und lehrreich. Du musst dein Thema aber wirklich beherrschen (Ronny)."},
+ {de:"Bewertung", en:"Rating / Ranking", img:["r11"], v:"7,5", g:"7", by:"Ronny", at:[RV + 672], d:"Du bewertest Dinge auf einer Skala von 1 bis 10 oder ordnest sie in eine Rangliste.", tip:"Etwas Unerwartetes auf Platz 1 macht es interessanter (Ronny)."},
+ {de:"Stufen-Liste", en:"Tier List Ranking", img:["s_tier"], by:"Sam", at:[SV + 506], d:"Dinge werden Stufen zugeordnet: S ist das Beste, dann A, B, C und D für das Schwächste. Die Stufen stehen farbig am Rand.", tip:"Hilft dem Zuschauer, es auf einen Blick zu sehen, und zeigt klar deine Meinung (Sam)."},
+ {de:"Top 10", en:"Top 10 Ranking", img:["s_top10"], by:"Sam", at:[SV + 507], d:"Am Rand steht eine Skala von 10 bis 0, und du sortierst Dinge der Reihe nach ein.", tip:"Eine Variante der Bewertung (Sam)."},
+ {de:"Schlecht, gut, am besten", en:"Bad, Good, Best", img:["r12", "s_bgg"], v:"9", g:"3", by:"Ronny, Sam", at:[RV + 753, SV + 509], d:"Drei Varianten derselben Sache nebeneinander, von schlecht über gut bis am besten, zum Beispiel drei Arten, Eier zu braten.", tip:"Bringt Aufrufe, aber du siehst aus wie alle anderen (Ronny)."},
+ {de:"Klon", en:"Clone", img:["r13", "s_clone"], v:"7", g:"6", by:"Ronny, Sam", at:[RV + 821, SV + 503], d:"Du bist zweimal im Bild, zum Beispiel als Chef und als Mitarbeiter, und redest mit dir selbst.", tip:"Unterhaltsam, wird aber viel genutzt (Ronny)."},
+ {de:"Liste", en:"Listicle", img:["r14", "s_liste"], v:"8", g:"6", by:"Ronny, Sam", at:[RV + 867, SV + 505], d:"„5 Dinge, die …“: Du gehst Punkte nacheinander durch, oft stehen Nummern am Rand.", tip:"Neugier bis zum letzten Punkt hält die Leute im Video (Ronny)."},
+ {de:"Schnelle Liste", en:"Rapid Fire Listicle", img:["s_schnell"], by:"Sam", at:[SV + 505], d:"Sehr viele Punkte, zum Beispiel 30, extrem schnell hintereinander. Die Liste steht dabei im Bild.", tip:"Viel Wert in kurzer Zeit (Sam)."},
+ {de:"T-Tabelle", en:"T-Graph", img:["r15"], v:"8", g:"6", by:"Ronny", at:[RV + 916], d:"Zwei Spalten wie ein großes T, zum Beispiel „erlaubt“ und „verboten“. Du sortierst Dinge in die Spalten.", tip:"Zeigt deine Meinung, ist aber verbreitet (Ronny)."},
+ {de:"Animationen", en:"Motion Graphics", img:["motion"], v:"7", g:"8", by:"Ronny", at:[RV + 970], d:"Grafiken und Bewegungen erklären, was du sagst, zum Beispiel Begriffe, Pfeile und Diagramme, die ins Bild fliegen. Das Bild ist ein Beispiel aus Sam Gaudets Video.", tip:"Wirkt hochwertig und hilft beim Verstehen, braucht aber einen guten Editor (Ronny)."},
+ {de:"Vlog", en:"Vlog", img:["r17"], v:"4,5", g:"9", by:"Ronny", at:[RV + 1036], d:"Du filmst deinen Alltag und nimmst die Leute mit, zum Beispiel im Auto, beim Training oder bei der Arbeit.", tip:"Baut Nähe auf. Aufrufe kommen aber erst, wenn du schon ein Publikum hast (Ronny)."},
+ {de:"Requisiten", en:"Props", img:["r18"], v:"4 bis 5, gut geskriptet 9", g:"8", by:"Ronny", at:[RV + 1096], d:"Gegenstände machen deine Aussage sichtbar, zum Beispiel Teller mit verschiedenen Lebensmitteln als Vergleich.", tip:"Das Bild muss im Kopf des Zuschauers sofort Sinn ergeben (Ronny)."},
+ {de:"Tafel oder Notizblock", en:"Whiteboard / Sketchpad", img:["r19"], v:"7,5", g:"10", by:"Ronny", at:[RV + 1180], d:"Du schreibst oder zeichnest auf eine Tafel, einen Bildschirm oder einen Block und erklärst daran wie im Unterricht.", tip:"Braucht eine eigene Methode, die schon Ergebnisse gebracht hat (Ronny)."},
+ {de:"B-Roll mit Text", en:"B-roll + Text", img:["r20"], v:"10", g:"3", by:"Ronny", at:[RV + 1252], d:"Ein ruhiges Video, zum Beispiel eine Aussicht oder ein Paar, mit einem Text darüber. Meist nur 5 bis 7 Sekunden.", tip:"Sehr viele Aufrufe, aber kaum neue Follower (Ronny)."},
+ {de:"Sprecher aus dem Off", en:"Voiceover", img:["r21"], v:"6,5", g:"8", by:"Ronny", at:[RV + 1320], d:"Du sprichst über Bilder oder Videos, ohne selbst im Bild zu sein, zum Beispiel über alte Fotos von dir.", tip:"Gut für Geschichten und um Nähe aufzubauen (Ronny)."},
+ {de:"Meme", en:"Meme", img:["r22"], v:"8,5", g:"3", by:"Ronny", at:[RV + 1361], d:"Ein lustiges, wiedererkennbares Bild oder Video mit kurzem Text, oft „POV: …“.", tip:"Wird gern geteilt, bringt aber kaum Follower (Ronny)."},
+ {de:"Karussell", en:"Carousel", img:["r23"], v:"6,5", g:"7", by:"Ronny", at:[RV + 1426], d:"Mehrere Bilder zum Durchwischen statt eines Videos.", tip:"Trick: ein Video, das schon gut lief, in Slides umbauen (Ronny)."},
+ {de:"Videocall-Aufnahme", en:"Zoom Recording", img:["r24"], v:"5", g:"6", by:"Ronny", at:[RV + 1476], d:"Mitschnitt eines Videocalls, zum Beispiel ein Coaching-Gespräch, mit mehreren Fenstern im Bild.", tip:"Macht kaum jemand, läuft aber selten groß (Ronny)."},
+ {de:"Reaktion", en:"Reaction", img:["r25", "s_reaktion"], v:"8,5", g:"8", by:"Ronny, Sam", at:[RV + 1500, SV + 510], d:"Du reagierst auf ein fremdes Video, das neben oder über dir läuft, und sagst deine Meinung dazu.", tip:"Nur mit eigener, durchdachter Meinung, sonst bist du einer von vielen (Ronny)."},
+ {de:"Rote und grüne Flagge", en:"Red Flag / Green Flag", img:["s_flag"], by:"Sam", at:[SV + 504], d:"Du ordnest Verhalten ein: rote Flagge heißt Warnzeichen, grüne Flagge heißt gutes Zeichen.", tip:"Aus Sams 15 Formaten für Kurzvideos."},
+ {de:"Dies oder das", en:"This or That", img:["s_thisthat"], by:"Sam", at:[SV + 508], d:"Zwei Möglichkeiten stehen nebeneinander, zum Beispiel 2020 gegen 2026, und du entscheidest dich für eine.", tip:"Aus Sams 15 Formaten für Kurzvideos."},
+ {de:"Einfach reden", en:"Yap", img:["s_yap"], by:"Sam", at:[SV + 510], d:"Du redest frei drauflos, nah an der Kamera, mit großen Untertiteln und wenig Schnitt. Wirkt persönlich und echt.", tip:"Passt zu Sams Off-the-Dome-Methode: Gliederung einprägen, dann frei sprechen."},
+ {de:"Nicht so, sondern so", en:"Don't vs Do", img:["s_dontdo"], by:"Sam", at:[SV + 511], d:"Links steht die falsche Version, rechts die richtige, zum Beispiel Formulierungen, die du ersetzen solltest.", tip:"Aus Sams 15 Formaten für Kurzvideos."},
+ {de:"Bildschirm zeigen", en:"Screenshare", img:["s_screen"], by:"Sam", at:[SV + 513], d:"Du zeigst deinen Bildschirm, zum Beispiel ein Dokument, eine Website oder eine App, und erklärst daran. Du bist klein mit im Bild.", tip:"Aus Sams 15 Formaten für Kurzvideos."},
+ {de:"Haftnotizen", en:"Sticky Note", img:["s_sticky"], by:"Sam", at:[SV + 514], d:"Du schreibst Punkte auf Haftnotizen und klebst sie beim Erklären nacheinander an eine Wand.", tip:"Aus Sams 15 Formaten für Kurzvideos."},
+ {de:"Überbewertet oder unterbewertet", en:"Overrated / Underrated", img:["s_overrated"], by:"Sam", at:[SV + 514], d:"Du ordnest Dinge ein, zum Beispiel KI-Tools, als überbewertet oder unterbewertet und sagst, warum.", tip:"Aus Sams 15 Formaten für Kurzvideos."}
+];
 const RONNY6 = ["Vorreiter", "Inspiration", "Ähnlichkeit", "Sicherheit", "Sympathie", "Hebel"];
 const SPCL = [["s", "Status", "Du hast etwas, das andere wollen"], ["p", "Macht", "Du sagst etwas, sie machen es, es geht gut aus"], ["c", "Glaubwürdigkeit", "Beweise von außen"], ["l", "Ähnlichkeit", "Sie erkennen sich in dir wieder"]];
 const PLATFORMS = ["Instagram", "TikTok", "YouTube Shorts"];
@@ -672,8 +722,9 @@ function stepView(id){
 function studioView(a, b){
   if (a === "v" && b) return videoView(b);
   const tab = a || "werk", seg = (k, l) => `<a class="chip ${tab === k ? "on" : ""}" href="#/studio/${k}">${l}</a>`;
-  let h = pageHead("Content Creation · Distribution", "Studio") + `<div class="wrap"><div class="seg">${seg("werk", "Videos")}${seg("hooks", "Hook-Labor")}${seg("verteilen", "Verteilen & Algorithmus")}</div>`;
-  if (tab === "hooks") h += hookLab();
+  let h = pageHead("Content Creation · Distribution", "Studio") + `<div class="wrap"><div class="seg">${seg("werk", "Videos")}${seg("formate", "Formate")}${seg("hooks", "Hook-Labor")}${seg("verteilen", "Verteilen & Algorithmus")}</div>`;
+  if (tab === "formate") h += lexView();
+  else if (tab === "hooks") h += hookLab();
   else if (tab === "verteilen") h += distView();
   else {
     const work = ST.videos.filter(v => !v.posted), done = postedVideos();
@@ -685,6 +736,41 @@ function studioView(a, b){
 }
 function ringSVG(pct){ const C = 2 * Math.PI * 26; return `<svg class="ring" viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="26"/><circle class="fg" cx="32" cy="32" r="26" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct / 100)}" transform="rotate(-90 32 32)"/><text x="32" y="32">${pct}</text></svg>`; }
 function rulesHTML(R){ return `<ul class="rules">${R.map(r => `<li class="${r[0] === null ? "info" : r[0] ? "pass" : "fail"}"><i>${r[0] === null ? "i" : r[0] ? "✓" : "×"}</i><span>${esc(r[1])} <span class="faint tiny">· ${esc(r[2])}</span></span></li>`).join("")}</ul>`; }
+/* --- Format-Lexikon mit echten Bildern (privat aus Supabase-Storage) --- */
+const FIMG = {};
+async function loadFmtImgs(){
+  if (!sb || !user || loadFmtImgs.busy) return; loadFmtImgs.busy = true;
+  try { const c = JSON.parse(localStorage.getItem("bw-fimg") || "null"); if (c && c.u === user.id && c.exp > Date.now()) { Object.assign(FIMG, c.m); loadFmtImgs.busy = false; return paintFmt(); } } catch (e) {}
+  const keys = [...new Set(LEX.flatMap(x => x.img))], paths = keys.map(k => `${user.id}/brandweg/formats/${k}.jpg`);
+  try {
+    const {data, error} = await sb.storage.from("files").createSignedUrls(paths, 60 * 60 * 24 * 7);
+    if (error) throw error;
+    data.forEach((d, i) => { if (d.signedUrl) FIMG[keys[i]] = d.signedUrl; });
+    if (Object.keys(FIMG).length) try { localStorage.setItem("bw-fimg", JSON.stringify({u:user.id, exp:Date.now() + 6 * 864e5, m:FIMG})); } catch (e) {}
+    paintFmt();
+  } catch (e) {}
+  loadFmtImgs.busy = false;
+}
+function paintFmt(){ $$("[data-fimg]").forEach(el => { const u = FIMG[el.dataset.fimg]; if (u && !el.style.backgroundImage) el.style.backgroundImage = `url('${u}')`; }); }
+function lexView(){
+  setTimeout(loadFmtImgs, 0);
+  const q = (UI.fq || "").toLowerCase(), list = LEX.map((x, i) => [x, i]).filter(([x]) => !q || (x.de + " " + x.en + " " + x.d).toLowerCase().includes(q));
+  return `<section class="glass reveal"><p style="margin:0 0 12px">Alle Formate aus Ronny Mitchells und Sam Gaudets Videos, mit einem echten Beispielbild aus dem Video. Tipp eins an für Erklärung, Bewertung und die Stelle im Video.</p><input type="text" id="fq" placeholder="Suchen, z. B. Liste, Klon, Tafel" value="${esc(UI.fq || "")}"></section>
+    <div class="lex">${list.map(([x, i]) => `<button class="lex-c" data-act="lex" data-i="${i}"><span class="lex-img" data-fimg="${x.img[0]}" ${FIMG[x.img[0]] ? `style="background-image:url('${FIMG[x.img[0]]}')"` : ""}><i>${esc(x.de)}</i></span><b>${esc(x.de)}</b><small>${esc(x.en)}${x.v ? ` · Aufrufe ${esc(x.v)} · Geld ${esc(x.g)}` : ` · ${esc(x.by)}`}</small></button>`).join("")}</div>
+    ${user ? "" : `<p class="tiny muted">Die Beispielbilder liegen privat in deinem Konto. Melde dich an, um sie zu sehen.</p>`}`;
+}
+function lexSheet(i){
+  const x = LEX[i], mine = ST.prof.format === x.de;
+  const bar = (l, v) => { const n = parseFloat(String(v || "").replace(",", ".")); return isFinite(n) ? `<div class="between small" style="margin-top:8px"><span>${l}</span><span class="num">${esc(v)}/10</span></div><div class="bar"><i style="width:${n * 10}%"></i></div>` : ""; };
+  setTimeout(loadFmtImgs, 0);
+  const who = x.by === "Sam" ? "Sam Gaudet" : x.by === "Ronny" ? "Ronny Mitchell" : "Ronny Mitchell und Sam Gaudet";
+  return `<span class="kick acc">${esc(who)}</span><h2 class="h-l" style="margin:8px 0 2px">${esc(x.de)}</h2><div class="tiny muted">Englisch: ${esc(x.en)}</div>
+    <div class="lex-big">${x.img.map(k => `<span class="lex-img" data-fimg="${k}" ${FIMG[k] ? `style="background-image:url('${FIMG[k]}')"` : ""}><i>${esc(x.de)}</i></span>`).join("")}</div>
+    <p style="margin:12px 0 6px">${esc(x.d)}</p><p class="muted small" style="margin:0 0 6px">${esc(x.tip)}</p>
+    ${x.v ? bar("Aufrufe (Ronny)", x.v) + bar("Geld verdienen (Ronny)", x.g) : ""}
+    <div class="chips" style="margin:14px 0">${x.at.map((u, k) => `<a class="chip" href="${u}" target="_blank" rel="noopener">Beispiel im Video${x.at.length > 1 ? (k ? " (Sam)" : " (Ronny)") : ""}</a>`).join("")}</div>
+    <button class="btn block ${mine ? "ghost" : ""}" data-act="lexpick" data-i="${i}">${mine ? "Ist dein Format" : "Als mein Format festlegen"}</button>`;
+}
 function hookLab(){
   const bank = lines(ST.prof.hooks);
   return `<section class="glass reveal"><span class="kick acc">Hook testen</span><p class="muted small" style="margin:6px 0 10px">Der Hook ist rund 80 % des Videos. Über die Hälfte wischt in den ersten 3 Sekunden weg (Mino).</p>
@@ -837,7 +923,7 @@ function strategyView(){
       <div class="tiny muted" style="margin:14px 0 8px">Bis zu 3 Formate wählen (Sams 15 für Kurzvideos):</div>
       <div class="chips">${SAM15.map(f => `<button class="chip ${((ST.brand.mult || {}).formats || []).includes(f) ? "on" : ""}" data-act="multfmt" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div>
       <div id="multgrid" style="margin-top:14px">${multGrid()}</div></section>
-    <section class="glass reveal"><span class="kick acc">Format-Karte</span><p class="muted small" style="margin:6px 0 10px">Ronny Mitchells 25 Formate: rechts mehr Aufrufe, oben mehr Geld. Zeigen schlägt erzählen. Tipp einen Punkt an.</p>
+    <section class="glass reveal"><span class="kick acc">Format-Karte</span><p class="muted small" style="margin:6px 0 10px">Ronny Mitchells 25 Formate: rechts mehr Aufrufe, oben mehr Geld. Zeigen schlägt erzählen. Tipp einen Punkt an. Wie die Formate aussehen, zeigt das <a href="#/studio/formate">Format-Lexikon</a> mit echten Beispielbildern.</p>
     <svg class="chart matrix" viewBox="0 0 ${W} ${H}"><line class="ax" x1="26" y1="${H - 26}" x2="${W - 8}" y2="${H - 26}"/><line class="ax" x1="26" y1="8" x2="26" y2="${H - 26}"/><text x="${W - 8}" y="${H - 10}" text-anchor="end">Aufrufe →</text><text x="30" y="16">Geld ↑</text>
       ${FORMATS.map((f, i) => `<circle cx="${px(f[1]).toFixed(1)}" cy="${py(f[2]).toFixed(1)}" r="${f[0] === UI.fmt || f[0] === fm ? 8 : 5.5}" class="${f[0] === UI.fmt || f[0] === fm ? "on" : ""}" data-act="fmt" data-i="${i}"><title>${esc(f[0])}</title></circle>`).join("")}</svg>
     <div id="fmtinfo">${fmtInfo()}</div></section>
@@ -1004,6 +1090,8 @@ document.addEventListener("click", async e => {
   if (act === "fmtpick") { if (UI.fmt) { ST.prof.format = UI.fmt; save(true); $("#fmtinfo").innerHTML = fmtInfo(); toast("Als dein Format gespeichert"); } return; }
   if (act === "multfmt") { const m = ST.brand.mult ||= {}, a = m.formats ||= [], f = b.dataset.f; if (a.includes(f)) a.splice(a.indexOf(f), 1); else { if (a.length >= 3) return toast("Höchstens 3 Formate"); a.push(f); } save(true); b.classList.toggle("on", a.includes(f)); $("#multgrid").innerHTML = multGrid(); return; }
   if (act === "mult2video") { const m = ST.brand.mult || {}, an = (m.angles || []).filter(x => x && x.trim()), a = an[+b.dataset.a]; const nv = newVideo("heit", {title:a, idee:`${m.topic}: ${a} (Format: ${b.dataset.f})`}); location.hash = "#/studio/v/" + nv.id; return; }
+  if (act === "lex") return openSheet(lexSheet(+b.dataset.i));
+  if (act === "lexpick") { ST.prof.format = LEX[+b.dataset.i].de; save(true); toast("Als dein Format gespeichert"); return openSheet(lexSheet(+b.dataset.i)); }
   if (act === "tree2video") { const t = (ST.tree || [])[+b.dataset.i]; if (!t) return; const nv = newVideo("lern", {title:t, idee:t}); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "savehook") { const t = (UI.hook || "").trim(); if (!t) return toast("Erst einen Hook eintippen"); ST.prof.hooks = [...lines(ST.prof.hooks), t].join("\n"); UI.hook = ""; save(); return toast("In der Hook-Bank"); }
   if (act === "testhook") { UI.hook = lines(ST.prof.hooks)[+b.dataset.i] || ""; render(); scrollTo({top:0, behavior:"smooth"}); return; }
@@ -1038,6 +1126,7 @@ document.addEventListener("input", e => {
     return;
   }
   if (t.id === "q") { UI.q = t.value; const pos = t.selectionStart; render(); const q = $("#q"); q.focus(); q.setSelectionRange(pos, pos); return; }
+  if (t.id === "fq") { UI.fq = t.value; const pos = t.selectionStart; render(); const q = $("#fq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.id === "hooktest") { UI.hook = t.value; hookLive(t.value); return; }
   if (t.dataset.b) { ST.brand[t.dataset.b] = t.value.trim(); save(true); const el = $("#pv-user"); if (el) el.textContent = t.value || "dein.name"; return; }
   if (t.dataset.actIn === "capcol") { (ST.brand.look ||= {}).color = t.value; save(true); const c = $(".sub-prev .cap"); if (c) c.style.color = t.value; return; }
