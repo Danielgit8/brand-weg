@@ -436,7 +436,7 @@ for n in sorted(CH):
     WISSEN.append({"id": "k%d" % n, "n": n, "title": i["title"].split(" · ", 1)[1], "body": clean(i["body"]), "refs": [r for r in i.get("rel", [])]})
 WISSEN.append({"id": "formate", "n": None, "title": "Format-Tabelle: 25 Formate bewertet", "body": clean(fmt["body"]), "refs": fmt.get("rel", [])})
 
-CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis")]
+CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu")]
 SRC = {}
 for i in src["items"]:
     if i["kind"] != "resource" or i.get("archived"):
