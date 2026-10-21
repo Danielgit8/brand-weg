@@ -123,6 +123,7 @@ lessons: [
  goal:"Aus einem Erlebnis der Woche wird eine Idee in höchstens 10 Wörtern.",
  ex:[["q","Mino, Kurs-Tag 2","Die 3 Momente der letzten 7 Tage mit dem stärksten Gefühl aufschreiben. Banal ist okay."],
      ["q","Alex Hormozi","Einfangen statt herstellen: vorher, dabei, nachher."],
+     ["q","Robert McKeaveney","Bei null zu stehen heißt nicht, dass du nichts zu posten hast. Es heißt, dass du die ganze Geschichte erzählen kannst. Leute folgen nicht der Perfektion, sondern dem Weg."],
      ["e","Frag bei jedem Moment: Wem hilft es, das zu hören? Wenn dir eine Person einfällt, ist es eine Idee."]],
  bsp:"Erlebnis: Paul hat sein Video dreimal gelöscht, bevor er es gepostet hat. Idee: „Warum ich mein erstes Video dreimal gelöscht habe“.",
  task:"Nimm einen Moment der Woche und formulier daraus eine Idee in höchstens 10 Wörtern.",
