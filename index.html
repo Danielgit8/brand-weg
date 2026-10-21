@@ -176,6 +176,9 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .sh-r p.sh-miss{color:var(--muted);font-style:italic}
 .sh-r p.sh-miss a{color:var(--acc)}
 .sh-b+.btn{margin-top:20px}
+.mat-card{padding:14px 0;border-top:1px solid var(--line)} .mat-card:first-of-type{border-top:0}
+.mat-card>a{color:inherit} .mat-card b{display:block;font-weight:600;line-height:1.35} .mat-card small{display:block;font-size:12.5px;margin-top:2px}
+.mat-card p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.5}
 .src-card{display:block;padding:13px 0;border-top:1px solid var(--line);color:inherit}
 .src-card:first-child{border-top:0}
 .src-card b{display:block;font-weight:600;line-height:1.35}
@@ -734,7 +737,7 @@ function render(){
   if (login) { app.innerHTML = loginView(); after(); return; }
   if (r !== "lernen" && akBack) { akBack = null; try { sessionStorage.removeItem("bw-akback"); } catch (_) {} }
   setAcc(curWorld());
-  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, lernen:() => lernenView(a, b), wissen:() => a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
+  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, lernen:() => lernenView(a, b), wissen:() => a === "material" ? materialView() : a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
   app.innerHTML = v();
   if (lastRoute !== location.hash) { window.scrollTo(0, 0); lastRoute = location.hash; }
   after();
@@ -1337,10 +1340,33 @@ function zahlenView(){
 }
 
 /* --- Wissen --- */
+// Alles Material an einem Ort: PDFs, Vorlagen und Werkzeuge, Videos nach Creator. Dazu, wo es im Weg und im Wissen vorkommt.
+function materialView(){
+  const q = (UI.mq || "").toLowerCase().trim(), all = Object.entries(D.sources);
+  const hit = ([, s]) => !q || (s.t + " " + s.sum + " " + s.who + " " + (s.files || []).map(f => f.n).join(" ")).toLowerCase().includes(q);
+  const isVideo = s => /youtu\.?be|instagram\.com\/(reel|p)\//.test(s.url);
+  const used = id => [...D.wissen.filter(w => (w.refs || []).includes(id)).map(w => `<a class="chip" href="#/wissen/${w.id}">${w.n ? "Kapitel " + w.n : esc(w.title)}</a>`),
+    ...STEPS.filter(st => (st.refs || []).includes(id)).map(st => `<a class="chip" href="#/weg/${st.id}" style="white-space:normal">${esc(st.title)}</a>`)].slice(0, 5).join("");
+  const card = ([id, s]) => `<div class="mat-card"><a href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b></a><small class="muted">${esc(s.who)}</small>${s.sum ? `<p>${esc(s.sum)}</p>` : ""}
+    ${s.files ? `<div class="row" style="gap:8px;margin-top:8px">${s.files.map(f => `<button class="btn ghost" data-act="pdf" data-p="${esc(f.p)}">PDF öffnen: ${esc(f.n.replace(/\.pdf$/i, ""))}</button>`).join("")}</div>` : ""}
+    ${s.more ? `<details style="margin-top:8px"><summary class="tiny muted">${s.more.length} weitere Links</summary><div class="chips" style="margin-top:8px">${s.more.map(m => `<a class="chip" href="${esc(m.u)}" target="_blank" rel="noopener" style="white-space:normal">${esc(m.l || "Link")}</a>`).join("")}</div></details>` : ""}
+    ${used(id) ? `<div class="chips" style="margin-top:10px"><span class="tiny faint" style="align-self:center">Kommt vor in:</span>${used(id)}</div>` : ""}</div>`;
+  const list = all.filter(hit), pdfs = list.filter(([, s]) => s.files), tools = list.filter(([, s]) => !s.files && !isVideo(s)), vids = list.filter(([, s]) => !s.files && isVideo(s));
+  let h = `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Wissen</a><span class="kick acc" style="display:block;margin-top:16px">Alles an einem Ort</span><h1 class="h-xl" style="margin-top:8px">Material</h1>
+    <p class="muted" style="margin:8px 0 0">Alle PDFs, Vorlagen und Videos, die in deinem Weg vorkommen. Bei jedem steht, wo du es brauchst.</p></div><div class="wrap">
+    <section class="glass reveal"><input type="text" id="mq" aria-label="Material durchsuchen" placeholder="Suchen, z. B. Hooks, Schnitt, UGC" value="${esc(UI.mq || "")}">
+    <div class="chips" style="margin-top:12px"><button class="chip" data-act="jump" data-t="mat-pdf">PDFs · ${pdfs.length}</button><button class="chip" data-act="jump" data-t="mat-tools">Vorlagen und Werkzeuge · ${tools.length}</button><button class="chip" data-act="jump" data-t="mat-vid">Videos · ${vids.length}</button></div></section>`;
+  if (pdfs.length) h += `<section class="glass reveal" id="mat-pdf"><span class="kick acc">PDFs zum Lesen</span>${!user ? `<p class="tiny muted" style="margin:6px 0 0">Die PDFs liegen in deinem Konto. Zum Öffnen anmelden.</p>` : ""}${pdfs.map(card).join("")}</section>`;
+  if (tools.length) h += `<section class="glass reveal" id="mat-tools"><span class="kick acc">Vorlagen und Werkzeuge</span>${tools.map(card).join("")}</section>`;
+  const groups = [...new Set(vids.map(([, s]) => s.who))];
+  if (vids.length) h += `<section class="glass reveal" id="mat-vid"><span class="kick acc">Videos nach Creator</span></section>` + groups.map(g => `<section class="glass reveal"><span class="kick">${esc(g)} · ${vids.filter(([, s]) => s.who === g).length}</span>${vids.filter(([, s]) => s.who === g).map(card).join("")}</section>`).join("");
+  if (!list.length) h += `<section class="glass"><p class="empty" style="margin:0">Nichts gefunden.</p></section>`;
+  return h + `</div>`;
+}
 function wissenView(){
   const q = (UI.q || "").toLowerCase().trim(), hit = w => !q || (w.title + " " + w.body).toLowerCase().includes(q);
   let h = pageHead("Zum Nachschlagen", "Wissen") + `<div class="wrap"><section class="glass reveal"><p style="margin:0 0 12px">Wenn du bei einem Schritt hängst. Hier steht, was Mino Lee, Ronny Mitchell, Sam Gaudet und Alex Hormozi sagen, nach Themen sortiert.</p>
-    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><a class="chip" href="#/wissen/begriffe" style="margin-top:12px">Begriffe Deutsch und Englisch</a></section>`;
+    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><div class="chips" style="margin-top:12px"><a class="chip on" href="#/wissen/material">Alles Material: PDFs, Vorlagen, Videos</a><a class="chip" href="#/wissen/begriffe">Begriffe Deutsch und Englisch</a></div></section>`;
   h += `<section class="glass reveal" style="padding:6px 18px">${D.wissen.filter(hit).map(w => `<a class="item" href="#/wissen/${w.id}"><span class="num acc" style="color:var(--acc);width:24px">${w.n ? pad(w.n) : "··"}</span><span class="t"><b>${esc(w.title)}</b>${q ? `<small>${esc(snip(w.body, q))}</small>` : ""}</span></a>`).join("") || `<div class="empty" style="padding:12px 0">Nichts gefunden.</div>`}</section>`;
   const srcs = Object.values(D.sources).filter(s => !q || (s.t + " " + s.sum + " " + s.who).toLowerCase().includes(q));
   for (const g of [...new Set(srcs.map(s => s.who))]) h += `<section class="glass reveal"><span class="kick acc">${esc(g)}</span>${srcs.filter(s => s.who === g).map(s => `<a class="src-card" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b>${s.sum ? `<small>${esc(s.sum)}</small>` : ""}</a>`).join("")}</section>`;
@@ -1364,6 +1390,7 @@ function helpHTML(){
     <li><b>Lernen</b> ist die Lernakademie: Fähigkeiten einzeln üben, passend zu deinen Aufgaben. Übungen haken keinen Schritt im Weg ab.</li>
     <li><b>Brand</b> ist deine Identität und Strategie: Profil, Look, Markenkern, Themenbaum, Säulen und Formate. Dort steht auch alles, was du in den Schritten einträgst.</li>
     <li><b>Zahlen</b> ist Analytics: Aufrufe, Ausreißer, bestes gegen schwächstes Video, Retention.</li>
+    <li><b>Material</b> (Buch oben rechts, dann „Alles Material“) sammelt alle PDFs, Vorlagen und Videos an einem Ort.</li>
     <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
     <h4>Am Android-Handy</h4><p>In Chrome danielgit8.github.io/brand-weg/ öffnen und mit deinem Cockpit-Konto anmelden. Dann „Als App installieren“ tippen. Kommt der Knopf nicht, oben rechts auf die drei Punkte und „App installieren“ oder „Zum Startbildschirm hinzufügen“. Laptop und Handy bleiben gleich, ein eigenes Konto brauchst du nicht.</p></div>
     ${installEv ? `<button class="btn block" data-act="install" style="margin-top:12px">Als App installieren</button>` : ""}
@@ -1426,6 +1453,11 @@ document.addEventListener("click", async e => {
     if (t.startsWith("p:")) { const f = t.slice(2), old = (ST.prof[f] || "").trim(); if (!confirm(`In „${flabel(f)}“ unter Brand übernehmen?${old ? `\n\nBisher:\n${old.slice(0, 240)}` : ""}`)) return; ST.prof[f] = r; save(); return toast("Unter Brand übernommen"); }
     const v = akVideo(); if (!v) return; const old = (v[t] || "").trim();
     if (!confirm(`Als ${AKTR[t]} in „${v.title}“ übernehmen?${old ? `\n\nBisher:\n${old.slice(0, 240)}` : ""}`)) return; v[t] = r; save(); return toast("Ins Video übernommen"); }
+  if (act === "jump") { const el = document.getElementById(b.dataset.t); if (el) scrollTo({top:el.getBoundingClientRect().top + scrollY - 90, behavior:RM ? "auto" : "smooth"}); return; }
+  if (act === "pdf") { if (!sb || !user) return toast("PDFs liegen in deinem Konto. Melde dich an, um sie zu öffnen.");
+    const w = window.open("", "_blank"); const {data, error} = await sb.storage.from("files").createSignedUrl(user.id + "/" + b.dataset.p, 3600);
+    if (error || !data) { if (w) w.close(); return toast("Die Datei ließ sich gerade nicht öffnen."); }
+    if (w) w.location = data.signedUrl; else location.href = data.signedUrl; return; }
   if (act === "copysheet") { const s = STEPS.find(x => x.id === b.dataset.id);
     const t = s.sheet.map(bl => `${bl.t} (Quelle: ${bl.src})\n` + bl.f.map(id => `${flabel(id)}: ${(ST.prof[id] || "").trim() || "fehlt noch"}`).join("\n")).join("\n\n");
     try { await navigator.clipboard.writeText(t); toast("Seite kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
@@ -1483,6 +1515,7 @@ document.addEventListener("input", e => {
     return;
   }
   if (t.id === "q") { UI.q = t.value; const pos = t.selectionStart; render(); const q = $("#q"); q.focus(); q.setSelectionRange(pos, pos); return; }
+  if (t.id === "mq") { UI.mq = t.value; const pos = t.selectionStart; render(); const q = $("#mq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.id === "gq") { UI.gq = t.value; const pos = t.selectionStart; render(); const q = $("#gq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.dataset.actIn === "noen") { ST.open.noEn = !t.checked; saveLocal(); return render(); }
   if (t.id === "fq") { UI.fq = t.value; const pos = t.selectionStart; render(); const q = $("#fq"); q.focus(); q.setSelectionRange(pos, pos); return; }

@@ -474,6 +474,11 @@ for i in src["items"]:
     if len(first) > 230:
         first = first[:230].rsplit(" ", 1)[0] + " …"
     SRC[i["id"]] = {"t": clean(i["title"]), "who": who, "url": url, "sum": clean(first), "img": i.get("image", "")}
+    # Dateien nur mit Pfad ohne Nutzer-ID (die App setzt sie beim Öffnen davor), weitere Links ohne Zeitmarken desselben Videos
+    files = [{"n": f["name"], "p": f["path"].split("/", 1)[1]} for f in i.get("files", []) if "/" in f.get("path", "")]
+    more = [{"u": l["url"], "l": clean(l.get("label") or "")} for l in (i.get("links") or [])[1:] if l.get("url") and l["url"].split("?")[0] != url.split("?")[0] and "t=" not in l["url"]]
+    if files: SRC[i["id"]]["files"] = files
+    if more: SRC[i["id"]]["more"] = more
 
 for st in S:
     st["refs"] = [r for r in st["refs"] if r in SRC]
