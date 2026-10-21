@@ -229,6 +229,7 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .road span.blur small{filter:blur(4px)}
 .en{color:var(--faint);font-weight:400;font-size:.92em}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
+body.login #nav{display:none}
 #nav .in{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
 #nav a svg{width:22px;height:22px}
@@ -442,7 +443,7 @@ function begriffeView(){
   const hit = g => !q || (g[0].join(" ") + " " + g[1] + " " + g[2]).toLowerCase().includes(q);
   return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Wissen</a><span class="kick acc" style="display:block;margin-top:16px">Deutsch und Englisch</span><h1 class="h-xl" style="margin-top:8px">Begriffe</h1></div>
     <div class="wrap" data-noen><section class="glass reveal"><p style="margin:0 0 12px">Die Videos sind auf Englisch, die App auf Deutsch. Hier stehen beide Wörter nebeneinander. In der App steht der englische Begriff außerdem in Klammern dahinter, wenn er zum ersten Mal auf einer Seite vorkommt.</p>
-    <input type="text" id="gq" placeholder="Suchen, z. B. Angle, Hook, Ausreißer" value="${esc(UI.gq || "")}">
+    <input type="text" id="gq" aria-label="Begriffe suchen" placeholder="Suchen, z. B. Angle, Hook, Ausreißer" value="${esc(UI.gq || "")}">
     <label class="row small" style="margin-top:12px;gap:8px"><input type="checkbox" data-act-in="noen" ${ST.open.noEn ? "" : "checked"} style="width:18px;height:18px;accent-color:var(--acc)"> Englische Begriffe in der App anzeigen</label></section>
     ${cats.map(c => { const gs = GLOSS.filter(hit).filter(g => g[3] === c); return gs.length ? `<section class="glass"><span class="kick acc">${esc(c)}</span><div class="list" style="margin-top:4px">${gs.map(g => `<div class="item"><span class="t"><b>${esc(g[0][0])} <span class="en" style="font-weight:600">· ${esc(g[1])}</span></b><small>${esc(g[2])}</small></span></div>`).join("")}</div></section>` : ""; }).join("")}</div>`;
 }
@@ -524,11 +525,15 @@ try { const j = JSON.parse(localStorage.getItem(LKEY) || "null"); if (j && j.v) 
 let sb = null, user = null, sync = "lokal", pushT = null, authChecked = false, skipLogin = false;
 try { skipLogin = localStorage.getItem("brandweg-skip-login") === "1"; } catch (e) {}
 const UI = {}; // nur auf diesem Gerät, nicht synchronisiert
-function saveLocal(){ try { localStorage.setItem(LKEY, JSON.stringify(ST)); } catch (e) {} }
+function saveLocal(){ try { localStorage.setItem(LKEY, JSON.stringify(ST)); return true; } catch (e) { return false; } }
+// Gibt zurück, ob der Stand irgendwo ankommt (Gerät oder Konto). Ohne beides einmal pro Sitzung warnen.
+let warnedLocal = false;
 function save(quiet){
-  ST.updated = Date.now(); saveLocal();
+  ST.updated = Date.now(); const lok = saveLocal();
   if (user) { setSync("warte"); clearTimeout(pushT); pushT = setTimeout(push, 700); }
+  if (!lok && !user && !warnedLocal) { warnedLocal = true; setTimeout(() => toast("Achtung: Auf diesem Gerät wird gerade nichts gespeichert. Melde dich an oder lade eine Sicherung herunter (Fragezeichen oben)."), 50); }
   if (!quiet) render();
+  return lok || !!user;
 }
 async function push(){
   if (!sb || !user) return;
@@ -594,19 +599,23 @@ function viewsStats(){
 
 /* ---------- Hook- und Skript-Prüfung (Regeln aus den Quellen) ---------- */
 const GREET = /^(hey|hi|hallo|servus|moin|was geht|willkommen|ich bin |mein name|heute zeige ich|in diesem video)/i;
+// Ziffern oder ausgeschriebene Zahlen wie „zwölfmal“, „hundert“ („ein/eins“ nicht, das ist meist ein Artikel)
+const NUM = /\d|\b(zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|elf|zwölf|zwanzig|dreißig|vierzig|fünfzig|hundert|tausend|millionen?)(mal|fach|tausend|hundert)?\b/i;
 function hookCheck(h){
   const t = (h || "").trim(), words = t ? t.split(/\s+/).length : 0, kw = lines(ST.prof.keywords).map(x => x.toLowerCase());
   const R = [
     [t && words <= 15, `Höchstens 15 Wörter (jetzt ${words})`, "Mino"],
     [t && !GREET.test(t), "Keine Begrüßung, keine Vorstellung", "Mino"],
-    [/\d/.test(t), "Konkrete Zahl drin", "Mino, Ronny"],
+    [NUM.test(t), "Konkrete Zahl drin", "Mino, Ronny"],
     [/\b(du|dir|dich|dein\w*|ihr|euch)\b/i.test(t), "Spricht eine Person direkt an", "Mino"],
     [kw.length ? kw.some(k => k && t.toLowerCase().includes(k)) : null, kw.length ? "Ein Wort aus deiner Keyword-Bank" : "Keyword-Bank noch leer (Schritt 11)", "Ronny, Mino"],
-    [t ? !/\b(ich weiß nicht, wer das hören muss|tipps|dinge)\b/i.test(t) : null, "Ein klares Thema statt „Tipps“ oder „Dinge“", "Ronny"]
+    [t ? !/\b(ich weiß nicht, wer das hören muss|tipps|dinge)\b/i.test(t) : null, "Ein klares Thema statt „Tipps“ oder „Dinge“", "Ronny"],
+    [null, "Zählt nur die Form, nicht ob der Hook gut ist. Selbst prüfen: Versteht ein Fremder sofort, worum es geht, und will er wissen, wie es weitergeht?", "Klar vor schnell, Wissen Kapitel 4"]
   ];
   const scored = R.filter(r => r[0] !== null), pass = scored.filter(r => r[0]).length;
-  return {R, score:t ? Math.round(pass / scored.length * 100) : 0};
+  return {R, pass:t ? pass : 0, n:scored.length};
 }
+const hookRing = c => ringSVG(c.n ? c.pass / c.n * 100 : 0, `${c.pass}/${c.n}`);
 function scriptCheck(s){
   const t = (s || "").replace(/^[^\n]*:\s*$/gm, "").trim();
   const sents = t.split(/(?<=[.!?…])\s+|\n+/).map(x => x.trim()).filter(x => x.split(/\s+/).length > 1);
@@ -708,7 +717,8 @@ let lastRoute = "";
 function render(){
   nav();
   const app = $("#app"), [r, a, b] = route();
-  if (sb && authChecked && !user && !skipLogin) { app.innerHTML = loginView(); after(); return; }
+  const login = !!(sb && authChecked && !user && !skipLogin); document.body.classList.toggle("login", login);
+  if (login) { app.innerHTML = loginView(); after(); return; }
   setAcc(curWorld());
   const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, wissen:() => a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
   app.innerHTML = v();
@@ -729,8 +739,8 @@ function loginView(){
     <div class="title"><h1 class="display split" data-fit="170">${splitWord("Dein Weg")}</h1><span class="kick">Personal Brand nach Mino Lee</span></div>
     <div class="content"><div class="in"><div class="glass reveal"><h2 class="h-l">Mit deinem Cockpit-Konto anmelden</h2>
     <p class="muted small" style="margin:0 0 6px">Gleiche E-Mail und gleiches Passwort wie im PARA Cockpit. Dann ist dein Fortschritt auf Laptop und Handy gleich.</p>
-    <form id="login"><div class="fld"><input type="email" id="l-mail" autocomplete="username" placeholder="E-Mail" required></div>
-    <div class="fld"><input type="password" id="l-pw" autocomplete="current-password" placeholder="Passwort" required></div>
+    <form id="login"><div class="fld"><label for="l-mail">E-Mail</label><input type="email" id="l-mail" autocomplete="username" placeholder="E-Mail" required></div>
+    <div class="fld"><label for="l-pw">Passwort</label><input type="password" id="l-pw" autocomplete="current-password" placeholder="Passwort" required></div>
     <p class="small" id="l-msg" style="color:var(--bad);margin:0"></p>
     <button class="btn block" type="submit">Anmelden</button></form>
     <button class="btn ghost block" data-act="skip-login" style="margin-top:10px">Ohne Anmeldung, nur auf diesem Gerät</button></div></div></div></section>`;
@@ -765,11 +775,8 @@ function heuteView(){
 }
 function statsForm(){
   return `<form id="stats" class="grid2" style="margin-top:12px">
-    <input type="number" inputmode="numeric" name="fol" placeholder="Follower">
-    <input type="number" inputmode="numeric" name="best" placeholder="Beste Aufrufe der Woche">
-    <input type="number" inputmode="decimal" name="ret" placeholder="Nach 5 Sek. in %">
-    <input type="number" inputmode="decimal" name="eur" placeholder="Einnahmen in €">
-    <input type="number" inputmode="numeric" name="leads" placeholder="Neue Leads (E-Mails)" style="grid-column:1/-1">
+    ${[["fol", "Follower", "numeric"], ["best", "Beste Aufrufe der Woche", "numeric"], ["ret", "Nach 5 Sek. noch da, in %", "decimal"], ["eur", "Einnahmen in €", "decimal"], ["leads", "Neue Leads (E-Mails)", "numeric"]].map(([k, l, m], i) =>
+      `<div class="fld" style="margin:0${i === 4 ? ";grid-column:1/-1" : ""}"><label for="st_${k}" class="small">${l}</label><input type="number" inputmode="${m}" id="st_${k}" name="${k}"></div>`).join("")}
     <button class="btn" type="submit" style="grid-column:1/-1">Zahlen speichern</button></form>`;
 }
 function videoRow(v){
@@ -876,7 +883,7 @@ function studioView(a, b){
   }
   return h + `</div>`;
 }
-function ringSVG(pct){ const C = 2 * Math.PI * 26; return `<svg class="ring" viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="26"/><circle class="fg" cx="32" cy="32" r="26" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct / 100)}" transform="rotate(-90 32 32)"/><text x="32" y="32">${pct}</text></svg>`; }
+function ringSVG(pct, label){ const C = 2 * Math.PI * 26; return `<svg class="ring" viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="26"/><circle class="fg" cx="32" cy="32" r="26" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct / 100)}" transform="rotate(-90 32 32)"/><text x="32" y="32">${label ?? pct}</text></svg>`; }
 function rulesHTML(R){ return `<ul class="rules">${R.map(r => `<li class="${r[0] === null ? "info" : r[0] ? "pass" : "fail"}"><i>${r[0] === null ? "i" : r[0] ? "✓" : "×"}</i><span>${esc(r[1])} <span class="faint tiny">· ${esc(r[2])}</span></span></li>`).join("")}</ul>`; }
 /* --- Format-Lexikon mit echten Bildern (privat aus Supabase-Storage) --- */
 const FIMG = {};
@@ -915,17 +922,17 @@ function lexSheet(i){
 }
 function hookLab(){
   const bank = lines(ST.prof.hooks);
-  return `<section class="glass reveal"><span class="kick acc">Hook testen</span><p class="muted small" style="margin:6px 0 10px">Der Hook ist rund 80 % des Videos. Über die Hälfte wischt in den ersten 3 Sekunden weg (Mino).</p>
+  return `<section class="glass reveal"><span class="kick acc">Hook testen · Regel-Check</span><p class="muted small" style="margin:6px 0 10px">Der Hook ist rund 80 % des Videos. Über die Hälfte wischt in den ersten 3 Sekunden weg (Mino).</p>
     <textarea id="hooktest" rows="3" placeholder="Dein erster Satz …">${esc(UI.hook || "")}</textarea>
     <div class="meter" style="margin-top:14px" id="hookmeter"></div>
     <div class="row" style="margin-top:12px"><button class="btn ghost" data-act="savehook">In die Hook-Bank</button></div></section>
     <section class="glass reveal"><div class="between"><span class="kick">Deine Hook-Bank · ${bank.length}</span><a class="tiny" href="#/weg/s11">Wie anlegen?</a></div>
-    ${bank.length ? `<div class="list" style="margin-top:4px">${bank.map((x, i) => { const c = hookCheck(x); return `<button class="item" data-act="testhook" data-i="${i}"><span class="num" style="width:34px;color:${c.score >= 80 ? "var(--ok)" : c.score >= 50 ? "#FFC857" : "var(--bad)"}">${c.score}</span><span class="t"><b>${esc(x)}</b></span></button>`; }).join("")}</div>` : `<p class="empty">Noch leer. Copy, Understand, Maximize: Hooks von Videos mit über 50.000 Likes in deinem Format sammeln (Mino).</p>`}</section>
+    ${bank.length ? `<div class="list" style="margin-top:4px">${bank.map((x, i) => { const c = hookCheck(x); return `<button class="item" data-act="testhook" data-i="${i}"><span class="num" style="width:40px;color:${c.pass === c.n ? "var(--ok)" : c.pass / c.n >= .5 ? "#FFC857" : "var(--bad)"}">${c.pass}/${c.n}</span><span class="t"><b>${esc(x)}</b></span></button>`; }).join("")}</div>` : `<p class="empty">Noch leer. Copy, Understand, Maximize: Hooks von Videos mit über 50.000 Likes in deinem Format sammeln (Mino).</p>`}</section>
     <section class="glass flat reveal"><span class="kick">Was einen Hook stark macht</span><ul class="tips">${D.stages[1].tips.map(t => `<li>${esc(t)}</li>`).join("")}<li>Beweis früh: große Zahl oder Ergebnis gleich am Anfang (Leitfaden Kapitel 4).</li><li>Die drei C: Kontext, Gegenposition, offene Schleife (Sam Gaudet).</li></ul></section>`;
 }
 function hookLive(t){
   const m = $("#hookmeter"); if (!m) return; const c = hookCheck(t);
-  m.innerHTML = `${ringSVG(c.score)}<div style="flex:1">${rulesHTML(c.R)}</div>`;
+  m.innerHTML = `${hookRing(c)}<div style="flex:1">${rulesHTML(c.R)}</div>`;
 }
 function distView(){
   const pf = ST.brand.platforms || [], vs = viewsStats(), now = dkey();
@@ -1022,7 +1029,7 @@ function videoView(id){
   const s = stages[cur]; let body = "";
   if (!s) {
     body = `<span class="kick acc">Gepostet${v.posted ? ` am ${fmtD(v.posted)}` : ""}</span><p class="muted small" style="margin:6px 0 4px">Ein, zwei Tage nach dem Posten eintragen. Aufrufe ohne neue Follower schaden eher (Sam Gaudet).</p>
-      <div class="grid2">${[["views", "Aufrufe"], ["follows", "Neue Follower"], ["ret", "Nach 3 Sek. noch da, in %"], ["len", "Länge in Sekunden"], ["react", "Echte Reaktionen aus deiner Zielgruppe"], ["link", "Link zum Video"]].map(([k, l]) => `<div class="fld" style="margin:8px 0"><label class="tiny muted" style="font-weight:500">${l}</label><input type="${k === "link" ? "url" : "text"}" ${k === "link" ? "" : 'inputmode="decimal"'} data-v="${k}" value="${esc(v[k] || "")}"></div>`).join("")}</div>
+      <div class="grid2">${[["views", "Aufrufe"], ["follows", "Neue Follower"], ["ret", "Nach 3 Sek. noch da, in %"], ["len", "Länge in Sekunden"], ["react", "Echte Reaktionen aus deiner Zielgruppe"], ["link", "Link zum Video"]].map(([k, l]) => `<div class="fld" style="margin:8px 0"><label for="vf_${k}" class="tiny muted" style="font-weight:500">${l}</label><input id="vf_${k}" type="${k === "link" ? "url" : "text"}" ${k === "link" ? "" : 'inputmode="decimal"'} data-v="${k}" value="${esc(v[k] || "")}"></div>`).join("")}</div>
       <p class="tiny muted">„Echte Reaktionen“: Nachrichten oder Kommentare von Leuten, für die du das Video gemacht hast. Die zählen mehr als Aufrufe (Alex Hormozi).</p>`;
   } else if (s.id === "idee") {
     const pil = lines(ST.prof.saeulen);
@@ -1033,7 +1040,7 @@ function videoView(id){
   } else if (s.id === "hook") {
     const bank = lines(ST.prof.hooks), c = hookCheck(v.hook);
     body = `<span class="kick acc">2 Hook</span><div class="fld"><textarea rows="2" data-v="hook" data-live="hook" placeholder="Dein erster Satz …">${esc(v.hook)}</textarea></div>
-      <div class="meter" id="vhook">${ringSVG(c.score)}<div style="flex:1">${rulesHTML(c.R)}</div></div>
+      <div class="meter" id="vhook">${hookRing(c)}<div style="flex:1">${rulesHTML(c.R)}</div></div>
       ${bank.length ? `<div class="tiny muted" style="margin:14px 0 8px">Aus deiner Hook-Bank:</div><div class="chips">${bank.map((x, i) => `<button class="chip" data-act="usehook" data-i="${i}" style="white-space:normal;text-align:left">${esc(x)}</button>`).join("")}</div>` : `<p class="tiny muted">Hook-Bank leer: Weg, Schritt 11.</p>`}`;
   } else if (s.id === "skript" && v.typ === "youtube") {
     body = ytBuilder(v);
@@ -1113,13 +1120,13 @@ function strategyView(){
   const W = 320, H = 250, px = v => 26 + (v - 2) / 8.5 * (W - 40), py = g => H - 26 - (g - 2) / 8.5 * (H - 40);
   return `<section class="glass reveal"><span class="kick acc">Themenbaum</span><p class="muted small" style="margin:6px 0 12px">Das große Ergebnis, das dein Zuschauer will, in 10 Teile zerlegen. Jedes Teil ist ein Video (Leitfaden Kap. 3). Pro Video nur ein Teil des Ganzen, so gehen dir die Ideen nie aus (Ronny).</p>
     <div class="script" style="margin-bottom:12px"><span class="tiny muted">Wunschergebnis deines Zuschauers</span><br>${filled("wunsch") ? esc(ST.prof.wunsch) : `<span class="miss">Noch offen, kommt in Schritt 6</span>`}</div>
-    <div class="tree">${Array.from({length:10}, (_, i) => `<div class="node"><span class="n">${pad(i + 1)}</span><input type="text" data-tree="${i}" value="${esc(tree[i] || "")}" placeholder="Teil ${i + 1}"><button class="chip" data-act="tree2video" data-i="${i}" ${tree[i] ? "" : "disabled style='opacity:.35'"}>Video</button></div>`).join("")}</div></section>
+    <div class="tree">${Array.from({length:10}, (_, i) => `<div class="node"><span class="n">${pad(i + 1)}</span><input type="text" aria-label="Teil ${i + 1}" data-tree="${i}" value="${esc(tree[i] || "")}" placeholder="Teil ${i + 1}"><button class="chip" data-act="tree2video" data-i="${i}" ${tree[i] ? "" : "disabled style='opacity:.35'"}>Video</button></div>`).join("")}</div></section>
     <section class="glass reveal"><span class="kick acc">Content-Säulen</span><p class="muted small" style="margin:6px 0 0">Marke ist wiederholte Verbindung: dieselben 3 bis 5 Themen immer wieder (Sam Gaudet). Im Studio ordnest du jedes Video einer Säule zu.</p>
     ${pil.length ? `<div style="margin-top:14px">${pil.map(p => `<div class="between small" style="margin-top:10px"><span>${esc(p)}</span><span class="num muted">${cnt(p)} Videos</span></div><div class="bar"><i style="width:${cnt(p) / tot * 100}%"></i></div>`).join("")}</div>` : ""}
     ${fieldHTML("saeulen", "brand")}${fieldHTML("nische", "brand")}</section>
     <section class="glass reveal"><span class="kick acc">Ideen-Multiplikator</span><p class="muted small" style="margin:6px 0 12px">Eine Idee hat drei Teile: Thema, Blickwinkel, Format. 1 Thema × 3 Blickwinkel × 3 Formate = 9 Videos (Sam Gaudet). Prüf das Thema auf Nachfrage, Passung und dein eigenes Interesse.</p>
-      <input type="text" data-mult="topic" value="${esc((ST.brand.mult || {}).topic || "")}" placeholder="Thema, z. B. Angst vorm ersten Video">
-      <div class="tree" style="margin-top:10px">${[0, 1, 2].map(i => `<div class="node"><span class="n">B${i + 1}</span><input type="text" data-mult="a${i}" value="${esc(((ST.brand.mult || {}).angles || [])[i] || "")}" placeholder="Blickwinkel ${i + 1}"></div>`).join("")}</div>
+      <input type="text" aria-label="Thema" data-mult="topic" value="${esc((ST.brand.mult || {}).topic || "")}" placeholder="Thema, z. B. Angst vorm ersten Video">
+      <div class="tree" style="margin-top:10px">${[0, 1, 2].map(i => `<div class="node"><span class="n">B${i + 1}</span><input type="text" aria-label="Blickwinkel B${i + 1}" data-mult="a${i}" value="${esc(((ST.brand.mult || {}).angles || [])[i] || "")}" placeholder="Blickwinkel ${i + 1}"></div>`).join("")}</div>
       <div class="tiny muted" style="margin:14px 0 8px">Bis zu 3 Formate wählen (Sams 15 für Kurzvideos):</div>
       <div class="chips">${SAM15.map(f => `<button class="chip ${((ST.brand.mult || {}).formats || []).includes(f) ? "on" : ""}" data-act="multfmt" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div>
       <div id="multgrid" style="margin-top:14px">${multGrid()}</div></section>
@@ -1205,7 +1212,7 @@ function zahlenView(){
 function wissenView(){
   const q = (UI.q || "").toLowerCase().trim(), hit = w => !q || (w.title + " " + w.body).toLowerCase().includes(q);
   let h = pageHead("Zum Nachschlagen", "Wissen") + `<div class="wrap"><section class="glass reveal"><p style="margin:0 0 12px">Wenn du bei einem Schritt hängst. Hier steht, was Mino Lee, Ronny Mitchell, Sam Gaudet und Alex Hormozi sagen, nach Themen sortiert.</p>
-    <input type="text" id="q" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><a class="chip" href="#/wissen/begriffe" style="margin-top:12px">Begriffe Deutsch und Englisch</a></section>`;
+    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><a class="chip" href="#/wissen/begriffe" style="margin-top:12px">Begriffe Deutsch und Englisch</a></section>`;
   h += `<section class="glass reveal" style="padding:6px 18px">${D.wissen.filter(hit).map(w => `<a class="item" href="#/wissen/${w.id}"><span class="num acc" style="color:var(--acc);width:24px">${w.n ? pad(w.n) : "··"}</span><span class="t"><b>${esc(w.title)}</b>${q ? `<small>${esc(snip(w.body, q))}</small>` : ""}</span></a>`).join("") || `<div class="empty" style="padding:12px 0">Nichts gefunden.</div>`}</section>`;
   const srcs = Object.values(D.sources).filter(s => !q || (s.t + " " + s.sum + " " + s.who).toLowerCase().includes(q));
   for (const g of [...new Set(srcs.map(s => s.who))]) h += `<section class="glass reveal"><span class="kick acc">${esc(g)}</span>${srcs.filter(s => s.who === g).map(s => `<a class="src-card" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b>${s.sum ? `<small>${esc(s.sum)}</small>` : ""}</a>`).join("")}</section>`;
@@ -1232,7 +1239,9 @@ function helpHTML(){
     <h4>Am Android-Handy</h4><p>In Chrome danielgit8.github.io/brand-weg/ öffnen und mit deinem Cockpit-Konto anmelden. Dann „Als App installieren“ tippen. Kommt der Knopf nicht, oben rechts auf die drei Punkte und „App installieren“ oder „Zum Startbildschirm hinzufügen“. Laptop und Handy bleiben gleich, ein eigenes Konto brauchst du nicht.</p></div>
     ${installEv ? `<button class="btn block" data-act="install" style="margin-top:12px">Als App installieren</button>` : ""}
     <p class="tiny muted" style="margin:16px 0 8px">${user ? `Angemeldet als ${esc(user.email)}.` : "Nicht angemeldet, nur auf diesem Gerät."}</p>
-    ${user ? `<button class="chip" data-act="logout">Abmelden</button>` : sb ? `<button class="chip" data-act="relogin">Anmelden</button>` : ""}`;
+    ${user ? `<button class="chip" data-act="logout">Abmelden</button>` : sb ? `<button class="chip" data-act="relogin">Anmelden</button>` : ""}
+    <h4 style="margin:22px 0 4px">Sicherung</h4><p class="tiny muted" style="margin:0 0 10px">Speichert alles, was du in Brand-Weg eingetragen hast, als Datei. Beim Einspielen wird der Stand ersetzt, auch im Konto, wenn du angemeldet bist.</p>
+    <div class="row"><button class="chip" data-act="backup">Sicherung herunterladen</button><label class="chip" for="bkin" style="cursor:pointer">Sicherung einspielen</label><input type="file" id="bkin" accept=".json,application/json" hidden></div>`;
 }
 function openSheet(html){ $("#sheet .pane").innerHTML = html; annotate($("#sheet .pane")); $("#sheet").classList.add("open"); }
 function closeSheet(){ $("#sheet").classList.remove("open"); }
@@ -1274,6 +1283,8 @@ document.addEventListener("click", async e => {
   if (act === "newvideo") return openSheet(typeSheet());
   if (act === "mkvideo") { const nv = newVideo(b.dataset.typ); closeSheet(); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "tpl2video") { const s = STEPS.find(x => x.id === b.dataset.id); const nv = newVideo(s.video || "freund", {title:s.title.replace(/^Kurs-Tag (\d+): /, "Tag $1: "), skript:fillPlain(s.tpl), step:s.id, stage:2}); location.hash = "#/studio/v/" + nv.id; return; }
+  if (act === "backup") { const a = document.createElement("a"), url = URL.createObjectURL(new Blob([JSON.stringify({app:"brand-weg", saved:new Date().toISOString(), data:ST}, null, 1)], {type:"application/json"}));
+    a.href = url; a.download = `brand-weg-sicherung-${dkey()}.json`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); return toast("Sicherung heruntergeladen"); }
   if (act === "copysheet") { const s = STEPS.find(x => x.id === b.dataset.id);
     const t = s.sheet.map(bl => `${bl.t} (Quelle: ${bl.src})\n` + bl.f.map(id => `${flabel(id)}: ${(ST.prof[id] || "").trim() || "fehlt noch"}`).join("\n")).join("\n\n");
     try { await navigator.clipboard.writeText(t); toast("Seite kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
@@ -1324,8 +1335,8 @@ $("#tp .txt").addEventListener("click", () => $("#tpplay").click());
 document.addEventListener("input", e => {
   const t = e.target;
   if (t.dataset.f) {
-    ST.prof[t.dataset.f] = t.value; save(true);
-    const sv = $(`[data-saved="${t.dataset.f}"]`); if (sv) { sv.textContent = "gespeichert"; clearTimeout(sv._t); sv._t = setTimeout(() => sv.textContent = "", 1500); }
+    ST.prof[t.dataset.f] = t.value; const ok = save(true);
+    const sv = $(`[data-saved="${t.dataset.f}"]`); if (sv) { sv.textContent = ok ? "gespeichert" : "nicht gespeichert!"; clearTimeout(sv._t); sv._t = setTimeout(() => sv.textContent = "", 1500); }
     const pv = $("#tplprev"); if (pv) { const s = STEPS.find(x => x.id === pv.dataset.tpl); pv.innerHTML = fillTpl(s.tpl); }
     if (t.dataset.f === "bio") { const el = $("#pv-bio"); if (el) el.textContent = t.value; }
     return;
@@ -1352,11 +1363,20 @@ document.addEventListener("input", e => {
   }
   if (t.dataset.v) {
     const v = curVideo(); if (!v) return; v[t.dataset.v] = t.value; save(true);
-    if (t.dataset.live === "hook") { const c = hookCheck(t.value); $("#vhook").innerHTML = `${ringSVG(c.score)}<div style="flex:1">${rulesHTML(c.R)}</div>`; }
+    if (t.dataset.live === "hook") { const c = hookCheck(t.value); $("#vhook").innerHTML = `${hookRing(c)}<div style="flex:1">${rulesHTML(c.R)}</div>`; }
     if (t.dataset.live === "script") $("#vscript").innerHTML = scriptPanel(t.value);
     return;
   }
   if (t.dataset.chk) { const v = curVideo(); if (v) { v.checks[t.dataset.chk] = t.checked; save(true); } }
+});
+document.addEventListener("change", async e => {
+  if (e.target.id !== "bkin" || !e.target.files[0]) return;
+  const file = e.target.files[0]; e.target.value = "";
+  let j; try { j = JSON.parse(await file.text()); } catch (_) { return toast("Die Datei ist keine Brand-Weg-Sicherung."); }
+  const d = j && j.app === "brand-weg" ? j.data : null;
+  if (!d || !d.v || typeof d.prof !== "object" || typeof d.done !== "object") return toast("Die Datei ist keine Brand-Weg-Sicherung.");
+  if (!confirm(`Sicherung${j.saved ? " vom " + fmtD(j.saved.slice(0, 10)) : ""} einspielen? Dein jetziger Stand wird dabei ersetzt.`)) return;
+  ST = {...blank(), ...d}; save(true); closeSheet(); render(); toast("Sicherung eingespielt");
 });
 document.addEventListener("submit", async e => {
   e.preventDefault();

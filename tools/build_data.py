@@ -39,7 +39,7 @@ FIELDS["keywords"] = {"label": "Meine Keyword-Bank", "hint": "Wörter, die deine
 FIELDS["versprechen"] = {"label": "Mein eines Versprechen", "hint": "Wobei hilfst du, in einem Satz? Eins, nicht zehn (Sam Gaudet, die vier P).", "rows": 2, "sec": "themen"}
 FIELDS["proofstack"] = {"label": "Woran ich gerade öffentlich arbeite (Proof Stacking)", "hint": "Ein laufendes Ziel, das du offen zeigst und mit jedem Ergebnis weiter belegst. Sam baut gerade öffentlich einen Account nur mit dem iPhone auf 100.000 Follower.", "rows": 2, "sec": "experte"}
 SECTIONS.insert(1, {"id": "dran", "title": "Dranbleiben", "why": "Die meisten scheitern nicht am Wissen, sondern daran, dass sie aufhören (Leitfaden Kapitel 1)."})
-FIELDS["zahlziel"] = {"label": "Mein Zahlenziel für 6 Monate", "hint": "Eins, nicht zwei: entweder 100.000 Follower oder 10.000 $ im Monat. Sichtbar aufschreiben, z. B. als Hintergrundbild (Mino).", "rows": 2, "sec": "dran"}
+FIELDS["zahlziel"] = {"label": "Mein Zahlenziel für 6 Monate", "hint": "Eins, nicht zwei (Mino). Zum Beispiel 100.000 Follower oder 10.000 $ im Monat. Sichtbar aufschreiben, etwa als Hintergrundbild.", "rows": 2, "sec": "dran"}
 FIELDS["huerden"] = {"label": "Meine Hürden und wie ich sie umdeute", "hint": "Pro Hürde: die schlimmste realistische Folge und warum sich das Posten trotzdem lohnt.", "rows": 4, "sec": "dran"}
 FIELDS["partner"] = {"label": "Wer mich zur Rechenschaft zieht", "hint": "Mino zahlt jedem Freund 30 $, wenn er einen Tag nicht postet. Und: 1 bis 2 Leute, die Content ernst nehmen.", "rows": 2, "sec": "dran"}
 
