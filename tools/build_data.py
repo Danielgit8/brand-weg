@@ -221,6 +221,28 @@ step(id="s10", ph="p1", title="Kurs-Tag 7: Rückblick auf die erste Woche",
      why="Hast du 6 Videos gepostet? Das allein ist der Erfolg dieser Woche.",
      body=task("mv6c2xlu73o27x"), fields=["k7_rueckblick"])
 
+# Die Seite als Ganzes ist eine Zusammenstellung, kein Schritt aus den Quellen. Jeder Block nennt, woher seine Fragen stammen.
+step(id="s10s", ph="p1", title="Deine Strategie auf einer Seite",
+     src="Zusammenstellung, nicht aus den Quellen · Fragen von Mino und Sam Gaudet",
+     refs=["muwc3ej574xmr4", "mv1wdfbeaqfx71", "mv0iq93x9fbhht", "muyyxm20972jcz", "muwzljdpz2t1bs", "mvsamgaudet02"], ch=[2],
+     why="Alles, was du in der ersten Woche festgelegt hast, steht hier zusammen. So siehst du, ob es zusammenpasst, bevor der Rhythmus losgeht.",
+     body="""**1. Einmal ganz durchlesen.** Wo noch etwas fehlt, steht der Schritt dabei, in dem du es einträgst.
+
+**2. Mit deiner ersten Woche abgleichen.** Bei Kurs-Tag 7 hast du notiert, welcher Video-Typ am leichtesten ging und welcher am besten lief. Passt das zu deinem Format? Wenn nicht, stell das Format um (Mino, Kurs-Tag 6 und 7).
+
+**3. Nachfrage prüfen.** Gibt es zu deiner Nische Videos mit vielen Aufrufen auf YouTube, TikTok und Instagram? (Mino, „become the niche“)
+
+**4. Als Annahme behandeln.** Mino: mit einer Annahme starten, ausprobieren, offen bleiben. In Phase 3 verdoppelst du, was in deinen Zahlen läuft. In Phase 4 schärfst du Blickwinkel und Markenkern.
+
+**Zur Kennzeichnung:** Dass alles auf einer Seite steht, ist eine Zusammenstellung und kommt nicht aus den Quellen. Woher jede Frage kommt, steht am jeweiligen Block.""",
+     sheet=[
+         {"t": "Für wen ich Videos mache", "src": "Mino, Ideal Viewer · Signal-Wörter: Sam Gaudet", "f": ["person", "schmerz", "wunsch", "einwaende", "signal"]},
+         {"t": "Wer ich für sie bin", "src": "Mino, If you're in college (Ziel, Lage, Problem) · Kurs-Tag 4", "f": ["rolle", "ziel", "lage", "problem", "helfen"]},
+         {"t": "Worüber ich rede", "src": "Mino, Kurs-Tag 6 und „become the niche“ · Versprechen: Sam Gaudet, die vier P", "f": ["nische", "versprechen", "saeulen"]},
+         {"t": "Wie ich es zeige", "src": "Mino, Kurs-Tag 6 (Format) · Wiedererkennbarer Look", "f": ["format", "look"]},
+         {"t": "Was die erste Woche gezeigt hat", "src": "Mino, Kurs-Tag 7", "f": ["k7_rueckblick"]},
+     ])
+
 step(id="s11", ph="p2", title="Hook-Bank und Keyword-Bank anlegen",
      src="Mino, how i create hooks", refs=["mux1cwxu3il6dl", "mv1wdfbfp4c6jh", "muxqsxactci59k"], ch=[4],
      why="Der Hook ist rund 80 % des Videos. Einen Hook selbst zu erfinden ist fast immer schlechter als eine bewährte Vorlage anzupassen.",

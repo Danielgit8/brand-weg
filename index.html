@@ -156,6 +156,15 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .saved{color:var(--ok)}
 .script{white-space:pre-wrap;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--line);border-radius:16px;padding:14px 16px;font-size:16px;line-height:1.6}
 .script .miss{color:var(--acc);font-weight:600}
+.sh-b{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.sh-b>b{display:block;font-size:16.5px}
+.sh-src{display:inline-block;margin:6px 0 4px;padding:4px 10px;border-radius:999px;font:500 11.5px/1.35 var(--fm);color:var(--acc);box-shadow:inset 0 0 0 1px var(--line)}
+.sh-r{margin-top:10px}
+.sh-r small{color:var(--muted);font-size:12.5px}
+.sh-r p{margin:2px 0 0;white-space:pre-wrap;line-height:1.5}
+.sh-r p.sh-miss{color:var(--muted);font-style:italic}
+.sh-r p.sh-miss a{color:var(--acc)}
+.sh-b+.btn{margin-top:20px}
 .src-card{display:block;padding:13px 0;border-top:1px solid var(--line);color:inherit}
 .src-card:first-child{border-top:0}
 .src-card b{display:block;font-weight:600;line-height:1.35}
@@ -814,6 +823,17 @@ function srcList(refs){
   if (!rs.length) return "";
   return `<section class="glass"><span class="kick">Quellen</span><div style="margin-top:4px">${rs.map(s => `<a class="src-card" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b><small>${esc(s.who)}</small></a>`).join("")}</div></section>`;
 }
+// Strategie-Seite: zeigt Antworten aus anderen Schritten, jeder Block mit seiner Quelle
+function sheetHTML(s){
+  const all = s.sheet.flatMap(b => b.f), n = all.filter(filled).length;
+  const row = id => { const v = (ST.prof[id] || "").trim(), w = STEPS.find(x => x.fields.includes(id));
+    const go = w ? `<a href="#/weg/${w.id}">${esc(w.title)}</a>` : `<a href="#/brand/alles">Brand, alle Antworten</a>`;
+    return `<div class="sh-r"><small>${esc(flabel(id))}</small>${v ? `<p>${esc(v)}</p>` : `<p class="sh-miss">Fehlt noch, eintragen bei ${go}</p>`}</div>`; };
+  return `<section class="glass reveal"><span class="kick acc">Deine Strategie</span><h3 class="h-l" style="margin-top:8px">${n} von ${all.length} Antworten stehen</h3>
+    <p class="tiny muted" style="margin:6px 0 0">Diese Seite bündelt nur und kommt so nicht aus den Quellen. Woher die Fragen stammen, steht an jedem Block.</p>
+    ${s.sheet.map(b => `<div class="sh-b"><b>${esc(b.t)}</b><span class="sh-src">Quelle: ${esc(b.src)}</span>${b.f.map(row).join("")}</div>`).join("")}
+    <button class="btn ghost" data-act="copysheet" data-id="${s.id}">Seite kopieren</button></section>`;
+}
 function stepView(id){
   const s = STEPS.find(x => x.id === id); if (!s) return `${pageHead("Weg", "Schritt nicht gefunden")}`;
   const p = phaseOf(s), i = STEPS.indexOf(s), nx = STEPS[i + 1], vid = stepVideo(s.id), w = WORLDS[phaseIdx(p)];
@@ -826,6 +846,7 @@ function stepView(id){
     <section class="glass reveal"><p style="margin:0 0 4px;font-size:17px"><b>${esc(s.why)}</b></p><div class="md">${md(s.body)}</div>
     ${s.goal ? `<div class="between small" style="margin-top:12px"><b>${postedTotal()} von ${s.goal} Videos</b></div><div class="bar"><i style="width:${Math.min(100, postedTotal() / s.goal * 100)}%"></i></div>` : ""}</section>`;
   if (s.fields.length) h += `<section class="glass reveal"><span class="kick acc">Das trägst du ein</span><p class="muted small" style="margin:6px 0 0">Wird sofort gespeichert. Alles steht später auch unter „Brand“.</p>${s.fields.map(f => fieldHTML(f, "step")).join("")}</section>`;
+  if (s.sheet) h += sheetHTML(s);
   if (s.tpl) h += `<section class="glass reveal"><span class="kick acc">Dein Skript</span><h3 class="h-l" style="margin-top:8px">So klingt es mit deinen Antworten</h3><div class="script" id="tplprev" data-tpl="${s.id}">${fillTpl(s.tpl)}</div>
     <p class="tiny muted">Farbig heißt: Da fehlt noch eine Antwort. Im Studio kannst du alles frei ändern.</p>
     ${vid ? `<a class="btn" href="#/studio/v/${vid.id}">Zum Video im Studio</a>` : `<button class="btn" data-act="tpl2video" data-id="${s.id}">Skript ins Studio ${IC.arrow}</button>`}</section>`;
@@ -1253,6 +1274,9 @@ document.addEventListener("click", async e => {
   if (act === "newvideo") return openSheet(typeSheet());
   if (act === "mkvideo") { const nv = newVideo(b.dataset.typ); closeSheet(); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "tpl2video") { const s = STEPS.find(x => x.id === b.dataset.id); const nv = newVideo(s.video || "freund", {title:s.title.replace(/^Kurs-Tag (\d+): /, "Tag $1: "), skript:fillPlain(s.tpl), step:s.id, stage:2}); location.hash = "#/studio/v/" + nv.id; return; }
+  if (act === "copysheet") { const s = STEPS.find(x => x.id === b.dataset.id);
+    const t = s.sheet.map(bl => `${bl.t} (Quelle: ${bl.src})\n` + bl.f.map(id => `${flabel(id)}: ${(ST.prof[id] || "").trim() || "fehlt noch"}`).join("\n")).join("\n\n");
+    try { await navigator.clipboard.writeText(t); toast("Seite kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
   if (act === "step2video") { const s = STEPS.find(x => x.id === b.dataset.id); const nv = newVideo(s.video, {title:s.title.replace(/^Kurs-Tag (\d+): /, "Tag $1: "), step:s.id}); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "platform") { const p = b.dataset.p, a = ST.brand.platforms || (ST.brand.platforms = []); a.includes(p) ? a.splice(a.indexOf(p), 1) : a.push(p); return save(); }
   if (act === "recut" || act === "refilm" || act === "double") {
