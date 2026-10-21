@@ -156,6 +156,17 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .saved{color:var(--ok)}
 .script{white-space:pre-wrap;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--line);border-radius:16px;padding:14px 16px;font-size:16px;line-height:1.6}
 .script .miss{color:var(--acc);font-weight:600}
+.ak-tag{display:inline-block;font:600 10.5px/1.3 var(--fm);letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 9px;margin:0 8px 4px 0;vertical-align:1px;white-space:nowrap}
+.ak-tag.q{background:var(--acc);color:var(--acc-ink)} .ak-tag.e{box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink)} .ak-tag.a{background:rgba(255,200,87,.16);color:#FFC857}
+.ak-ex{list-style:none;margin:8px 0 0;padding:0} .ak-ex li{padding:12px 0;border-top:1px solid var(--line);line-height:1.55} .ak-ex li:first-child{border-top:0}
+.ak-legend{display:grid;gap:8px;margin-top:14px;font-size:13.5px;color:var(--muted)} .ak-legend .ak-tag{margin-bottom:0}
+.ak-mat{margin:14px 0 4px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--line)}
+.ak-mat select{width:100%;margin-top:8px;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.06);border:0;border-radius:12px;padding:12px;box-shadow:inset 0 0 0 1px var(--line)}
+.ak-mat select option{background:#16161b;color:var(--ink)}
+.ak-chips{display:grid;gap:8px;margin-top:12px}
+.ak-link{display:block;width:100%;text-align:left;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);transition:transform 160ms var(--ease-out)}
+.ak-link:active{transform:scale(.98)} .ak-link b{display:block;font-weight:600;line-height:1.35} .ak-link small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+.ak-link.done b::before{content:"✓ ";color:var(--ok)}
 .sh-b{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
 .sh-b>b{display:block;font-size:16.5px}
 .sh-src{display:inline-block;margin:6px 0 4px;padding:4px 10px;border-radius:999px;font:500 11.5px/1.35 var(--fm);color:var(--acc);box-shadow:inset 0 0 0 1px var(--line)}
@@ -230,7 +241,7 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .en{color:var(--faint);font-weight:400;font-size:.92em}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
 body.login #nav{display:none}
-#nav .in{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+#nav .in{display:grid;grid-template-columns:repeat(6,1fr);position:relative}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
 #nav a svg{width:22px;height:22px}
 #nav a.on{color:var(--ink)}
@@ -272,6 +283,7 @@ body.login #nav{display:none}
 <div id="toast"></div>
 <script src="supabase.js"></script>
 <script src="data.js"></script>
+<script src="akademie.js"></script>
 <script>
 "use strict";
 // Gleiches Supabase-Projekt und gleicher Login wie das PARA Cockpit. Eigene Zeile "__brandweg" in der Tabelle items;
@@ -472,6 +484,7 @@ const IC = {
   weg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7.5a3.5 3.5 0 0 0 0-7h-7a3.5 3.5 0 0 1 0-7H16"/></svg>',
   studio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg>',
   brand:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7Z"/></svg>',
+  lernen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 5l10 4.5-10 4.5Z"/><path d="M6 11.3V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.7M22 9.5V15"/></svg>',
   zahlen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
   book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 1 6 18h13"/></svg>',
   help:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><circle cx="12" cy="18" r=".7" fill="currentColor"/></svg>',
@@ -519,7 +532,7 @@ function md(src){
 }
 
 /* ---------- Zustand und Abgleich ---------- */
-const blank = () => ({v:1, done:{}, prof:{}, videos:[], stats:[], posts:[], open:{}, brand:{}, tree:[], updated:0});
+const blank = () => ({v:1, done:{}, prof:{}, videos:[], stats:[], posts:[], open:{}, brand:{}, tree:[], aka:{done:{}, res:{}, chk:{}}, updated:0});
 let ST = blank();
 try { const j = JSON.parse(localStorage.getItem(LKEY) || "null"); if (j && j.v) ST = {...blank(), ...j}; } catch (e) {}
 let sb = null, user = null, sync = "lokal", pushT = null, authChecked = false, skipLogin = false;
@@ -699,7 +712,7 @@ function setAcc(w){ document.documentElement.style.setProperty("--acc", w.acc); 
 
 /* ---------- Routing und Rahmen ---------- */
 const route = () => (location.hash.replace(/^#\/?/, "") || "heute").split("/");
-const TABS = [["heute", "Heute"], ["weg", "Weg"], ["studio", "Studio"], ["brand", "Brand"], ["zahlen", "Zahlen"]];
+const TABS = [["heute", "Heute"], ["weg", "Weg"], ["studio", "Studio"], ["lernen", "Lernen"], ["brand", "Brand"], ["zahlen", "Zahlen"]];
 function nav(){
   const r = route()[0], i = TABS.findIndex(t => t[0] === r);
   const inEl = $("#nav .in");
@@ -719,8 +732,9 @@ function render(){
   const app = $("#app"), [r, a, b] = route();
   const login = !!(sb && authChecked && !user && !skipLogin); document.body.classList.toggle("login", login);
   if (login) { app.innerHTML = loginView(); after(); return; }
+  if (r !== "lernen" && akBack) { akBack = null; try { sessionStorage.removeItem("bw-akback"); } catch (_) {} }
   setAcc(curWorld());
-  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, wissen:() => a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
+  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, lernen:() => lernenView(a, b), wissen:() => a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
   app.innerHTML = v();
   if (lastRoute !== location.hash) { window.scrollTo(0, 0); lastRoute = location.hash; }
   after();
@@ -765,6 +779,7 @@ function heuteView(){
     <div class="row" style="margin-top:14px"><button class="btn" data-act="newvideo">Neues Video</button><button class="btn ghost" data-act="quickpost">+ gepostet</button>${ST.posts.length ? `<button class="chip" data-act="undopost">Letztes zurück</button>` : ""}</div></section>`;
   if (installEv && !standalone()) h += `<section class="glass reveal"><span class="kick acc">Aufs Handy holen</span><p class="muted small" style="margin:6px 0 12px">Als App installiert hast du Brand-Weg mit eigenem Symbol auf dem Startbildschirm, im Vollbild und auch offline.</p><button class="btn block" data-act="install">Als App installieren</button></section>`;
   if (inWork.length) h += `<section class="glass reveal"><span class="kick">Videos in Arbeit</span><div class="list" style="margin-top:6px">${inWork.slice(0, 4).map(videoRow).join("")}</div></section>`;
+  { const r = akRecommend(); if (r) h += `<section class="glass reveal"><div class="between"><span class="kick acc">Fähigkeit üben</span><a class="tiny" href="#/lernen">Alle Fähigkeiten</a></div><h3 class="h-l" style="margin-top:8px">${esc(AKL[r.id].t)}</h3><p class="muted small" style="margin:6px 0 12px">${esc(r.why)}</p><button class="btn ghost" data-act="learn" data-l="${r.id}">Übung öffnen ${IC.arrow}</button></section>`; }
   if (due) h += `<section class="glass reveal"><span class="kick">Zahlen der Woche</span><p class="muted small" style="margin:8px 0 0">Einmal pro Woche notieren (Fahrplan). Nur zum Vergleichen mit dir selbst.</p>${statsForm()}</section>`;
   h += `<section class="glass flat reveal"><span class="kick">Was immer gilt</span><ul class="tips" style="color:var(--ink)">
     <li>Es zählt die Reihenfolge, nicht das Tempo. Klappt ein Tag nicht, machst du beim nächsten Mal weiter.</li>
@@ -841,6 +856,116 @@ function sheetHTML(s){
     ${s.sheet.map(b => `<div class="sh-b"><b>${esc(b.t)}</b><span class="sh-src">Quelle: ${esc(b.src)}</span>${b.f.map(row).join("")}</div>`).join("")}
     <button class="btn ghost" data-act="copysheet" data-id="${s.id}">Seite kopieren</button></section>`;
 }
+/* ---------- Lernakademie: Fähigkeiten einzeln üben. Fortschritt liegt getrennt vom Weg in ST.aka ---------- */
+const AK = window.AK, AKL = Object.fromEntries(AK.lessons.map(l => [l.id, l])), AKS = Object.fromEntries(AK.skills.map(s => [s.id, s]));
+const AKTR = {idee:"Idee", hook:"Hook", skript:"Skript"};
+const aka = () => { const a = ST.aka || (ST.aka = {}); a.done ||= {}; a.res ||= {}; a.chk ||= {}; return a; };
+const akDone = id => !!aka().done[id];
+let akBack = null; try { akBack = sessionStorage.getItem("bw-akback"); } catch (_) {}
+// Von einer Aufgabe zur Lektion: Rückweg und aktuelles Video merken
+function akGo(id){
+  if (route()[0] !== "lernen") { akBack = location.hash || "#/heute"; try { sessionStorage.setItem("bw-akback", akBack); } catch (_) {} const v = curVideo(); if (v) UI.akv = v.id; }
+  location.hash = "#/lernen/l/" + id;
+}
+function akBackLabel(){
+  const h = akBack || "", m = h.match(/^#\/studio\/v\/(.+)$/), w = h.match(/^#\/weg\/(.+)$/);
+  if (m) { const v = ST.videos.find(x => x.id === m[1]); return v ? `„${v.title}“` : "Studio"; }
+  if (w) { const st = STEPS.find(x => x.id === w[1]); return st ? `„${st.title}“` : "Weg"; }
+  return {heute:"Heute", studio:"Studio", zahlen:"Zahlen", brand:"Brand", weg:"Weg"}[h.replace(/^#\/?/, "").split("/")[0]] || "deiner Arbeit";
+}
+function akVideo(){ const vs = ST.videos; return vs.find(x => x.id === UI.akv) || vs.find(x => !x.posted) || vs[0] || null; }
+function akChips(ids, title = "Fähigkeit dazu üben"){
+  if (!ids || !ids.length) return "";
+  return `<section class="glass flat"><div class="between"><span class="kick">${esc(title)}</span><a class="tiny" href="#/lernen">Lernakademie</a></div><div class="ak-chips">${ids.filter(id => AKL[id]).map(id => `<button class="ak-link ${akDone(id) ? "done" : ""}" data-act="learn" data-l="${id}"><b>${esc(AKL[id].t)}</b><small>${esc(AKS[AKL[id].sk].t)}${akDone(id) ? " · geübt" : ""}</small></button>`).join("")}</div></section>`;
+}
+function akRecommend(){
+  const pick = ids => (ids || []).find(id => AKL[id] && !akDone(id)), cur = curStep();
+  let id = cur && pick(AK.step[cur.id]); if (id) return {id, why:`Passt zu deinem Schritt „${cur.title}“.`};
+  const v = ST.videos.find(x => !x.posted), sg = v && D.stages[v.stage];
+  id = sg && pick(AK.stage[sg.id]); if (id) return {id, why:`Passt zu deinem Video „${v.title}“, Stufe ${sg.label}.`};
+  id = pick(AK.start); if (id) return {id, why:"Mino: In den ersten Videos lernst du zuerst Filmen und Schneiden."};
+  id = (AK.lessons.find(l => !akDone(l.id)) || {}).id; return id ? {id, why:"Die nächste offene Übung."} : null;
+}
+function lernenView(a, b){ return a === "l" ? akLesson(b) : a === "f" ? akSkill(b) : akHome(); }
+function akLegend(){
+  return `<div class="ak-legend"><div><span class="ak-tag q">Quelle</span>stammt aus deinen Creator-Quellen, der Name steht dabei</div><div><span class="ak-tag e">Eigene Erklärung</span>ergänzt, wo die Quellen nichts sagen</div><div><span class="ak-tag a">Annahme</span>eine Vermutung, die du selbst prüfen solltest</div></div>`;
+}
+function akHome(){
+  const r = akRecommend(), n = AK.lessons.filter(l => akDone(l.id)).length;
+  let h = pageHead("Lernakademie", "Fähigkeiten lernen") + `<div class="wrap">
+    <section class="glass reveal"><p style="margin:0">Hier übst du einzelne Fähigkeiten, die du bei deinen Aufgaben brauchst. Das ergänzt deinen Weg: Eine Übung hakt keinen Schritt ab, und deine Entwürfe ändern sich nur, wenn du selbst auf „Übernehmen“ tippst.</p>
+    <p class="tiny muted" style="margin:10px 0 0">${n} von ${AK.lessons.length} Übungen geübt. Reichweite oder Einnahmen verspricht keine davon.</p>${akLegend()}</section>`;
+  if (r) h += `<section class="glass reveal"><span class="kick acc">Empfohlener Einstieg</span><h2 class="h-l" style="margin-top:8px">${esc(AKL[r.id].t)}</h2><p class="muted small" style="margin:6px 0 12px">${esc(r.why)}</p><a class="btn" href="#/lernen/l/${r.id}">Übung öffnen ${IC.arrow}</a></section>`;
+  h += `<section class="glass reveal"><span class="kick">Alle Fähigkeiten</span><div class="list" style="margin-top:4px">${AK.skills.map(s => { const ls = AK.lessons.filter(l => l.sk === s.id), d = ls.filter(l => akDone(l.id)).length;
+    return `<a class="item" href="#/lernen/f/${s.id}"><span class="num" style="width:26px;color:var(--acc)">${s.n}</span><span class="t"><b>${esc(s.t)}</b><small>${d} von ${ls.length} geübt</small></span></a>`; }).join("")}</div></section></div>`;
+  return h;
+}
+function akSkill(id){
+  const s = AKS[id]; if (!s) return pageHead("Lernakademie", "Fähigkeit nicht gefunden");
+  const ls = AK.lessons.filter(l => l.sk === id), groups = s.secs ? s.secs.map(sec => [sec, ls.filter(l => l.sec === sec)]) : [[null, ls]];
+  const row = l => `<a class="item" href="#/lernen/l/${l.id}"><span class="chk ${akDone(l.id) ? "done" : ""}"></span><span class="t"><b>${esc(l.t)}</b><small>${esc(l.goal)}</small></span>${l.opt ? `<span class="badge">freiwillig</span>` : ""}</a>`;
+  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/lernen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Lernakademie</a>
+    <span class="kick acc" style="display:block;margin-top:16px">Fähigkeit ${s.n} von ${AK.skills.length}</span><h1 class="h-xl" style="margin-top:8px">${esc(s.t)}</h1><p class="muted" style="margin:8px 0 0">${esc(s.why)}</p></div>
+    <div class="wrap">${groups.map(([sec, g]) => `<section class="glass reveal">${sec ? `<span class="kick acc">${esc(sec)}</span>` : ""}<div class="list" style="margin-top:4px">${g.map(row).join("")}</div></section>`).join("")}</div>`;
+}
+// Text, der als Startpunkt ins Ergebnis kopiert werden kann (das Original bleibt, wie es ist)
+function akSeedText(l){
+  const u = l.use || "";
+  if (u.startsWith("p:")) return u.slice(2).split(",").map(f => (ST.prof[f] || "").trim()).filter(Boolean).join("\n\n");
+  if (["idee", "hook", "skript", "video"].includes(u)) { const v = akVideo(); if (!v) return ""; return (u === "video" ? ["idee", "hook", "skript"] : [u]).map(k => (v[k] || "").trim()).filter(Boolean).join("\n\n"); }
+  return "";
+}
+function akMaterial(l){
+  const u = l.use; if (!u) return "";
+  const seed = akSeedText(l) ? `<button class="chip" data-act="akseed" data-id="${l.id}" style="margin-top:12px">Als Startpunkt ins Ergebnis kopieren</button>` : "";
+  if (u.startsWith("p:")) return `<div class="ak-mat"><span class="kick">Deine Antworten dazu</span>${u.slice(2).split(",").map(f => { const v = (ST.prof[f] || "").trim(), w = STEPS.find(x => x.fields.includes(f));
+    return `<div class="sh-r"><small>${esc(flabel(f))}</small>${v ? `<p>${esc(v)}</p>` : `<p class="sh-miss">Noch leer${w ? `, steht bei <a href="#/weg/${w.id}">${esc(w.title)}</a>` : `, steht unter <a href="#/brand/alles">Brand</a>`}</p>`}</div>`; }).join("")}${seed}</div>`;
+  if (u === "tree") { const t = (ST.tree || []).filter(Boolean);
+    return `<div class="ak-mat"><span class="kick">Dein Themenbaum</span>${t.length ? `<p style="white-space:pre-wrap;margin:6px 0 0">${esc(t.join("\n"))}</p>` : `<p class="sh-miss">Noch leer, steht unter <a href="#/brand/strategie">Brand, Strategie</a></p>`}</div>`; }
+  if (u === "posted") { const ps = ST.videos.filter(v => v.posted).slice(0, 6);
+    return `<div class="ak-mat"><span class="kick">Deine geposteten Videos</span>${ps.length ? ps.map(v => `<div class="sh-r"><small>${fmtD(v.posted)}</small><p><b>${esc(v.title)}</b>${[v.views && v.views + " Aufrufe", v.follows && "+" + v.follows + " Follower", v.ret && v.ret + " % nach 3 Sek.", v.react && v.react + " echte Reaktionen"].filter(Boolean).map(x => " · " + esc(x)).join("")}</p></div>`).join("")
+      : `<p class="sh-miss">Noch kein gepostetes Video. Du kannst die Übung mit einem fremden Video als Beispiel machen.</p>`}</div>`; }
+  const v = akVideo();
+  if (!v) return `<div class="ak-mat"><span class="kick">Dein Material</span><p class="sh-miss">Noch kein Video im Studio. <a href="#/studio">Leg eins an</a> oder übe mit einem eigenen Beispiel.</p></div>`;
+  const keys = u === "video" ? ["idee", "hook", "skript"] : [u];
+  return `<div class="ak-mat"><label class="kick" for="akv">Dein Video</label><select id="akv" data-akv="1">${ST.videos.map(x => `<option value="${x.id}" ${x.id === v.id ? "selected" : ""}>${esc(x.title)}${x.posted ? " (gepostet)" : ""}</option>`).join("")}</select>
+    ${keys.map(k => `<div class="sh-r"><small>${AKTR[k]}</small>${(v[k] || "").trim() ? `<p>${esc(v[k])}</p>` : `<p class="sh-miss">Noch leer</p>`}</div>`).join("")}${seed}</div>`;
+}
+function akTransfer(l){
+  const t = l.tr; if (!t) return "";
+  if (t === "neu") return `<button class="btn ghost" data-act="aktr" data-id="${l.id}">Als neues Video ins Studio</button><p class="tiny muted">Legt ein neues Video an. Bestehende Videos bleiben, wie sie sind.</p>`;
+  if (t.startsWith("p:")) return `<button class="btn ghost" data-act="aktr" data-id="${l.id}">In „${esc(flabel(t.slice(2)))}“ übernehmen</button><p class="tiny muted">Ändert deine Antwort unter Brand erst, wenn du bestätigst.</p>`;
+  const v = akVideo(); if (!v) return "";
+  return `<button class="btn ghost" data-act="aktr" data-id="${l.id}">Als ${AKTR[t]} in „${esc(v.title)}“ übernehmen</button><p class="tiny muted">Ändert dein Video erst, wenn du bestätigst.</p>`;
+}
+function akGoLink(l){
+  const [lab, href] = l.go, ar = IC.arrow.replace("<svg", '<svg width="14" height="14"');
+  if (!href.startsWith("video:")) return `<a class="chip" href="${href}" style="white-space:normal">${esc(lab)} ${ar}</a>`;
+  const v = akVideo();
+  return v ? `<a class="chip" href="#/studio/v/${v.id}" style="white-space:normal">${esc(lab)}: „${esc(v.title)}“ ${ar}</a>` : `<a class="chip" href="#/studio">Neues Video im Studio ${ar}</a>`;
+}
+function akLesson(id){
+  const l = AKL[id]; if (!l) return pageHead("Lernakademie", "Übung nicht gefunden");
+  const s = AKS[l.sk], ls = AK.lessons.filter(x => x.sk === l.sk), i = ls.indexOf(l), nx = ls[i + 1], A = aka(), chk = A.chk[id] || [];
+  const tag = e => e[0] === "q" ? `<span class="ak-tag q">Quelle: ${esc(e[1])}</span>` : e[0] === "a" ? `<span class="ak-tag a">Annahme</span>` : `<span class="ak-tag e">Eigene Erklärung</span>`;
+  const backBtn = cls => akBack ? `<button class="${cls}" data-act="akback">${cls === "chip" ? IC.left.replace("<svg", '<svg width="15" height="15"') + " " : ""}Zurück zu ${esc(akBackLabel())}</button>` : "";
+  const from = Object.entries(AK.step).filter(([k, v]) => v.includes(id) && l.go[1] !== "#/weg/" + k).map(([k]) => STEPS.find(x => x.id === k)).filter(Boolean);
+  return `${topbar()}<div class="wrap page-top"><div class="chips">${backBtn("chip")}<a class="chip" href="#/lernen/f/${s.id}" style="white-space:normal">${esc(s.t)}</a></div>
+    <span class="kick acc" style="display:block;margin-top:16px">${l.sec ? esc(l.sec) + " · " : ""}Übung ${i + 1} von ${ls.length}${l.opt ? " · freiwillig" : ""}</span>
+    <h1 class="h-xl" style="margin-top:8px">${esc(l.t)}</h1></div><div class="wrap">
+    <section class="glass reveal"><span class="kick acc">Lernziel</span><p style="margin:8px 0 0;font-size:17px"><b>${esc(l.goal)}</b></p></section>
+    <section class="glass reveal"><span class="kick">Erklärung</span><ul class="ak-ex">${l.ex.map(e => `<li>${tag(e)}${esc(e[0] === "q" ? e[2] : e[1])}</li>`).join("")}</ul></section>
+    <section class="glass reveal"><span class="kick">Beispiel</span><span class="tiny faint"> · ausgedacht, keine echte Person</span><p style="margin:8px 0 0">${esc(l.bsp)}</p></section>
+    <section class="glass reveal"><span class="kick acc">Deine Übung</span><p style="margin:8px 0 0">${esc(l.task)}</p>${akMaterial(l)}
+      <div class="fld"><label for="akr_${id}">${esc(l.res)}</label><textarea id="akr_${id}" data-akr="${id}" rows="6">${esc(A.res[id] || "")}</textarea>
+      <div class="meta"><span>Bleibt in der Lernakademie, deine Entwürfe ändern sich dadurch nicht.</span><span class="saved" data-saved="ak_${id}"></span></div></div>${akTransfer(l)}</section>
+    <section class="glass reveal"><span class="kick acc">Selbst prüfen</span><p class="tiny muted" style="margin:6px 0 0">Die App vergibt keine Punkte. Hak ab, was für dein Ergebnis stimmt.</p>
+      <div class="checks" style="margin-top:6px">${l.chk.map((c, k) => `<label><input type="checkbox" data-akc="${id}|${k}" ${chk[k] ? "checked" : ""}><span>${esc(c)}</span></label>`).join("")}</div></section>
+    <section class="glass flat"><span class="kick">Hier setzt du es ein</span><div class="chips" style="margin-top:12px">${akGoLink(l)}${from.map(st => `<a class="chip" href="#/weg/${st.id}" style="white-space:normal">${esc(st.title)}</a>`).join("")}</div></section>
+    <section class="glass" style="text-align:center">${akDone(id) ? `<p style="margin:0 0 12px"><b class="saved">Geübt am ${fmtD(A.done[id])}</b></p>` : ""}
+      <div class="row" style="justify-content:center">${akDone(id) ? `<button class="btn ghost" data-act="akundone" data-id="${id}">Wieder öffnen</button>` : `<button class="btn ok" data-act="akdone" data-id="${id}">Übung erledigt</button>`}${backBtn("btn ghost")}${nx ? `<a class="btn ghost" href="#/lernen/l/${nx.id}">Nächste Übung ${IC.arrow}</a>` : ""}</div>
+      <p class="tiny muted" style="margin:12px 0 0">Das hakt keinen Schritt im Weg ab.</p></section></div>`;
+}
 function stepView(id){
   const s = STEPS.find(x => x.id === id); if (!s) return `${pageHead("Weg", "Schritt nicht gefunden")}`;
   const p = phaseOf(s), i = STEPS.indexOf(s), nx = STEPS[i + 1], vid = stepVideo(s.id), w = WORLDS[phaseIdx(p)];
@@ -859,6 +984,7 @@ function stepView(id){
     ${vid ? `<a class="btn" href="#/studio/v/${vid.id}">Zum Video im Studio</a>` : `<button class="btn" data-act="tpl2video" data-id="${s.id}">Skript ins Studio ${IC.arrow}</button>`}</section>`;
   else if (s.video) h += `<section class="glass reveal"><span class="kick acc">Video dazu</span><p class="muted small">Im Studio gehst du Idee, Hook, Skript, Dreh, Schnitt, Check und Posten durch. Die Vorlage „${esc(D.types[s.video].label)}“ ist schon drin.</p>
     ${vid ? `<a class="btn" href="#/studio/v/${vid.id}">Zum Video</a>` : `<button class="btn" data-act="step2video" data-id="${s.id}">Video im Studio anlegen ${IC.arrow}</button>`}</section>`;
+  h += akChips(AK.step[s.id]);
   if (s.ch.length) h += `<section class="glass flat"><span class="kick">Hängst du? Hier steht das Wissen dazu</span><div class="chips" style="margin-top:12px">${s.ch.map(n => { const k = D.wissen.find(x => x.n === n); return k ? `<a class="chip" href="#/wissen/${k.id}">Kapitel ${n}: ${esc(k.title)}</a>` : ""; }).join("")}</div></section>`;
   h += srcList(s.refs);
   h += `<section class="glass" style="text-align:center">${isDone(s.id)
@@ -1055,6 +1181,7 @@ function videoView(id){
   }
   if (s && s.tips) body += `<ul class="tips">${s.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
   h += `<section class="glass reveal">${body}</section>`;
+  h += akChips(AK.stage[s ? s.id : "zahlen"]);
   if (s) h += s.id === "posten" && !v.posted ? `<button class="btn ok block" data-act="posted">Gepostet!</button>` : `<button class="btn block" data-act="next">Weiter: ${esc((stages[cur + 1] || {label:"Zahlen"}).label)} ${IC.arrow}</button>`;
   h += `<p style="text-align:center;margin:26px 0 0"><button class="chip" data-act="delvideo">Video löschen</button></p></div>`;
   return h;
@@ -1204,6 +1331,7 @@ function zahlenView(){
   // Wochenzahlen
   h += `<section class="glass reveal"><span class="kick acc">Zahlen der Woche</span><p class="muted small" style="margin:6px 0 0">Sams vier Zahlen: Aufrufe, Follower, Leads (E-Mails, die dir gehören) und Umsatz. Kommt kein Geld rein, stimmt die Positionierung nicht.</p>${last ? `<p class="small" style="margin:8px 0 0">Zuletzt am ${fmtD(last.d)}: ${esc(last.fol || "–")} Follower · beste Aufrufe ${esc(last.best || "–")} · nach 5 Sek. ${esc(last.ret || "–")} % · ${esc(last.eur || "0")} €</p>` : ""}${statsForm()}
     ${ST.stats.length ? `<details style="margin-top:12px"><summary class="small muted">Alle Wochen</summary><div class="md"><table><thead><tr><th>Datum</th><th>Follower</th><th>Beste</th><th>5 Sek.</th><th>Leads</th><th>€</th></tr></thead><tbody>${ST.stats.slice().reverse().map(x => `<tr><td>${fmtD(x.d)}</td><td>${esc(x.fol)}</td><td>${esc(x.best)}</td><td>${esc(x.ret)}</td><td>${esc(x.leads || "")}</td><td>${esc(x.eur)}</td></tr>`).join("")}</tbody></table></div></details>` : ""}</section>`;
+  h += akChips(["a3", "a5", "a7", "a8"], "Ergebnisse richtig einordnen");
   h += `<section class="glass flat reveal"><span class="kick">Was du daraus machst</span>${fieldHTML("laeuft", "brand")}${fieldHTML("naechstes", "brand")}</section>`;
   return h + `</div>`;
 }
@@ -1233,6 +1361,7 @@ function helpHTML(){
     <div class="md"><ul><li><b>Heute</b> zeigt nur den nächsten Schritt und wie viele Videos du gepostet hast.</li>
     <li><b>Weg</b> ist der ganze Plan nach Mino Lee. Ohne Termine: Du machst den nächsten Schritt, wenn du so weit bist.</li>
     <li><b>Studio</b> ist für Content Creation und Verteilen: Videos von der Idee bis zum Posten, das Hook-Labor, der Teleprompter und alles zum Algorithmus.</li>
+    <li><b>Lernen</b> ist die Lernakademie: Fähigkeiten einzeln üben, passend zu deinen Aufgaben. Übungen haken keinen Schritt im Weg ab.</li>
     <li><b>Brand</b> ist deine Identität und Strategie: Profil, Look, Markenkern, Themenbaum, Säulen und Formate. Dort steht auch alles, was du in den Schritten einträgst.</li>
     <li><b>Zahlen</b> ist Analytics: Aufrufe, Ausreißer, bestes gegen schwächstes Video, Retention.</li>
     <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
@@ -1285,6 +1414,18 @@ document.addEventListener("click", async e => {
   if (act === "tpl2video") { const s = STEPS.find(x => x.id === b.dataset.id); const nv = newVideo(s.video || "freund", {title:s.title.replace(/^Kurs-Tag (\d+): /, "Tag $1: "), skript:fillPlain(s.tpl), step:s.id, stage:2}); location.hash = "#/studio/v/" + nv.id; return; }
   if (act === "backup") { const a = document.createElement("a"), url = URL.createObjectURL(new Blob([JSON.stringify({app:"brand-weg", saved:new Date().toISOString(), data:ST}, null, 1)], {type:"application/json"}));
     a.href = url; a.download = `brand-weg-sicherung-${dkey()}.json`; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000); return toast("Sicherung heruntergeladen"); }
+  if (act === "learn") return akGo(b.dataset.l);
+  if (act === "akback") { const h = akBack || "#/heute"; akBack = null; try { sessionStorage.removeItem("bw-akback"); } catch (_) {} location.hash = h; return; }
+  if (act === "akdone") { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); aka().done[b.dataset.id] = dkey(); save(true); toast("Geübt. Dein Weg bleibt, wie er ist."); return setTimeout(render, 380); }
+  if (act === "akundone") { delete aka().done[b.dataset.id]; return save(); }
+  if (act === "akseed") { const l = AKL[b.dataset.id], t = akSeedText(l), A = aka(); if (!t) return;
+    if ((A.res[l.id] || "").trim() && !confirm("Dein bisheriges Ergebnis in dieser Übung wird ersetzt. Weiter?")) return;
+    A.res[l.id] = t; save(); return toast("Als Startpunkt kopiert. Dein Original bleibt unverändert."); }
+  if (act === "aktr") { const l = AKL[b.dataset.id], r = (aka().res[l.id] || "").trim(), t = l.tr; if (!r) return toast("Schreib zuerst dein Ergebnis.");
+    if (t === "neu") { const nv = newVideo("geschichte", {title:l.t.slice(0, 60), skript:r, stage:2}); toast("Neues Video angelegt"); location.hash = "#/studio/v/" + nv.id; return; }
+    if (t.startsWith("p:")) { const f = t.slice(2), old = (ST.prof[f] || "").trim(); if (!confirm(`In „${flabel(f)}“ unter Brand übernehmen?${old ? `\n\nBisher:\n${old.slice(0, 240)}` : ""}`)) return; ST.prof[f] = r; save(); return toast("Unter Brand übernommen"); }
+    const v = akVideo(); if (!v) return; const old = (v[t] || "").trim();
+    if (!confirm(`Als ${AKTR[t]} in „${v.title}“ übernehmen?${old ? `\n\nBisher:\n${old.slice(0, 240)}` : ""}`)) return; v[t] = r; save(); return toast("Ins Video übernommen"); }
   if (act === "copysheet") { const s = STEPS.find(x => x.id === b.dataset.id);
     const t = s.sheet.map(bl => `${bl.t} (Quelle: ${bl.src})\n` + bl.f.map(id => `${flabel(id)}: ${(ST.prof[id] || "").trim() || "fehlt noch"}`).join("\n")).join("\n\n");
     try { await navigator.clipboard.writeText(t); toast("Seite kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
@@ -1367,8 +1508,11 @@ document.addEventListener("input", e => {
     if (t.dataset.live === "script") $("#vscript").innerHTML = scriptPanel(t.value);
     return;
   }
+  if (t.dataset.akr) { aka().res[t.dataset.akr] = t.value; const ok = save(true); const sv = $(`[data-saved="ak_${t.dataset.akr}"]`); if (sv) { sv.textContent = ok ? "gespeichert" : "nicht gespeichert!"; clearTimeout(sv._t); sv._t = setTimeout(() => sv.textContent = "", 1500); } return; }
+  if (t.dataset.akc) { const [id, k] = t.dataset.akc.split("|"), A = aka(); (A.chk[id] ||= [])[+k] = t.checked; save(true); return; }
   if (t.dataset.chk) { const v = curVideo(); if (v) { v.checks[t.dataset.chk] = t.checked; save(true); } }
 });
+document.addEventListener("change", e => { if (e.target.dataset.akv) { UI.akv = e.target.value; render(); } });
 document.addEventListener("change", async e => {
   if (e.target.id !== "bkin" || !e.target.files[0]) return;
   const file = e.target.files[0]; e.target.value = "";
