@@ -458,6 +458,23 @@ for n in sorted(CH):
     WISSEN.append({"id": "k%d" % n, "n": n, "title": i["title"].split(" · ", 1)[1], "body": clean(i["body"]), "refs": [r for r in i.get("rel", [])]})
 WISSEN.append({"id": "formate", "n": None, "title": "Format-Tabelle: 25 Formate bewertet", "body": clean(fmt["body"]), "refs": fmt.get("rel", [])})
 
+# TikTok läuft seit 22.10.2026 mit Instagram mit: Hinweise dort ergänzen, wo es im Kurs passt.
+# (Anker, Text) – fehlt der Anker, kommt der Text ans Ende des Schritts.
+TT = {
+    "s01": ("- In der Instagram-App hochladen, nicht direkt aus CapCut",
+            "- Danach dieselbe Datei auf TikTok hochladen und das Schlüsselwort an den Anfang der Beschreibung schreiben (ManyChat, Hootsuite). Im Studio unter „Posten“ auf „TikTok“ tippen, dann führt dich die App durch."),
+    "s07": ("- Business-E-Mail in die Bio, damit Marken dich finden.",
+            "- Dasselbe Profil auch auf TikTok: gleicher Benutzername, gleiches Bild, gleiche Bio, damit Leute dich auf beiden Plattformen wiederfinden (eigene Ergänzung, passt zu Sams Omnipräsenz)."),
+    "s17": (None,
+            "**Auf TikTok:** Dieselbe Kurve steht in den Statistiken jedes Videos. Schau, ob Leute dort an derselben Stelle aussteigen wie auf Instagram."),
+    "s19": ("- Videos nach Aufrufen sortieren: Instagram im Profi-Dashboard unter „meistgesehen“ (Ronny), TikTok unter „Beliebt“ (Mino).",
+            "- Instagram gegen TikTok im Zahlen-Reiter vergleichen. Sam Gaudet: Pro Plattform nur posten, was dort läuft. Wenn ein Format zündet, alles darauf setzen."),
+}
+for st in S:
+    if st["id"] in TT:
+        a, txt = TT[st["id"]]
+        st["body"] = st["body"].replace(a, a + "\n" + txt, 1) if a and a in st["body"] else st["body"].rstrip() + "\n\n" + txt
+
 CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney")]
 SRC = {}
 for i in src["items"]:

@@ -985,9 +985,9 @@ function stepView(id){
   if (s.fields.length) h += `<section class="glass reveal"><span class="kick acc">Das trägst du ein</span><p class="muted small" style="margin:6px 0 0">Wird sofort gespeichert. Alles steht später auch unter „Brand“.</p>${s.fields.map(f => fieldHTML(f, "step")).join("")}</section>`;
   if (s.sheet) h += sheetHTML(s);
   if (s.tpl) h += `<section class="glass reveal"><span class="kick acc">Dein Skript</span><h3 class="h-l" style="margin-top:8px">So klingt es mit deinen Antworten</h3><div class="script" id="tplprev" data-tpl="${s.id}">${fillTpl(s.tpl)}</div>
-    <p class="tiny muted">Farbig heißt: Da fehlt noch eine Antwort. Im Studio kannst du alles frei ändern.</p>
+    <p class="tiny muted">Farbig heißt: Da fehlt noch eine Antwort. Im Studio kannst du alles frei ändern. Beim Posten kannst du das Video dort auch auf TikTok veröffentlichen.</p>
     ${vid ? `<a class="btn" href="#/studio/v/${vid.id}">Zum Video im Studio</a>` : `<button class="btn" data-act="tpl2video" data-id="${s.id}">Skript ins Studio ${IC.arrow}</button>`}</section>`;
-  else if (s.video) h += `<section class="glass reveal"><span class="kick acc">Video dazu</span><p class="muted small">Im Studio gehst du Idee, Hook, Skript, Dreh, Schnitt, Check und Posten durch. Die Vorlage „${esc(D.types[s.video].label)}“ ist schon drin.</p>
+  else if (s.video) h += `<section class="glass reveal"><span class="kick acc">Video dazu</span><p class="muted small">Im Studio gehst du Idee, Hook, Skript, Dreh, Schnitt, Check und Posten durch. Die Vorlage „${esc(D.types[s.video].label)}“ ist schon drin. Beim Posten kannst du es dort auch auf TikTok veröffentlichen.</p>
     ${vid ? `<a class="btn" href="#/studio/v/${vid.id}">Zum Video</a>` : `<button class="btn" data-act="step2video" data-id="${s.id}">Video im Studio anlegen ${IC.arrow}</button>`}</section>`;
   h += akChips(AK.step[s.id]);
   if (s.ch.length) h += `<section class="glass flat"><span class="kick">Hängst du? Hier steht das Wissen dazu</span><div class="chips" style="margin-top:12px">${s.ch.map(n => { const k = D.wissen.find(x => x.n === n); return k ? `<a class="chip" href="#/wissen/${k.id}">Kapitel ${n}: ${esc(k.title)}</a>` : ""; }).join("")}</div></section>`;
