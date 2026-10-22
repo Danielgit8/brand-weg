@@ -162,7 +162,7 @@ lessons: [
  task:"Such ein Video mit vielen Aufrufen in deinem Format und schreib auf: erster Satz, Text im Bild, Aufbau in 3 bis 5 Teilen, Länge, Schluss.",
  use:null, res:"Aufbau des Vorbild-Videos",
  chk:["Der erste Satz steht wörtlich da.", "Du hast nur Sichtbares notiert, keine Vermutungen.", "Der Aufbau hat 3 bis 5 Teile."],
- go:["Ein Vorbild-Video zerlegen", "#/weg/s16"]},
+ go:["Vorbilder unter Material, Inspiration sammeln", "#/material/inspiration"]},
 
 {id:"i6", sk:"ideen", t:"Strukturen auf eigene Inhalte übertragen",
  goal:"Du nutzt den Aufbau eines fremden Videos für deinen eigenen Inhalt.",

@@ -161,6 +161,7 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .ak-ex{list-style:none;margin:8px 0 0;padding:0} .ak-ex li{padding:12px 0;border-top:1px solid var(--line);line-height:1.55} .ak-ex li:first-child{border-top:0}
 .ak-legend{display:grid;gap:8px;margin-top:14px;font-size:13.5px;color:var(--muted)} .ak-legend .ak-tag{margin-bottom:0}
 .ak-mat{margin:14px 0 4px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--line)}
+#inspform select{width:100%;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.05);border:0;border-radius:14px;padding:13px 14px;box-shadow:inset 0 0 0 1px var(--line)} #inspform select option{background:#16161b;color:var(--ink)}
 .ak-mat select{width:100%;margin-top:8px;font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.06);border:0;border-radius:12px;padding:12px;box-shadow:inset 0 0 0 1px var(--line)}
 .ak-mat select option{background:#16161b;color:var(--ink)}
 .ak-chips{display:grid;gap:8px;margin-top:12px}
@@ -244,7 +245,7 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .en{color:var(--faint);font-weight:400;font-size:.92em}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
 body.login #nav{display:none}
-#nav .in{display:grid;grid-template-columns:repeat(6,1fr);position:relative}
+#nav .in{display:grid;grid-template-columns:repeat(7,1fr);position:relative}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
 #nav a svg{width:22px;height:22px}
 #nav a.on{color:var(--ink)}
@@ -488,6 +489,7 @@ const IC = {
   studio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg>',
   brand:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7Z"/></svg>',
   lernen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 5l10 4.5-10 4.5Z"/><path d="M6 11.3V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.7M22 9.5V15"/></svg>',
+  material:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/><path d="M3 11h18"/></svg>',
   zahlen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
   book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 1 6 18h13"/></svg>',
   help:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><circle cx="12" cy="18" r=".7" fill="currentColor"/></svg>',
@@ -535,7 +537,7 @@ function md(src){
 }
 
 /* ---------- Zustand und Abgleich ---------- */
-const blank = () => ({v:1, done:{}, prof:{}, videos:[], stats:[], posts:[], open:{}, brand:{}, tree:[], aka:{done:{}, res:{}, chk:{}}, updated:0});
+const blank = () => ({v:1, done:{}, prof:{}, videos:[], stats:[], posts:[], open:{}, brand:{}, tree:[], aka:{done:{}, res:{}, chk:{}}, insp:[], updated:0});
 let ST = blank();
 try { const j = JSON.parse(localStorage.getItem(LKEY) || "null"); if (j && j.v) ST = {...blank(), ...j}; } catch (e) {}
 let sb = null, user = null, sync = "lokal", pushT = null, authChecked = false, skipLogin = false;
@@ -715,7 +717,7 @@ function setAcc(w){ document.documentElement.style.setProperty("--acc", w.acc); 
 
 /* ---------- Routing und Rahmen ---------- */
 const route = () => (location.hash.replace(/^#\/?/, "") || "heute").split("/");
-const TABS = [["heute", "Heute"], ["weg", "Weg"], ["studio", "Studio"], ["lernen", "Lernen"], ["brand", "Brand"], ["zahlen", "Zahlen"]];
+const TABS = [["heute", "Heute"], ["weg", "Weg"], ["studio", "Studio"], ["lernen", "Lernen"], ["material", "Material"], ["brand", "Brand"], ["zahlen", "Zahlen"]];
 function nav(){
   const r = route()[0], i = TABS.findIndex(t => t[0] === r);
   const inEl = $("#nav .in");
@@ -737,7 +739,7 @@ function render(){
   if (login) { app.innerHTML = loginView(); after(); return; }
   if (r !== "lernen" && akBack) { akBack = null; try { sessionStorage.removeItem("bw-akback"); } catch (_) {} }
   setAcc(curWorld());
-  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, lernen:() => lernenView(a, b), wissen:() => a === "material" ? materialView() : a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
+  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, lernen:() => lernenView(a, b), material:() => materialPage(a), wissen:() => a === "material" ? materialPage() : a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
   app.innerHTML = v();
   if (lastRoute !== location.hash) { window.scrollTo(0, 0); lastRoute = location.hash; }
   after();
@@ -1352,21 +1354,55 @@ function materialView(){
     ${s.more ? `<details style="margin-top:8px"><summary class="tiny muted">${s.more.length} weitere Links</summary><div class="chips" style="margin-top:8px">${s.more.map(m => `<a class="chip" href="${esc(m.u)}" target="_blank" rel="noopener" style="white-space:normal">${esc(m.l || "Link")}</a>`).join("")}</div></details>` : ""}
     ${used(id) ? `<div class="chips" style="margin-top:10px"><span class="tiny faint" style="align-self:center">Kommt vor in:</span>${used(id)}</div>` : ""}</div>`;
   const list = all.filter(hit), pdfs = list.filter(([, s]) => s.files), tools = list.filter(([, s]) => !s.files && !isVideo(s)), vids = list.filter(([, s]) => !s.files && isVideo(s));
-  let h = `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Wissen</a><span class="kick acc" style="display:block;margin-top:16px">Alles an einem Ort</span><h1 class="h-xl" style="margin-top:8px">Material</h1>
-    <p class="muted" style="margin:8px 0 0">Alle PDFs, Vorlagen und Videos, die in deinem Weg vorkommen. Bei jedem steht, wo du es brauchst.</p></div><div class="wrap">
-    <section class="glass reveal"><input type="text" id="mq" aria-label="Material durchsuchen" placeholder="Suchen, z. B. Hooks, Schnitt, UGC" value="${esc(UI.mq || "")}">
+  let h = `<section class="glass reveal"><p class="muted" style="margin:0 0 12px">Alle PDFs, Vorlagen und Videos, die in deinem Weg vorkommen. Bei jedem steht, wo du es brauchst.</p><input type="text" id="mq" aria-label="Material durchsuchen" placeholder="Suchen, z. B. Hooks, Schnitt, UGC" value="${esc(UI.mq || "")}">
     <div class="chips" style="margin-top:12px"><button class="chip" data-act="jump" data-t="mat-pdf">PDFs · ${pdfs.length}</button><button class="chip" data-act="jump" data-t="mat-tools">Vorlagen und Werkzeuge · ${tools.length}</button><button class="chip" data-act="jump" data-t="mat-vid">Videos · ${vids.length}</button></div></section>`;
   if (pdfs.length) h += `<section class="glass reveal" id="mat-pdf"><span class="kick acc">PDFs zum Lesen</span>${!user ? `<p class="tiny muted" style="margin:6px 0 0">Die PDFs liegen in deinem Konto. Zum Öffnen anmelden.</p>` : ""}${pdfs.map(card).join("")}</section>`;
   if (tools.length) h += `<section class="glass reveal" id="mat-tools"><span class="kick acc">Vorlagen und Werkzeuge</span>${tools.map(card).join("")}</section>`;
   const groups = [...new Set(vids.map(([, s]) => s.who))];
   if (vids.length) h += `<section class="glass reveal" id="mat-vid"><span class="kick acc">Videos nach Creator</span></section>` + groups.map(g => `<section class="glass reveal"><span class="kick">${esc(g)} · ${vids.filter(([, s]) => s.who === g).length}</span>${vids.filter(([, s]) => s.who === g).map(card).join("")}</section>`).join("");
   if (!list.length) h += `<section class="glass"><p class="empty" style="margin:0">Nichts gefunden.</p></section>`;
-  return h + `</div>`;
+  return h;
+}
+function materialPage(a){
+  const tab = a === "inspiration" ? "insp" : "quellen", seg = (k, l, href) => `<a class="chip ${tab === k ? "on" : ""}" href="${href}">${l}</a>`;
+  return pageHead("Alles an einem Ort", "Material") + `<div class="wrap"><div class="seg">${seg("quellen", "PDFs, Vorlagen, Videos", "#/material")}${seg("insp", `Inspiration · ${(ST.insp || []).length}`, "#/material/inspiration")}</div>${tab === "insp" ? inspView() : materialView()}</div>`;
+}
+/* --- Inspiration: virale Reels sammeln und studieren (Minos Copy, Understand, Maximize) --- */
+const platOf = u => /tiktok\./.test(u) ? "TikTok" : /instagram\./.test(u) ? "Instagram" : /youtu\.?be/.test(u) ? "YouTube" : u ? "Link" : "";
+function inspView(){
+  const list = ST.insp || (ST.insp = []), ed = list.find(x => x.id === UI.ie) || null, q = (UI.iq || "").toLowerCase().trim(), ff = UI.if || "";
+  const fmts = [...new Set(list.map(x => x.fmt).filter(Boolean))];
+  const hit = x => (!ff || x.fmt === ff) && (!q || [x.hook, x.fmt, x.why, x.note, x.url].join(" ").toLowerCase().includes(q));
+  const opt = n => `<option value="${esc(n)}" ${ed && ed.fmt === n ? "selected" : ""}>${esc(n)}</option>`, known = LEX.map(x => x.de);
+  let h = `<section class="glass reveal"><span class="kick acc">So studierst du virale Reels</span><ul class="ak-ex">
+    <li><span class="ak-tag q">Quelle: Mino</span>Copy: Hooks von Videos mit über 50.000 Likes in deinem Format Wort für Wort abschreiben, auch den Text im Bild. Auf TikTok findest du sie leichter als auf Instagram.</li>
+    <li><span class="ak-tag q">Quelle: Mino</span>Understand: Bei jedem fragen, welche Wörter ein Gefühl auslösen und was er verspricht. Maximize: deinen eigenen Hook danach Wort für Wort schärfen.</li>
+    <li><span class="ak-tag q">Quelle: Ronny Mitchell</span>Nur Hooks von Videos nehmen, die wirklich gelaufen sind. Themen, Blickwinkel und Formate abschauen, nicht ganze Videos (Sam Gaudet).</li></ul></section>
+  <section class="glass reveal"><span class="kick acc">${ed ? "Vorbild bearbeiten" : "Neues Vorbild"}</span>
+    <form id="inspform" style="margin-top:8px">
+      <div class="fld"><label for="in_url">Link zum Reel</label><input type="url" id="in_url" name="url" inputmode="url" placeholder="https://www.instagram.com/reel/…" value="${esc(ed ? ed.url : "")}"></div>
+      <div class="fld"><label for="in_hook">Hook, Wort für Wort</label><span class="hint">Der erste Satz und der Text im Bild (Mino).</span><textarea id="in_hook" name="hook" rows="3">${esc(ed ? ed.hook : "")}</textarea></div>
+      <div class="fld"><label for="in_fmt">Format</label><span class="hint">Erklärungen zu jedem Format im <a href="#/studio/formate">Format-Lexikon</a>.</span><select id="in_fmt" name="fmt"><option value="">Format wählen</option>${known.map(opt).join("")}${ed && ed.fmt && !known.includes(ed.fmt) ? opt(ed.fmt) : ""}<option value="__neu">Anderes Format …</option></select>
+        <input type="text" name="fmtneu" aria-label="Anderes Format" placeholder="Eigenes Format, z. B. Vorher-nachher" style="margin-top:8px"></div>
+      <div class="fld"><label for="in_why">Warum funktioniert es?</label><span class="hint">Welche Wörter lösen ein Gefühl aus, was wird versprochen (Mino, Understand)?</span><textarea id="in_why" name="why" rows="3">${esc(ed ? ed.why : "")}</textarea></div>
+      <div class="grid2"><div class="fld" style="margin:0"><label for="in_views">Aufrufe oder Likes</label><input type="text" id="in_views" name="views" inputmode="numeric" value="${esc(ed ? ed.views || "" : "")}"></div>
+        <div class="fld" style="margin:0"><label for="in_note">Was ich übernehmen will</label><input type="text" id="in_note" name="note" value="${esc(ed ? ed.note || "" : "")}"></div></div>
+      <div class="row" style="margin-top:14px"><button class="btn" type="submit">${ed ? "Änderungen speichern" : "Vorbild speichern"}</button>${ed ? `<button class="btn ghost" type="button" data-act="inspcancel">Abbrechen</button>` : ""}</div>
+    </form></section>`;
+  if (!list.length) return h + `<section class="glass"><p class="empty" style="margin:0">Noch keine Vorbilder. Fang mit drei Reels in deinem Format an.</p></section>`;
+  h += `<section class="glass reveal"><input type="text" id="iq" aria-label="Inspiration durchsuchen" placeholder="Suchen in Hooks und Notizen" value="${esc(UI.iq || "")}">
+    ${fmts.length > 1 ? `<div class="chips" style="margin-top:12px"><button class="chip ${!ff ? "on" : ""}" data-act="inspf" data-f="">Alle · ${list.length}</button>${fmts.map(f => `<button class="chip ${ff === f ? "on" : ""}" data-act="inspf" data-f="${esc(f)}">${esc(f)} · ${list.filter(x => x.fmt === f).length}</button>`).join("")}</div>` : ""}</section>`;
+  const items = list.filter(hit);
+  h += `<section class="glass reveal">${items.map(x => `<div class="mat-card"><p style="margin:0;color:var(--ink);font-size:17px;line-height:1.45;white-space:pre-wrap"><b>${esc(x.hook || "Ohne Hook")}</b></p>
+      <div class="chips" style="margin-top:8px">${x.fmt ? `<span class="badge">${esc(x.fmt)}</span>` : ""}${x.url ? `<a class="chip" href="${esc(x.url)}" target="_blank" rel="noopener">${platOf(x.url)} ansehen ${IC.ext}</a>` : ""}${x.views ? `<span class="tiny muted" style="align-self:center">${esc(x.views)}</span>` : ""}</div>
+      ${x.why ? `<p><b style="display:inline;color:var(--ink)">Warum es funktioniert:</b> ${esc(x.why)}</p>` : ""}${x.note ? `<p><b style="display:inline;color:var(--ink)">Übernehmen:</b> ${esc(x.note)}</p>` : ""}
+      <div class="row" style="gap:8px;margin-top:10px">${x.hook ? `<button class="chip" data-act="insphook" data-id="${x.id}">In meine Hook-Bank</button>` : ""}<button class="chip" data-act="inspedit" data-id="${x.id}">Bearbeiten</button><button class="chip" data-act="inspdel" data-id="${x.id}">Löschen</button></div></div>`).join("") || `<p class="empty" style="margin:0">Nichts gefunden.</p>`}</section>`;
+  return h;
 }
 function wissenView(){
   const q = (UI.q || "").toLowerCase().trim(), hit = w => !q || (w.title + " " + w.body).toLowerCase().includes(q);
   let h = pageHead("Zum Nachschlagen", "Wissen") + `<div class="wrap"><section class="glass reveal"><p style="margin:0 0 12px">Wenn du bei einem Schritt hängst. Hier steht, was Mino Lee, Ronny Mitchell, Sam Gaudet und Alex Hormozi sagen, nach Themen sortiert.</p>
-    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><div class="chips" style="margin-top:12px"><a class="chip on" href="#/wissen/material">Alles Material: PDFs, Vorlagen, Videos</a><a class="chip" href="#/wissen/begriffe">Begriffe Deutsch und Englisch</a></div></section>`;
+    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><div class="chips" style="margin-top:12px"><a class="chip on" href="#/material">Alles Material: PDFs, Vorlagen, Videos</a><a class="chip" href="#/wissen/begriffe">Begriffe Deutsch und Englisch</a></div></section>`;
   h += `<section class="glass reveal" style="padding:6px 18px">${D.wissen.filter(hit).map(w => `<a class="item" href="#/wissen/${w.id}"><span class="num acc" style="color:var(--acc);width:24px">${w.n ? pad(w.n) : "··"}</span><span class="t"><b>${esc(w.title)}</b>${q ? `<small>${esc(snip(w.body, q))}</small>` : ""}</span></a>`).join("") || `<div class="empty" style="padding:12px 0">Nichts gefunden.</div>`}</section>`;
   const srcs = Object.values(D.sources).filter(s => !q || (s.t + " " + s.sum + " " + s.who).toLowerCase().includes(q));
   for (const g of [...new Set(srcs.map(s => s.who))]) h += `<section class="glass reveal"><span class="kick acc">${esc(g)}</span>${srcs.filter(s => s.who === g).map(s => `<a class="src-card" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b>${s.sum ? `<small>${esc(s.sum)}</small>` : ""}</a>`).join("")}</section>`;
@@ -1390,7 +1426,7 @@ function helpHTML(){
     <li><b>Lernen</b> ist die Lernakademie: Fähigkeiten einzeln üben, passend zu deinen Aufgaben. Übungen haken keinen Schritt im Weg ab.</li>
     <li><b>Brand</b> ist deine Identität und Strategie: Profil, Look, Markenkern, Themenbaum, Säulen und Formate. Dort steht auch alles, was du in den Schritten einträgst.</li>
     <li><b>Zahlen</b> ist Analytics: Aufrufe, Ausreißer, bestes gegen schwächstes Video, Retention.</li>
-    <li><b>Material</b> (Buch oben rechts, dann „Alles Material“) sammelt alle PDFs, Vorlagen und Videos an einem Ort.</li>
+    <li><b>Material</b> sammelt alle PDFs, Vorlagen und Videos an einem Ort. Unter „Inspiration“ speicherst du virale Reels mit Link, Hook und Format, um sie zu studieren.</li>
     <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
     <h4>Am Android-Handy</h4><p>In Chrome danielgit8.github.io/brand-weg/ öffnen und mit deinem Cockpit-Konto anmelden. Dann „Als App installieren“ tippen. Kommt der Knopf nicht, oben rechts auf die drei Punkte und „App installieren“ oder „Zum Startbildschirm hinzufügen“. Laptop und Handy bleiben gleich, ein eigenes Konto brauchst du nicht.</p></div>
     ${installEv ? `<button class="btn block" data-act="install" style="margin-top:12px">Als App installieren</button>` : ""}
@@ -1453,6 +1489,12 @@ document.addEventListener("click", async e => {
     if (t.startsWith("p:")) { const f = t.slice(2), old = (ST.prof[f] || "").trim(); if (!confirm(`In „${flabel(f)}“ unter Brand übernehmen?${old ? `\n\nBisher:\n${old.slice(0, 240)}` : ""}`)) return; ST.prof[f] = r; save(); return toast("Unter Brand übernommen"); }
     const v = akVideo(); if (!v) return; const old = (v[t] || "").trim();
     if (!confirm(`Als ${AKTR[t]} in „${v.title}“ übernehmen?${old ? `\n\nBisher:\n${old.slice(0, 240)}` : ""}`)) return; v[t] = r; save(); return toast("Ins Video übernommen"); }
+  if (act === "inspf") { UI.if = b.dataset.f; return render(); }
+  if (act === "inspedit") { UI.ie = b.dataset.id; render(); scrollTo({top:0, behavior:RM ? "auto" : "smooth"}); return; }
+  if (act === "inspcancel") { UI.ie = null; return render(); }
+  if (act === "inspdel") { if (!confirm("Dieses Vorbild löschen?")) return; ST.insp = (ST.insp || []).filter(x => x.id !== b.dataset.id); if (UI.ie === b.dataset.id) UI.ie = null; return save(); }
+  if (act === "insphook") { const x = (ST.insp || []).find(y => y.id === b.dataset.id); if (!x) return; const hook = x.hook.split("\n")[0].trim(), bank = lines(ST.prof.hooks);
+    if (bank.includes(hook)) return toast("Steht schon in deiner Hook-Bank"); ST.prof.hooks = [...bank, hook].join("\n"); save(true); return toast("In deine Hook-Bank übernommen"); }
   if (act === "jump") { const el = document.getElementById(b.dataset.t); if (el) scrollTo({top:el.getBoundingClientRect().top + scrollY - 90, behavior:RM ? "auto" : "smooth"}); return; }
   if (act === "pdf") { if (!sb || !user) return toast("PDFs liegen in deinem Konto. Melde dich an, um sie zu öffnen.");
     const w = window.open("", "_blank"); const {data, error} = await sb.storage.from("files").createSignedUrl(user.id + "/" + b.dataset.p, 3600);
@@ -1515,6 +1557,7 @@ document.addEventListener("input", e => {
     return;
   }
   if (t.id === "q") { UI.q = t.value; const pos = t.selectionStart; render(); const q = $("#q"); q.focus(); q.setSelectionRange(pos, pos); return; }
+  if (t.id === "iq") { UI.iq = t.value; const pos = t.selectionStart; render(); const q = $("#iq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.id === "mq") { UI.mq = t.value; const pos = t.selectionStart; render(); const q = $("#mq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.id === "gq") { UI.gq = t.value; const pos = t.selectionStart; render(); const q = $("#gq"); q.focus(); q.setSelectionRange(pos, pos); return; }
   if (t.dataset.actIn === "noen") { ST.open.noEn = !t.checked; saveLocal(); return render(); }
@@ -1557,6 +1600,15 @@ document.addEventListener("change", async e => {
 });
 document.addEventListener("submit", async e => {
   e.preventDefault();
+  if (e.target.id === "inspform") {
+    const fd = new FormData(e.target), g = k => String(fd.get(k) || "").trim();
+    const fmt = g("fmt") === "__neu" ? g("fmtneu") : g("fmt"), x = {url:g("url"), hook:g("hook"), fmt, why:g("why"), views:g("views"), note:g("note")};
+    if (!x.url && !x.hook) return toast("Trag mindestens Link oder Hook ein.");
+    ST.insp ||= [];
+    const old = ST.insp.find(y => y.id === UI.ie);
+    if (old) Object.assign(old, x); else ST.insp.unshift({id:uid(), created:dkey(), ...x});
+    UI.ie = null; save(); return toast(old ? "Gespeichert" : "Vorbild gespeichert");
+  }
   if (e.target.id === "stats") {
     const fd = new FormData(e.target), x = {d:dkey()}; for (const [k, val] of fd) x[k] = String(val).trim();
     if (!x.fol && !x.best && !x.ret && !x.eur && !x.leads) return toast("Trag mindestens eine Zahl ein.");
