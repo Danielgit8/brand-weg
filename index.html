@@ -1364,38 +1364,46 @@ function materialView(){
   return h;
 }
 function materialPage(a){
-  const tab = a === "inspiration" ? "insp" : "quellen", seg = (k, l, href) => `<a class="chip ${tab === k ? "on" : ""}" href="${href}">${l}</a>`;
-  return pageHead("Alles an einem Ort", "Material") + `<div class="wrap"><div class="seg">${seg("quellen", "PDFs, Vorlagen, Videos", "#/material")}${seg("insp", `Inspiration · ${(ST.insp || []).length}`, "#/material/inspiration")}</div>${tab === "insp" ? inspView() : materialView()}</div>`;
+  const insp = a === "inspiration" || a === "tiktok", seg = (on, l, href) => `<a class="chip ${on ? "on" : ""}" href="${href}">${l}</a>`;
+  return pageHead("Alles an einem Ort", "Material") + `<div class="wrap"><div class="seg">${seg(!insp, "PDFs, Vorlagen, Videos", "#/material")}${seg(insp, `Inspiration · ${(ST.insp || []).length}`, "#/material/inspiration")}</div>${insp ? inspView(a === "tiktok" ? "tt" : "ig") : materialView()}</div>`;
 }
-/* --- Inspiration: virale Reels sammeln und studieren (Minos Copy, Understand, Maximize) --- */
+/* --- Inspiration: virale Reels und TikToks sammeln und studieren (Minos Copy, Understand, Maximize) --- */
 const platOf = u => /tiktok\./.test(u) ? "TikTok" : /instagram\./.test(u) ? "Instagram" : /youtu\.?be/.test(u) ? "YouTube" : u ? "Link" : "";
-function inspView(){
-  const list = ST.insp || (ST.insp = []), ed = list.find(x => x.id === UI.ie) || null, q = (UI.iq || "").toLowerCase().trim(), ff = UI.if || "";
+const inspPlat = x => x.plat || (/tiktok\./.test(x.url || "") ? "tt" : "ig");
+function inspView(pl){
+  const all = ST.insp || (ST.insp = []), list = all.filter(x => inspPlat(x) === pl), tt = pl === "tt";
+  const ed = list.find(x => x.id === UI.ie) || null, q = (UI.iq || "").toLowerCase().trim(), ff = UI.if || "";
   const fmts = [...new Set(list.map(x => x.fmt).filter(Boolean))];
-  const hit = x => (!ff || x.fmt === ff) && (!q || [x.hook, x.fmt, x.why, x.note, x.url].join(" ").toLowerCase().includes(q));
+  const hit = x => (!ff || x.fmt === ff) && (!q || [x.hook, x.fmt, x.why, x.note, x.kw, x.url].join(" ").toLowerCase().includes(q));
   const opt = n => `<option value="${esc(n)}" ${ed && ed.fmt === n ? "selected" : ""}>${esc(n)}</option>`, known = LEX.map(x => x.de);
-  let h = `<section class="glass reveal"><span class="kick acc">So studierst du virale Reels</span><ul class="ak-ex">
-    <li><span class="ak-tag q">Quelle: Mino</span>Copy: Hooks von Videos mit über 50.000 Likes in deinem Format Wort für Wort abschreiben, auch den Text im Bild. Auf TikTok findest du sie leichter als auf Instagram.</li>
+  const n = p => all.filter(x => inspPlat(x) === p).length;
+  let h = `<div class="chips" style="margin:0 0 4px"><a class="chip ${!tt ? "on" : ""}" href="#/material/inspiration">Instagram · ${n("ig")}</a><a class="chip ${tt ? "on" : ""}" href="#/material/tiktok">TikTok · ${n("tt")}</a></div>
+  <section class="glass reveal"><span class="kick acc">So studierst du virale ${tt ? "TikToks" : "Reels"}</span><ul class="ak-ex">${tt ? `
+    <li><span class="ak-tag q">Quelle: Mino</span>Auf TikTok suchen, die Suche ist dort besser als bei Instagram. Nur Videos mit über 50.000 Likes in deinem Format nehmen und den Hook Wort für Wort abschreiben.</li>
+    <li><span class="ak-tag q">Quelle: Hootsuite, Reflect Digital</span>TikTok wertet aus, was gesagt wird, was als Text im Bild steht und was in der Beschreibung steht. Notier, welches Schlüsselwort das Video benutzt und wo.</li>
+    <li><span class="ak-tag q">Quelle: ManyChat</span>Auf TikTok laufen Erzählen, Alltag und kurze Erklärungen auch mit wenig Schnitt. Achte darauf, wie wenig Aufwand im Video steckt und warum es trotzdem hält.</li>` : `
+    <li><span class="ak-tag q">Quelle: Mino</span>Copy: Hooks von Videos mit über 50.000 Likes in deinem Format Wort für Wort abschreiben, auch den Text im Bild.</li>
     <li><span class="ak-tag q">Quelle: Mino</span>Understand: Bei jedem fragen, welche Wörter ein Gefühl auslösen und was er verspricht. Maximize: deinen eigenen Hook danach Wort für Wort schärfen.</li>
-    <li><span class="ak-tag q">Quelle: Ronny Mitchell</span>Nur Hooks von Videos nehmen, die wirklich gelaufen sind. Themen, Blickwinkel und Formate abschauen, nicht ganze Videos (Sam Gaudet).</li></ul></section>
-  <section class="glass reveal"><span class="kick acc">${ed ? "Vorbild bearbeiten" : "Neues Vorbild"}</span>
-    <form id="inspform" style="margin-top:8px">
-      <div class="fld"><label for="in_url">Link zum Reel</label><input type="url" id="in_url" name="url" inputmode="url" placeholder="https://www.instagram.com/reel/…" value="${esc(ed ? ed.url : "")}"></div>
+    <li><span class="ak-tag q">Quelle: Ronny Mitchell</span>Nur Hooks von Videos nehmen, die wirklich gelaufen sind. Themen, Blickwinkel und Formate abschauen, nicht ganze Videos (Sam Gaudet).</li>`}</ul></section>
+  <section class="glass reveal"><span class="kick acc">${ed ? "Vorbild bearbeiten" : tt ? "Neues TikTok-Vorbild" : "Neues Reel-Vorbild"}</span>
+    <form id="inspform" style="margin-top:8px"><input type="hidden" name="plat" value="${pl}">
+      <div class="fld"><label for="in_url">Link zum ${tt ? "TikTok" : "Reel"}</label><input type="url" id="in_url" name="url" inputmode="url" placeholder="${tt ? "https://www.tiktok.com/@…/video/…" : "https://www.instagram.com/reel/…"}" value="${esc(ed ? ed.url : "")}"></div>
       <div class="fld"><label for="in_hook">Hook, Wort für Wort</label><span class="hint">Der erste Satz und der Text im Bild (Mino).</span><textarea id="in_hook" name="hook" rows="3">${esc(ed ? ed.hook : "")}</textarea></div>
       <div class="fld"><label for="in_fmt">Format</label><span class="hint">Erklärungen zu jedem Format im <a href="#/studio/formate">Format-Lexikon</a>.</span><select id="in_fmt" name="fmt"><option value="">Format wählen</option>${known.map(opt).join("")}${ed && ed.fmt && !known.includes(ed.fmt) ? opt(ed.fmt) : ""}<option value="__neu">Anderes Format …</option></select>
-        <input type="text" name="fmtneu" aria-label="Anderes Format" placeholder="Eigenes Format, z. B. Vorher-nachher" style="margin-top:8px"></div>
+        <input type="text" name="fmtneu" aria-label="Anderes Format" placeholder="Eigenes Format, z. B. Storytime" style="margin-top:8px"></div>
+      ${tt ? `<div class="fld"><label for="in_kw">Schlüsselwort</label><span class="hint">Welches Suchwort benutzt das Video, und wo: gesagt, als Text im Bild, in der Beschreibung?</span><input type="text" id="in_kw" name="kw" value="${esc(ed ? ed.kw || "" : "")}"></div>` : ""}
       <div class="fld"><label for="in_why">Warum funktioniert es?</label><span class="hint">Welche Wörter lösen ein Gefühl aus, was wird versprochen (Mino, Understand)?</span><textarea id="in_why" name="why" rows="3">${esc(ed ? ed.why : "")}</textarea></div>
       <div class="grid2"><div class="fld" style="margin:0"><label for="in_views">Aufrufe oder Likes</label><input type="text" id="in_views" name="views" inputmode="numeric" value="${esc(ed ? ed.views || "" : "")}"></div>
         <div class="fld" style="margin:0"><label for="in_note">Was ich übernehmen will</label><input type="text" id="in_note" name="note" value="${esc(ed ? ed.note || "" : "")}"></div></div>
       <div class="row" style="margin-top:14px"><button class="btn" type="submit">${ed ? "Änderungen speichern" : "Vorbild speichern"}</button>${ed ? `<button class="btn ghost" type="button" data-act="inspcancel">Abbrechen</button>` : ""}</div>
     </form></section>`;
-  if (!list.length) return h + `<section class="glass"><p class="empty" style="margin:0">Noch keine Vorbilder. Fang mit drei Reels in deinem Format an.</p></section>`;
+  if (!list.length) return h + `<section class="glass"><p class="empty" style="margin:0">Noch keine ${tt ? "TikTok-" : ""}Vorbilder. Fang mit drei ${tt ? "TikToks" : "Reels"} in deinem Format an.</p></section>`;
   h += `<section class="glass reveal"><input type="text" id="iq" aria-label="Inspiration durchsuchen" placeholder="Suchen in Hooks und Notizen" value="${esc(UI.iq || "")}">
     ${fmts.length > 1 ? `<div class="chips" style="margin-top:12px"><button class="chip ${!ff ? "on" : ""}" data-act="inspf" data-f="">Alle · ${list.length}</button>${fmts.map(f => `<button class="chip ${ff === f ? "on" : ""}" data-act="inspf" data-f="${esc(f)}">${esc(f)} · ${list.filter(x => x.fmt === f).length}</button>`).join("")}</div>` : ""}</section>`;
   const items = list.filter(hit);
   h += `<section class="glass reveal">${items.map(x => `<div class="mat-card"><p style="margin:0;color:var(--ink);font-size:17px;line-height:1.45;white-space:pre-wrap"><b>${esc(x.hook || "Ohne Hook")}</b></p>
       <div class="chips" style="margin-top:8px">${x.fmt ? `<span class="badge">${esc(x.fmt)}</span>` : ""}${x.url ? `<a class="chip" href="${esc(x.url)}" target="_blank" rel="noopener">${platOf(x.url)} ansehen ${IC.ext}</a>` : ""}${x.views ? `<span class="tiny muted" style="align-self:center">${esc(x.views)}</span>` : ""}</div>
-      ${x.why ? `<p><b style="display:inline;color:var(--ink)">Warum es funktioniert:</b> ${esc(x.why)}</p>` : ""}${x.note ? `<p><b style="display:inline;color:var(--ink)">Übernehmen:</b> ${esc(x.note)}</p>` : ""}
+      ${x.kw ? `<p><b style="display:inline;color:var(--ink)">Schlüsselwort:</b> ${esc(x.kw)}</p>` : ""}${x.why ? `<p><b style="display:inline;color:var(--ink)">Warum es funktioniert:</b> ${esc(x.why)}</p>` : ""}${x.note ? `<p><b style="display:inline;color:var(--ink)">Übernehmen:</b> ${esc(x.note)}</p>` : ""}
       <div class="row" style="gap:8px;margin-top:10px">${x.hook ? `<button class="chip" data-act="insphook" data-id="${x.id}">In meine Hook-Bank</button>` : ""}<button class="chip" data-act="inspedit" data-id="${x.id}">Bearbeiten</button><button class="chip" data-act="inspdel" data-id="${x.id}">Löschen</button></div></div>`).join("") || `<p class="empty" style="margin:0">Nichts gefunden.</p>`}</section>`;
   return h;
 }
@@ -1426,7 +1434,7 @@ function helpHTML(){
     <li><b>Lernen</b> ist die Lernakademie: Fähigkeiten einzeln üben, passend zu deinen Aufgaben. Übungen haken keinen Schritt im Weg ab.</li>
     <li><b>Brand</b> ist deine Identität und Strategie: Profil, Look, Markenkern, Themenbaum, Säulen und Formate. Dort steht auch alles, was du in den Schritten einträgst.</li>
     <li><b>Zahlen</b> ist Analytics: Aufrufe, Ausreißer, bestes gegen schwächstes Video, Retention.</li>
-    <li><b>Material</b> sammelt alle PDFs, Vorlagen und Videos an einem Ort. Unter „Inspiration“ speicherst du virale Reels mit Link, Hook und Format, um sie zu studieren.</li>
+    <li><b>Material</b> sammelt alle PDFs, Vorlagen und Videos an einem Ort. Unter „Inspiration“ speicherst du virale Reels und TikToks mit Link, Hook und Format, um sie zu studieren.</li>
     <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
     <h4>Am Android-Handy</h4><p>In Chrome danielgit8.github.io/brand-weg/ öffnen und mit deinem Cockpit-Konto anmelden. Dann „Als App installieren“ tippen. Kommt der Knopf nicht, oben rechts auf die drei Punkte und „App installieren“ oder „Zum Startbildschirm hinzufügen“. Laptop und Handy bleiben gleich, ein eigenes Konto brauchst du nicht.</p></div>
     ${installEv ? `<button class="btn block" data-act="install" style="margin-top:12px">Als App installieren</button>` : ""}
@@ -1602,7 +1610,7 @@ document.addEventListener("submit", async e => {
   e.preventDefault();
   if (e.target.id === "inspform") {
     const fd = new FormData(e.target), g = k => String(fd.get(k) || "").trim();
-    const fmt = g("fmt") === "__neu" ? g("fmtneu") : g("fmt"), x = {url:g("url"), hook:g("hook"), fmt, why:g("why"), views:g("views"), note:g("note")};
+    const fmt = g("fmt") === "__neu" ? g("fmtneu") : g("fmt"), x = {url:g("url"), hook:g("hook"), fmt, why:g("why"), views:g("views"), note:g("note"), kw:g("kw"), plat:g("plat") || "ig"};
     if (!x.url && !x.hook) return toast("Trag mindestens Link oder Hook ein.");
     ST.insp ||= [];
     const old = ST.insp.find(y => y.id === UI.ie);
