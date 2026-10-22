@@ -1161,7 +1161,10 @@ function videoView(id){
   if (!s) {
     body = `<span class="kick acc">Gepostet${v.posted ? ` am ${fmtD(v.posted)}` : ""}</span><p class="muted small" style="margin:6px 0 4px">Ein, zwei Tage nach dem Posten eintragen. Aufrufe ohne neue Follower schaden eher (Sam Gaudet).</p>
       <div class="grid2">${[["views", "Aufrufe"], ["follows", "Neue Follower"], ["ret", "Nach 3 Sek. noch da, in %"], ["len", "Länge in Sekunden"], ["react", "Echte Reaktionen aus deiner Zielgruppe"], ["link", "Link zum Video"]].map(([k, l]) => `<div class="fld" style="margin:8px 0"><label for="vf_${k}" class="tiny muted" style="font-weight:500">${l}</label><input id="vf_${k}" type="${k === "link" ? "url" : "text"}" ${k === "link" ? "" : 'inputmode="decimal"'} data-v="${k}" value="${esc(v[k] || "")}"></div>`).join("")}</div>
-      <p class="tiny muted">„Echte Reaktionen“: Nachrichten oder Kommentare von Leuten, für die du das Video gemacht hast. Die zählen mehr als Aufrufe (Alex Hormozi).</p>`;
+      <p class="tiny muted">„Echte Reaktionen“: Nachrichten oder Kommentare von Leuten, für die du das Video gemacht hast. Die zählen mehr als Aufrufe (Alex Hormozi).</p>
+      ${v.ttPosted || (v.platforms || []).includes("TikTok") ? `<span class="kick acc" style="display:block;margin-top:18px">TikTok${v.ttPosted ? ` · gepostet am ${fmtD(v.ttPosted)}` : ""}</span>
+      <div class="grid2">${[["tt_views", "TikTok: Aufrufe"], ["tt_follows", "TikTok: neue Follower"]].map(([k, l]) => `<div class="fld" style="margin:8px 0"><label for="vf_${k}" class="tiny muted" style="font-weight:500">${l}</label><input id="vf_${k}" type="text" inputmode="decimal" data-v="${k}" value="${esc(v[k] || "")}"></div>`).join("")}</div>
+      ${v.ttPosted ? "" : `<button class="chip" data-act="ttposted">Auf TikTok gepostet</button>`}` : ""}`;
   } else if (s.id === "idee") {
     const pil = lines(ST.prof.saeulen);
     body = `<span class="kick acc">1 Idee</span><div class="fld"><label>Worum geht es, in höchstens 10 Wörtern?</label><textarea rows="2" data-v="idee">${esc(v.idee)}</textarea></div>
@@ -1181,7 +1184,7 @@ function videoView(id){
       <div class="row" style="margin-top:12px"><button class="btn" data-act="tp">${IC.play} Teleprompter</button><button class="btn ghost" data-act="copyscript">Kopieren</button>${v.skript.trim() ? "" : `<button class="chip" data-act="tplvideo">Vorlage einfügen</button>`}</div>`;
   } else {
     body = `<span class="kick acc">${cur + 1} ${esc(s.label)}</span><div class="checks" style="margin-top:6px">${s.checks.map((c, i) => `<label><input type="checkbox" data-chk="${s.id}${i}" ${v.checks[s.id + i] ? "checked" : ""}><span>${esc(c)}</span></label>`).join("")}</div>
-      ${s.id === "posten" ? `<div class="fld"><label>Wo postest du es?</label><div class="chips" style="margin-top:8px">${PLATFORMS.map(p => `<button class="chip ${(v.platforms || []).includes(p) ? "on" : ""}" data-act="vplat" data-p="${esc(p)}">${esc(p)}</button>`).join("")}</div></div>` : ""}
+      ${s.id === "posten" ? `<div class="fld"><label>Wo postest du es?</label><div class="chips" style="margin-top:8px">${PLATFORMS.map(p => `<button class="chip ${(v.platforms || []).includes(p) ? "on" : ""}" data-act="vplat" data-p="${esc(p)}">${esc(p)}</button>`).join("")}</div></div>${ttBox(v)}` : ""}
       <div class="tiny faint" style="margin-top:10px">Quelle: ${esc(s.src || "")}</div>`;
   }
   if (s && s.tips) body += `<ul class="tips">${s.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
@@ -1291,6 +1294,27 @@ function allView(){
 }
 
 /* --- Zahlen: Analytics und Optimierung --- */
+// TikTok-Ablauf in der Posten-Stufe: gleiche Datei, Text in der App, Schlüsselwort (ManyChat, Hootsuite)
+function ttBox(v){
+  if (!(v.platforms || []).includes("TikTok")) return `<p class="tiny muted" style="margin:6px 0 0">Postest du auch auf TikTok? Tipp oben auf „TikTok“, dann zeigt dir die App, wie du dasselbe Video dort hochlädst.</p>`;
+  const checks = ["Dieselbe Datei aus CapCut genommen, nicht das Instagram-Video mit Wasserzeichen", "Text und Untertitel in TikTok eingefügt", "Schlüsselwort im ersten Satz gesagt und als Text im Bild", "Beschreibung beginnt mit dem Schlüsselwort"];
+  return `<div class="ak-mat" style="margin-top:14px"><span class="kick acc">Auch auf TikTok</span>
+    <div class="checks" style="margin-top:6px">${checks.map((c, i) => `<label><input type="checkbox" data-chk="tt${i}" ${v.checks["tt" + i] ? "checked" : ""}><span>${esc(c)}</span></label>`).join("")}</div>
+    <div class="fld"><label for="vf_ttcap">Beschreibung für TikTok</label><span class="hint">Mit dem Schlüsselwort anfangen, so wie Leute danach suchen würden.</span><textarea id="vf_ttcap" rows="3" data-v="ttcap">${esc(v.ttcap || "")}</textarea></div>
+    <div class="row" style="gap:8px;margin-top:10px"><button class="chip" data-act="copyttcap">Beschreibung kopieren</button><a class="chip" href="https://www.tiktok.com/upload" target="_blank" rel="noopener">TikTok öffnen ${IC.ext}</a>
+    ${v.ttPosted ? `<span class="tiny saved" style="align-self:center">Auf TikTok gepostet am ${fmtD(v.ttPosted)}</span><button class="chip" data-act="ttundo">Zurücknehmen</button>` : `<button class="btn ok" data-act="ttposted">Auf TikTok gepostet</button>`}</div>
+    <p class="tiny faint" style="margin:10px 0 0">Quelle: ManyChat (Wasserzeichen, Text in der App), Hootsuite (Schlüsselwort)</p></div>`;
+}
+function platCompare(){
+  const pv = postedVideos(), tt = ST.videos.filter(v => v.ttPosted);
+  if (!tt.length) return "";
+  const ig = pv; // „Gepostet!“ steht für Instagram, die Hauptplattform
+  const stat = (list, kv, kf) => { const vs = list.map(v => n0(v[kv])).filter(x => x != null), vw = list.reduce((a, v) => a + (n0(v[kv]) || 0), 0), fl = list.reduce((a, v) => a + (n0(v[kf]) || 0), 0); return {n:list.length, med:median(vs), per:vw ? fl / vw * 1000 : null}; };
+  const a = stat(ig, "views", "follows"), b = stat(tt, "tt_views", "tt_follows"), f = x => x == null ? "–" : x.toFixed(1).replace(".", ",");
+  return `<section class="glass reveal"><span class="kick acc">Instagram gegen TikTok</span><div class="md"><table><thead><tr><th></th><th>Instagram</th><th>TikTok</th></tr></thead><tbody>
+    <tr><td class="muted">Videos</td><td>${a.n}</td><td>${b.n}</td></tr><tr><td class="muted">Aufrufe im Median</td><td>${fmtN(a.med)}</td><td>${fmtN(b.med)}</td></tr><tr><td class="muted">Neue Follower pro 1.000 Aufrufe</td><td>${f(a.per)}</td><td>${f(b.per)}</td></tr></tbody></table></div>
+    <p class="tiny muted" style="margin:8px 0 0">${Math.min(a.n, b.n) < 30 ? `Noch zu wenig für ein Urteil. Nach etwa 30 Videos hast du genug Daten (Mino).` : `Genug Daten: Pro Plattform nur posten, was dort läuft (Sam Gaudet).`}</p></section>`;
+}
 function zahlenView(){
   const pv = postedVideos(), {vs, med, out} = viewsStats(), last = ST.stats[ST.stats.length - 1];
   const sum = (k) => pv.reduce((a, v) => a + (n0(v[k]) || 0), 0), views = sum("views"), fol = sum("follows");
@@ -1336,6 +1360,7 @@ function zahlenView(){
   // Wochenzahlen
   h += `<section class="glass reveal"><span class="kick acc">Zahlen der Woche</span><p class="muted small" style="margin:6px 0 0">Sams vier Zahlen: Aufrufe, Follower, Leads (E-Mails, die dir gehören) und Umsatz. Kommt kein Geld rein, stimmt die Positionierung nicht.</p>${last ? `<p class="small" style="margin:8px 0 0">Zuletzt am ${fmtD(last.d)}: ${esc(last.fol || "–")} Follower · beste Aufrufe ${esc(last.best || "–")} · nach 5 Sek. ${esc(last.ret || "–")} % · ${esc(last.eur || "0")} €</p>` : ""}${statsForm()}
     ${ST.stats.length ? `<details style="margin-top:12px"><summary class="small muted">Alle Wochen</summary><div class="md"><table><thead><tr><th>Datum</th><th>Follower</th><th>Beste</th><th>5 Sek.</th><th>Leads</th><th>€</th></tr></thead><tbody>${ST.stats.slice().reverse().map(x => `<tr><td>${fmtD(x.d)}</td><td>${esc(x.fol)}</td><td>${esc(x.best)}</td><td>${esc(x.ret)}</td><td>${esc(x.leads || "")}</td><td>${esc(x.eur)}</td></tr>`).join("")}</tbody></table></div></details>` : ""}</section>`;
+  h += platCompare();
   h += akChips(["a3", "a5", "a7", "a8"], "Ergebnisse richtig einordnen");
   h += `<section class="glass flat reveal"><span class="kick">Was du daraus machst</span>${fieldHTML("laeuft", "brand")}${fieldHTML("naechstes", "brand")}</section>`;
   return h + `</div>`;
@@ -1537,6 +1562,9 @@ document.addEventListener("click", async e => {
   if (!v) return;
   if (act === "stage") { const i = +b.dataset.i; if (i >= D.stages.length && !v.posted) return toast("Erst posten, dann Zahlen eintragen."); if (v.posted) v.view = i; else v.stage = i; return save(); }
   if (act === "next") { if (v.posted) v.view = Math.min((v.view ?? D.stages.length) + 1, D.stages.length); else v.stage = Math.min(v.stage + 1, D.stages.length - 1); return save(); }
+  if (act === "ttposted") { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); v.ttPosted = dkey(); const a = v.platforms || (v.platforms = []); if (!a.includes("TikTok")) a.push("TikTok"); save(); return toast("Auf TikTok gepostet"); }
+  if (act === "ttundo") { delete v.ttPosted; return save(); }
+  if (act === "copyttcap") { try { await navigator.clipboard.writeText(v.ttcap || ""); toast("Beschreibung kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
   if (act === "posted") {
     const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2);
     v.posted = dkey(); v.stage = D.stages.length - 1; delete v.view;
