@@ -245,7 +245,16 @@ input[type=range]{width:100%;accent-color:var(--acc)}
 .en{color:var(--faint);font-weight:400;font-size:.92em}
 #nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;width:min(calc(100% - 20px),520px);border-radius:26px;background:rgba(14,14,18,.62);-webkit-backdrop-filter:blur(24px) saturate(170%);backdrop-filter:blur(24px) saturate(170%);box-shadow:inset 0 0 0 1px var(--line),0 20px 50px -10px rgba(0,0,0,.7);padding:6px}
 body.login #nav{display:none}
-#nav .in{display:grid;grid-template-columns:repeat(7,1fr);position:relative}
+#nav .in{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.lead{margin:0 0 14px;color:var(--muted);font-size:15px;line-height:1.5;max-width:60ch}
+.seg-hint{margin:-4px 0 16px;color:var(--muted);font-size:13.5px;line-height:1.5;max-width:60ch}
+.seg-hint a{color:var(--acc)}
+.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.qa{display:flex;align-items:center;gap:10px;min-height:54px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:15px;line-height:1.2;color:var(--ink);text-align:left;transition:transform 160ms var(--ease-out),background-color 200ms ease}
+.qa:active{transform:scale(.97)}
+.qa svg{width:20px;height:20px;flex:none;color:var(--acc)}
+.qa.main{background:var(--acc);color:var(--acc-ink);box-shadow:0 10px 30px -12px var(--acc)}
+.qa.main svg{color:var(--acc-ink)}
 #nav a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 7px;font-size:11px;font-weight:500;color:var(--muted);border-radius:20px;transition:color 200ms ease}
 #nav a svg{width:22px;height:22px}
 #nav a.on{color:var(--ink)}
@@ -457,7 +466,7 @@ function annotate(root){
 function begriffeView(){
   const q = (UI.gq || "").toLowerCase(), cats = [...new Set(GLOSS.map(g => g[3]))];
   const hit = g => !q || (g[0].join(" ") + " " + g[1] + " " + g[2]).toLowerCase().includes(q);
-  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Wissen</a><span class="kick acc" style="display:block;margin-top:16px">Deutsch und Englisch</span><h1 class="h-xl" style="margin-top:8px">Begriffe</h1></div>
+  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Nachschlagen</a><span class="kick acc" style="display:block;margin-top:16px">Deutsch und Englisch</span><h1 class="h-xl" style="margin-top:8px">Begriffe</h1></div>
     <div class="wrap" data-noen><section class="glass reveal"><p style="margin:0 0 12px">Die Videos sind auf Englisch, die App auf Deutsch. Hier stehen beide Wörter nebeneinander. In der App steht der englische Begriff außerdem in Klammern dahinter, wenn er zum ersten Mal auf einer Seite vorkommt.</p>
     <input type="text" id="gq" aria-label="Begriffe suchen" placeholder="Suchen, z. B. Angle, Hook, Ausreißer" value="${esc(UI.gq || "")}">
     <label class="row small" style="margin-top:12px;gap:8px"><input type="checkbox" data-act-in="noen" ${ST.open.noEn ? "" : "checked"} style="width:18px;height:18px;accent-color:var(--acc)"> Englische Begriffe in der App anzeigen</label></section>
@@ -490,6 +499,10 @@ const IC = {
   brand:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7Z"/></svg>',
   lernen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 5l10 4.5-10 4.5Z"/><path d="M6 11.3V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.7M22 9.5V15"/></svg>',
   material:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z"/><path d="M3 11h18"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7Z"/></svg>',
+  save:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4Z"/></svg>',
   zahlen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
   book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19.5A2 2 0 0 1 6 18h13"/></svg>',
   help:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><circle cx="12" cy="18" r=".7" fill="currentColor"/></svg>',
@@ -499,6 +512,7 @@ const IC = {
   arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
   mark:'<svg viewBox="0 0 24 24" fill="none" stroke="#140B04" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="18" r="2.2" fill="#140B04" stroke="none"/><path d="M6 18c4 0 3-6 7-6s3-6 7-6"/><path d="M16 5.5 20 6l-.5 4"/></svg>'
 };
+IC.wissen = IC.book;
 
 /* ---------- Kleines Markdown ---------- */
 function inline(s){
@@ -628,7 +642,7 @@ function hookCheck(h){
     [t && !GREET.test(t), "Keine Begrüßung, keine Vorstellung", "Mino"],
     [NUM.test(t), "Konkrete Zahl drin", "Mino, Ronny"],
     [/\b(du|dir|dich|dein\w*|ihr|euch)\b/i.test(t), "Spricht eine Person direkt an", "Mino"],
-    [kw.length ? kw.some(k => k && t.toLowerCase().includes(k)) : null, kw.length ? "Ein Wort aus deiner Keyword-Bank" : "Keyword-Bank noch leer (Schritt 11)", "Ronny, Mino"],
+    [kw.length ? kw.some(k => k && t.toLowerCase().includes(k)) : null, kw.length ? "Ein Wort aus deiner Keyword-Bank" : `Keyword-Bank noch leer (Schritt ${STEPS.findIndex(s => s.id === "s11") + 1})`, "Ronny, Mino"],
     [t ? !/\b(ich weiß nicht, wer das hören muss|tipps|dinge)\b/i.test(t) : null, "Ein klares Thema statt „Tipps“ oder „Dinge“", "Ronny"],
     [null, "Zählt nur die Form, nicht ob der Hook gut ist. Selbst prüfen: Versteht ein Fremder sofort, worum es geht, und will er wissen, wie es weitergeht?", "Klar vor schnell, Wissen Kapitel 4"]
   ];
@@ -719,9 +733,11 @@ function setAcc(w){ document.documentElement.style.setProperty("--acc", w.acc); 
 
 /* ---------- Routing und Rahmen ---------- */
 const route = () => (location.hash.replace(/^#\/?/, "") || "heute").split("/");
-const TABS = [["heute", "Heute"], ["weg", "Weg"], ["studio", "Studio"], ["lernen", "Lernen"], ["material", "Material"], ["brand", "Brand"], ["zahlen", "Zahlen"]];
+const TABS = [["heute", "Heute"], ["weg", "Weg"], ["studio", "Studio"], ["brand", "Brand"], ["wissen", "Wissen"]];
+// Alte Adressen gehören jetzt zu einem der fünf Reiter: Zahlen und Inspiration zum Studio, Lernen und Material zu Wissen.
+const tabOf = ([r, a]) => r === "zahlen" || (r === "material" && (a === "inspiration" || a === "tiktok")) ? "studio" : r === "lernen" || r === "material" ? "wissen" : r;
 function nav(){
-  const r = route()[0], i = TABS.findIndex(t => t[0] === r);
+  const r = tabOf(route()), i = TABS.findIndex(t => t[0] === r);
   const inEl = $("#nav .in");
   if (!inEl.children.length) inEl.innerHTML = `<span class="pill"></span>` + TABS.map(([k, l]) => `<a href="#/${k}" data-tab="${k}">${IC[k]}<span>${l}</span></a>`).join("");
   $$("#nav a").forEach(a => a.classList.toggle("on", a.dataset.tab === r));
@@ -730,9 +746,33 @@ function nav(){
 }
 function topbar(){
   return `<div class="topbar"><div class="in"><a class="mark" href="#/heute"><i>${IC.mark}</i>Brand-Weg</a>${syncPill()}
-    <a class="iconbtn" href="#/wissen" aria-label="Wissen">${IC.book}</a><button class="iconbtn" data-act="help" aria-label="So funktioniert die App">${IC.help}</button></div></div>`;
+    <button class="iconbtn" data-act="help" aria-label="So funktioniert die App">${IC.help}</button></div></div>`;
 }
 function pageHead(kick, title){ return `${topbar()}<div class="wrap page-top"><span class="kick acc">${esc(kick)}</span><h1 class="h-xl" style="margin-top:8px">${esc(title)}</h1></div>`; }
+// Schritt-Nummer mit Link, damit die Erklärungen stimmen, auch wenn sich der Weg ändert
+const stepLink = id => { const i = STEPS.findIndex(s => s.id === id); return i < 0 ? "" : `<a href="#/weg/${id}">Schritt ${i + 1}</a>`; };
+const SUBS = {
+  studio: {kick:"Videos machen", lead:"Hier machst du deine Videos, von der Idee bis zum Posten.", subs:[
+    ["werk", "Videos", "#/studio", () => "Jedes Video läuft gleich ab: Idee, Hook, Skript, Dreh, Schnitt, Check, Posten. Brauchst du ab dem ersten Schritt."],
+    ["ideen", "Ideen", "#/studio/ideen", () => "Fremde Reels und TikToks, die gut laufen, speichern und abschauen, wie sie gemacht sind."],
+    ["hooks", "Hooks", "#/studio/hooks", () => `Der Hook ist der erste Satz deines Videos. Hier prüfst du ihn und sammelst gute Hooks. Richtig dran ist das ab ${stepLink("s11")}.`],
+    ["verteilen", "Posten", "#/studio/verteilen", () => "Worauf du beim Hochladen achtest und wie Instagram und TikTok entscheiden, wem sie dein Video zeigen."],
+    ["zahlen", "Zahlen", "#/studio/zahlen", () => "Wie deine Videos laufen. Richtig auswerten kannst du nach etwa 30 Videos (Mino), bis dahin reicht das Eintragen."]]},
+  brand: {kick:"Deine Marke", lead:"Wer du bist, für wen du Videos machst und worüber du redest. Du füllst das nach und nach in den Schritten aus.", subs:[
+    ["profil", "Profil & Look", "#/brand/profil", () => `So sieht dein Profil für Fremde aus, dazu Schrift und Farbe deiner Videos. Dran in ${stepLink("s04")} und ${stepLink("s07")}.`],
+    ["kern", "Markenkern", "#/brand/kern", () => `Woran du glaubst und was dich von anderen unterscheidet. Dran in ${stepLink("s25")} und ${stepLink("s26")}, bis dahin darfst du das überspringen.`],
+    ["strategie", "Strategie", "#/brand/strategie", () => `Deine Themen, deine Nische und Ideen für viele Videos. Dran ab ${stepLink("s09")} und in ${stepLink("s10s")}.`],
+    ["alles", "Alle Antworten", "#/brand/alles", () => "Alles, was du in den Schritten einträgst, an einem Ort. Zum Nachlesen, hier musst du nichts zusätzlich ausfüllen."]]},
+  wissen: {kick:"Lernen und nachschauen", lead:"Nichts davon musst du vorher lesen. Schau hier rein, wenn du bei einem Schritt hängst oder etwas üben willst.", subs:[
+    ["lernen", "Üben", "#/lernen", () => "Einzelne Fähigkeiten üben, zum Beispiel Licht oder frei sprechen. Eine Übung hakt keinen Schritt ab."],
+    ["wissen", "Nachschlagen", "#/wissen", () => "Was Mino Lee, Ronny Mitchell, Sam Gaudet und Alex Hormozi sagen, nach Themen sortiert."],
+    ["formate", "Formate", "#/wissen/formate", () => "Welche Arten von Videos es gibt, mit Beispielbild und Bewertung. Hilft, wenn du ein Format wählen sollst."],
+    ["material", "Material", "#/material", () => "Alle PDFs, Vorlagen und Videos aus deinen Quellen. Bei jedem steht, wo du es brauchst."]]}
+};
+function areaHead(area, on){
+  const A = SUBS[area], cur = A.subs.find(s => s[0] === on) || A.subs[0];
+  return pageHead(A.kick, TABS.find(t => t[0] === area)[1]) + `<div class="wrap"><p class="lead">${A.lead}</p><div class="seg">${A.subs.map(([k, l, href]) => `<a class="chip ${k === cur[0] ? "on" : ""}" href="${href}">${l}</a>`).join("")}</div><p class="seg-hint">${cur[3]()}</p>`;
+}
 let lastRoute = "";
 function render(){
   nav();
@@ -741,7 +781,7 @@ function render(){
   if (login) { app.innerHTML = loginView(); after(); return; }
   if (r !== "lernen" && akBack) { akBack = null; try { sessionStorage.removeItem("bw-akback"); } catch (_) {} }
   setAcc(curWorld());
-  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:zahlenView, lernen:() => lernenView(a, b), material:() => materialPage(a), wissen:() => a === "material" ? materialPage() : a === "begriffe" ? begriffeView() : a ? kapView(a) : wissenView()}[r] || heuteView;
+  const v = {heute:heuteView, weg:() => a ? stepView(a) : wegView(), studio:() => studioView(a, b), brand:() => brandView(a), zahlen:() => studioView("zahlen"), lernen:() => lernenView(a, b), material:() => a === "inspiration" ? studioView("ideen") : a === "tiktok" ? studioView("ideen", "tt") : materialPage(), wissen:() => a === "material" ? materialPage() : a === "begriffe" ? begriffeView() : a === "formate" ? areaHead("wissen", "formate") + lexView() + `</div>` : a ? kapView(a) : wissenView()}[r] || heuteView;
   app.innerHTML = v();
   if (lastRoute !== location.hash) { window.scrollTo(0, 0); lastRoute = location.hash; }
   after();
@@ -779,11 +819,14 @@ function heuteView(){
         <div class="row"><a class="btn" href="#/weg/${s.id}">Schritt öffnen ${IC.arrow}</a>${stepVideo(s.id) ? `<a class="btn ghost" href="#/studio/v/${stepVideo(s.id).id}">Zum Video</a>` : ""}</div></div>`
       : `<div class="glass reveal"><span class="kick acc">Alles abgehakt</span><h2 class="h-l" style="margin-top:8px">Du bist den ganzen Weg gegangen.</h2><p class="muted">Weiter posten, auswerten, besser werden.</p></div>`}
     </div></div></section><div class="wrap">`;
+  h += `<section class="glass reveal"><span class="kick">Schnell erreichen</span><div class="quick">
+    <button class="qa main" data-act="newvideo">${IC.plus}Neues Video</button><button class="qa" data-act="quickpost">${IC.check}Video gepostet</button>
+    <a class="qa" href="#/studio/hooks">${IC.bolt}Hook testen</a><a class="qa" href="#/studio/ideen">${IC.save}Reel merken</a></div></section>`;
   h += `<section class="glass reveal"><div class="between"><span class="kick">Dranbleiben</span><span class="tiny faint">Mino Lee</span></div>
     <div class="stats"><div class="stat"><b class="num" data-count="${wk}" data-key="wk">0</b><span>diese Woche · Ziel 3</span></div><div class="stat"><b class="num" data-count="${tot}" data-key="tot">0</b><span>Videos gepostet</span></div><div class="stat"><b class="num"><span data-count="${doneN}" data-key="dn">0</span><span class="faint" style="font-size:.55em">/${STEPS.length}</span></b><span>Schritte</span></div></div>
     <div class="between"><span class="small"><b>Die ersten 30 Videos</b></span><span class="tiny muted">danach zählt Qualität</span></div>
     <div class="trail">${Array.from({length:30}, (_, i) => `<i class="${i < tot ? "on" : ""}" style="animation-delay:${i * 25}ms"></i>`).join("")}</div>
-    <div class="row" style="margin-top:14px"><button class="btn" data-act="newvideo">Neues Video</button><button class="btn ghost" data-act="quickpost">+ gepostet</button>${ST.posts.length ? `<button class="chip" data-act="undopost">Letztes zurück</button>` : ""}</div></section>`;
+    ${ST.posts.length ? `<div class="row" style="margin-top:14px"><button class="chip" data-act="undopost">Letztes „gepostet“ zurücknehmen</button></div>` : ""}</section>`;
   if (installEv && !standalone()) h += `<section class="glass reveal"><span class="kick acc">Aufs Handy holen</span><p class="muted small" style="margin:6px 0 12px">Als App installiert hast du Brand-Weg mit eigenem Symbol auf dem Startbildschirm, im Vollbild und auch offline.</p><button class="btn block" data-act="install">Als App installieren</button></section>`;
   if (inWork.length) h += `<section class="glass reveal"><span class="kick">Videos in Arbeit</span><div class="list" style="margin-top:6px">${inWork.slice(0, 4).map(videoRow).join("")}</div></section>`;
   { const r = akRecommend(); if (r) h += `<section class="glass reveal"><div class="between"><span class="kick acc">Fähigkeit üben</span><a class="tiny" href="#/lernen">Alle Fähigkeiten</a></div><h3 class="h-l" style="margin-top:8px">${esc(AKL[r.id].t)}</h3><p class="muted small" style="margin:6px 0 12px">${esc(r.why)}</p><button class="btn ghost" data-act="learn" data-l="${r.id}">Übung öffnen ${IC.arrow}</button></section>`; }
@@ -883,7 +926,7 @@ function akBackLabel(){
 function akVideo(){ const vs = ST.videos; return vs.find(x => x.id === UI.akv) || vs.find(x => !x.posted) || vs[0] || null; }
 function akChips(ids, title = "Fähigkeit dazu üben"){
   if (!ids || !ids.length) return "";
-  return `<section class="glass flat"><div class="between"><span class="kick">${esc(title)}</span><a class="tiny" href="#/lernen">Lernakademie</a></div><div class="ak-chips">${ids.filter(id => AKL[id]).map(id => `<button class="ak-link ${akDone(id) ? "done" : ""}" data-act="learn" data-l="${id}"><b>${esc(AKL[id].t)}</b><small>${esc(AKS[AKL[id].sk].t)}${akDone(id) ? " · geübt" : ""}</small></button>`).join("")}</div></section>`;
+  return `<section class="glass flat"><div class="between"><span class="kick">${esc(title)}</span><a class="tiny" href="#/lernen">Alle Übungen</a></div><div class="ak-chips">${ids.filter(id => AKL[id]).map(id => `<button class="ak-link ${akDone(id) ? "done" : ""}" data-act="learn" data-l="${id}"><b>${esc(AKL[id].t)}</b><small>${esc(AKS[AKL[id].sk].t)}${akDone(id) ? " · geübt" : ""}</small></button>`).join("")}</div></section>`;
 }
 function akRecommend(){
   const pick = ids => (ids || []).find(id => AKL[id] && !akDone(id)), cur = curStep();
@@ -899,8 +942,8 @@ function akLegend(){
 }
 function akHome(){
   const r = akRecommend(), n = AK.lessons.filter(l => akDone(l.id)).length;
-  let h = pageHead("Lernakademie", "Fähigkeiten lernen") + `<div class="wrap">
-    <section class="glass reveal"><p style="margin:0">Hier übst du einzelne Fähigkeiten, die du bei deinen Aufgaben brauchst. Das ergänzt deinen Weg: Eine Übung hakt keinen Schritt ab, und deine Entwürfe ändern sich nur, wenn du selbst auf „Übernehmen“ tippst.</p>
+  let h = areaHead("wissen", "lernen") + `
+    <section class="glass reveal"><p style="margin:0">Die Übungen passen zu deinen Schritten im Weg. Deine Entwürfe ändern sich nur, wenn du selbst auf „Übernehmen“ tippst.</p>
     <p class="tiny muted" style="margin:10px 0 0">${n} von ${AK.lessons.length} Übungen geübt. Reichweite oder Einnahmen verspricht keine davon.</p>${akLegend()}</section>`;
   if (r) h += `<section class="glass reveal"><span class="kick acc">Empfohlener Einstieg</span><h2 class="h-l" style="margin-top:8px">${esc(AKL[r.id].t)}</h2><p class="muted small" style="margin:6px 0 12px">${esc(r.why)}</p><a class="btn" href="#/lernen/l/${r.id}">Übung öffnen ${IC.arrow}</a></section>`;
   h += `<section class="glass reveal"><span class="kick">Alle Fähigkeiten</span><div class="list" style="margin-top:4px">${AK.skills.map(s => { const ls = AK.lessons.filter(l => l.sk === s.id), d = ls.filter(l => akDone(l.id)).length;
@@ -911,7 +954,7 @@ function akSkill(id){
   const s = AKS[id]; if (!s) return pageHead("Lernakademie", "Fähigkeit nicht gefunden");
   const ls = AK.lessons.filter(l => l.sk === id), groups = s.secs ? s.secs.map(sec => [sec, ls.filter(l => l.sec === sec)]) : [[null, ls]];
   const row = l => `<a class="item" href="#/lernen/l/${l.id}"><span class="chk ${akDone(l.id) ? "done" : ""}"></span><span class="t"><b>${esc(l.t)}</b><small>${esc(l.goal)}</small></span>${l.opt ? `<span class="badge">freiwillig</span>` : ""}</a>`;
-  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/lernen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Lernakademie</a>
+  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/lernen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Üben</a>
     <span class="kick acc" style="display:block;margin-top:16px">Fähigkeit ${s.n} von ${AK.skills.length}</span><h1 class="h-xl" style="margin-top:8px">${esc(s.t)}</h1><p class="muted" style="margin:8px 0 0">${esc(s.why)}</p></div>
     <div class="wrap">${groups.map(([sec, g]) => `<section class="glass reveal">${sec ? `<span class="kick acc">${esc(sec)}</span>` : ""}<div class="list" style="margin-top:4px">${g.map(row).join("")}</div></section>`).join("")}</div>`;
 }
@@ -1003,14 +1046,16 @@ function stepView(id){
 /* --- Studio: Erstellen und Verteilen --- */
 function studioView(a, b){
   if (a === "v" && b) return videoView(b);
-  const tab = a || "werk", seg = (k, l) => `<a class="chip ${tab === k ? "on" : ""}" href="#/studio/${k}">${l}</a>`;
-  let h = pageHead("Content Creation · Distribution", "Studio") + `<div class="wrap"><div class="seg">${seg("werk", "Videos")}${seg("formate", "Formate")}${seg("hooks", "Hook-Labor")}${seg("verteilen", "Verteilen & Algorithmus")}</div>`;
-  if (tab === "formate") h += lexView();
+  if (a === "formate") { location.replace("#/wissen/formate"); return ""; } // Formate stehen jetzt unter Wissen
+  const tab = a || "werk";
+  let h = areaHead("studio", tab);
+  if (tab === "ideen") h += inspView(b === "tt" ? "tt" : "ig");
+  else if (tab === "zahlen") h += zahlenView();
   else if (tab === "hooks") h += hookLab();
   else if (tab === "verteilen") h += distView();
   else {
     const work = ST.videos.filter(v => !v.posted), done = postedVideos();
-    h += `<section class="glass reveal"><p style="margin:0 0 14px">Jedes Video läuft gleich ab: <b>Idee, Hook, Skript, Dreh, Schnitt, Check, Posten.</b> Dann von vorn, jedes Mal etwas besser (Leitfaden).</p><button class="btn" data-act="newvideo">Neues Video ${IC.arrow}</button></section>
+    h += `<section class="glass reveal"><p style="margin:0 0 14px">Nach dem Posten fängst du von vorn an, jedes Mal etwas besser (Leitfaden).</p><button class="btn" data-act="newvideo">Neues Video ${IC.arrow}</button></section>
       <section class="glass reveal"><span class="kick">In Arbeit</span>${work.length ? `<div class="list" style="margin-top:4px">${work.map(videoRow).join("")}</div>` : `<div class="empty" style="margin-top:6px">Gerade nichts in Arbeit.</div>`}</section>
       <section class="glass reveal"><span class="kick">Gepostet</span><p class="muted tiny" style="margin:6px 0 0">Nur zwei Zahlen zählen: Aufrufe und neue Follower pro Video (Sam Gaudet).</p>${done.length ? `<div class="list">${done.map(videoRow).join("")}</div>` : `<div class="empty">Noch kein Video gepostet. Das erste darf schlecht sein.</div>`}</section>`;
   }
@@ -1209,8 +1254,8 @@ function scriptPanel(text){
 
 /* --- Brand: Identität und Strategie --- */
 function brandView(a){
-  const tab = a || "profil", seg = (k, l) => `<a class="chip ${tab === k ? "on" : ""}" href="#/brand/${k}">${l}</a>`;
-  let h = pageHead("Brand Identity · Content-Strategie", "Brand") + `<div class="wrap"><div class="seg">${seg("profil", "Profil & Look")}${seg("kern", "Markenkern")}${seg("strategie", "Strategie")}${seg("alles", "Alle Antworten")}</div>`;
+  const tab = a || "profil";
+  let h = areaHead("brand", tab);
   if (tab === "kern") h += kernView(); else if (tab === "strategie") h += strategyView(); else if (tab === "alles") h += allView(); else h += profileView();
   return h + `</div>`;
 }
@@ -1247,7 +1292,7 @@ function kernView(){
     ${SPCL.map(([k, l, d]) => `<div class="fld" style="margin:12px 0"><div class="between small"><b>${l}</b><span class="num muted" data-sv="${k}">${sp[k] ?? 0}/10</span></div><span class="hint" style="margin:2px 0 6px">${d}</span><input type="range" min="0" max="10" value="${sp[k] ?? 0}" data-spcl="${k}"></div>`).join("")}</section>
     <section class="glass reveal"><span class="kick acc">Die vier P</span><p class="muted small" style="margin:6px 0 0">Versprechen, Beweis, Blickwinkel, Persönlichkeit. Das ist deine Positionierung (Sam Gaudet).</p>
     ${["versprechen", "proofstack"].map(k => fieldHTML(k, "brand")).join("")}</section>
-    <section class="glass reveal"><span class="kick acc">Woran du glaubst</span><p class="muted small" style="margin:6px 0 0">Dogma und Gegenposition machen aus Followern Fans (Ronny). Tipp: das Dogma-Interview mit Claude aus dem Weg, Schritt 25.</p>
+    <section class="glass reveal"><span class="kick acc">Woran du glaubst</span><p class="muted small" style="margin:6px 0 0">Dogma und Gegenposition machen aus Followern Fans (Ronny). Tipp: das Dogma-Interview mit Claude aus dem Weg, ${stepLink("s25")}.</p>
     ${["glaube", "gegen", "selten", "interessen", "ton"].map(k => fieldHTML(k, "brand")).join("")}</section>
     <section class="glass reveal"><span class="kick acc">Später zum Experten</span>${["beweise", "grenze"].map(k => fieldHTML(k, "brand")).join("")}</section>`;
 }
@@ -1267,7 +1312,7 @@ function strategyView(){
       <div class="tiny muted" style="margin:14px 0 8px">Bis zu 3 Formate wählen (Sams 15 für Kurzvideos):</div>
       <div class="chips">${SAM15.map(f => `<button class="chip ${((ST.brand.mult || {}).formats || []).includes(f) ? "on" : ""}" data-act="multfmt" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div>
       <div id="multgrid" style="margin-top:14px">${multGrid()}</div></section>
-    <section class="glass reveal"><span class="kick acc">Format-Karte</span><p class="muted small" style="margin:6px 0 10px">Ronny Mitchells 25 Formate: rechts mehr Aufrufe, oben mehr Geld. Zeigen schlägt erzählen. Tipp einen Punkt an. Wie die Formate aussehen, zeigt das <a href="#/studio/formate">Format-Lexikon</a> mit echten Beispielbildern.</p>
+    <section class="glass reveal"><span class="kick acc">Format-Karte</span><p class="muted small" style="margin:6px 0 10px">Ronny Mitchells 25 Formate: rechts mehr Aufrufe, oben mehr Geld. Zeigen schlägt erzählen. Tipp einen Punkt an. Wie die Formate aussehen, zeigt das <a href="#/wissen/formate">Format-Lexikon</a> mit echten Beispielbildern.</p>
     <svg class="chart matrix" viewBox="0 0 ${W} ${H}"><line class="ax" x1="26" y1="${H - 26}" x2="${W - 8}" y2="${H - 26}"/><line class="ax" x1="26" y1="8" x2="26" y2="${H - 26}"/><text x="${W - 8}" y="${H - 10}" text-anchor="end">Aufrufe →</text><text x="30" y="16">Geld ↑</text>
       ${FORMATS.map((f, i) => `<circle cx="${px(f[1]).toFixed(1)}" cy="${py(f[2]).toFixed(1)}" r="${f[0] === UI.fmt || f[0] === fm ? 8 : 5.5}" class="${f[0] === UI.fmt || f[0] === fm ? "on" : ""}" data-act="fmt" data-i="${i}"><title>${esc(f[0])}</title></circle>`).join("")}</svg>
     <div id="fmtinfo">${fmtInfo()}</div></section>
@@ -1285,7 +1330,7 @@ function fmtInfo(){
 }
 function allView(){
   const all = Object.keys(F), n = all.filter(filled).length;
-  let h = `<section class="glass reveal"><p style="margin:0">Alles, was du über deine Brand festlegst. Du füllst es in den Schritten aus, hier siehst du alles an einem Ort.</p><div class="bar"><i style="width:${n / all.length * 100}%"></i></div><span class="tiny muted">${n} von ${all.length} Feldern ausgefüllt. Leer ist normal: Die meisten kommen erst später dran.</span></section>`;
+  let h = `<section class="glass reveal"><div class="bar"><i style="width:${n / all.length * 100}%"></i></div><span class="tiny muted">${n} von ${all.length} Feldern ausgefüllt. Leer ist normal: Die meisten kommen erst später dran.</span></section>`;
   for (const sec of D.sections) {
     const ids = all.filter(k => F[k].sec === sec.id); if (!ids.length) continue;
     const dn = ids.filter(filled).length, open = !!UI["sec_" + sec.id];
@@ -1321,7 +1366,7 @@ function zahlenView(){
   const pv = postedVideos(), {vs, med, out} = viewsStats(), last = ST.stats[ST.stats.length - 1];
   const sum = (k) => pv.reduce((a, v) => a + (n0(v[k]) || 0), 0), views = sum("views"), fol = sum("follows");
   const per1k = views ? (fol / views * 1000) : null, rets = pv.map(v => n0(v.ret)).filter(x => x != null), avgRet = rets.length ? rets.reduce((a, b) => a + b, 0) / rets.length : null;
-  let h = pageHead("Analytics · Optimierung", "Zahlen") + `<div class="wrap">`;
+  let h = "";
   h += `<section class="glass reveal"><div class="stats" style="margin-top:2px"><div class="stat"><b class="num" data-count="${pv.length}" data-key="zv">0</b><span>Videos gepostet</span></div><div class="stat"><b class="num">${fmtN(med)}</b><span>Aufrufe im Median</span></div><div class="stat"><b class="num">${per1k == null ? "–" : per1k.toFixed(1).replace(".", ",")}</b><span>neue Follower pro 1.000 Aufrufe</span></div></div>
     <p class="tiny muted" style="margin:0">${pv.length < 30 ? `Noch ${30 - pv.length} Videos bis zur ersten richtigen Auswertung. Nach etwa 30 Videos hast du genug Daten (Mino).` : "Genug Daten: jetzt bestes und schwächstes Video vergleichen und Ausreißer jagen (Mino)."}</p></section>`;
   // Aufrufe pro Video
@@ -1365,7 +1410,7 @@ function zahlenView(){
   h += platCompare();
   h += akChips(["a3", "a5", "a7", "a8"], "Ergebnisse richtig einordnen");
   h += `<section class="glass flat reveal"><span class="kick">Was du daraus machst</span>${fieldHTML("laeuft", "brand")}${fieldHTML("naechstes", "brand")}</section>`;
-  return h + `</div>`;
+  return h;
 }
 
 /* --- Wissen --- */
@@ -1381,7 +1426,7 @@ function materialView(){
     ${s.more ? `<details style="margin-top:8px"><summary class="tiny muted">${s.more.length} weitere Links</summary><div class="chips" style="margin-top:8px">${s.more.map(m => `<a class="chip" href="${esc(m.u)}" target="_blank" rel="noopener" style="white-space:normal">${esc(m.l || "Link")}</a>`).join("")}</div></details>` : ""}
     ${used(id) ? `<div class="chips" style="margin-top:10px"><span class="tiny faint" style="align-self:center">Kommt vor in:</span>${used(id)}</div>` : ""}</div>`;
   const list = all.filter(hit), pdfs = list.filter(([, s]) => s.files), tools = list.filter(([, s]) => !s.files && !isVideo(s)), vids = list.filter(([, s]) => !s.files && isVideo(s));
-  let h = `<section class="glass reveal"><p class="muted" style="margin:0 0 12px">Alle PDFs, Vorlagen und Videos, die in deinem Weg vorkommen. Bei jedem steht, wo du es brauchst.</p><input type="text" id="mq" aria-label="Material durchsuchen" placeholder="Suchen, z. B. Hooks, Schnitt, UGC" value="${esc(UI.mq || "")}">
+  let h = `<section class="glass reveal"><input type="text" id="mq" aria-label="Material durchsuchen" placeholder="Suchen, z. B. Hooks, Schnitt, UGC" value="${esc(UI.mq || "")}">
     <div class="chips" style="margin-top:12px"><button class="chip" data-act="jump" data-t="mat-pdf">PDFs · ${pdfs.length}</button><button class="chip" data-act="jump" data-t="mat-tools">Vorlagen und Werkzeuge · ${tools.length}</button><button class="chip" data-act="jump" data-t="mat-vid">Videos · ${vids.length}</button></div></section>`;
   if (pdfs.length) h += `<section class="glass reveal" id="mat-pdf"><span class="kick acc">PDFs zum Lesen</span>${!user ? `<p class="tiny muted" style="margin:6px 0 0">Die PDFs liegen in deinem Konto. Zum Öffnen anmelden.</p>` : ""}${pdfs.map(card).join("")}</section>`;
   if (tools.length) h += `<section class="glass reveal" id="mat-tools"><span class="kick acc">Vorlagen und Werkzeuge</span>${tools.map(card).join("")}</section>`;
@@ -1391,8 +1436,7 @@ function materialView(){
   return h;
 }
 function materialPage(a){
-  const insp = a === "inspiration" || a === "tiktok", seg = (on, l, href) => `<a class="chip ${on ? "on" : ""}" href="${href}">${l}</a>`;
-  return pageHead("Alles an einem Ort", "Material") + `<div class="wrap"><div class="seg">${seg(!insp, "PDFs, Vorlagen, Videos", "#/material")}${seg(insp, `Inspiration · ${(ST.insp || []).length}`, "#/material/inspiration")}</div>${insp ? inspView(a === "tiktok" ? "tt" : "ig") : materialView()}</div>`;
+  return areaHead("wissen", "material") + materialView() + `</div>`;
 }
 /* --- Inspiration: virale Reels und TikToks sammeln und studieren (Minos Copy, Understand, Maximize) --- */
 const platOf = u => /tiktok\./.test(u) ? "TikTok" : /instagram\./.test(u) ? "Instagram" : /youtu\.?be/.test(u) ? "YouTube" : u ? "Link" : "";
@@ -1404,7 +1448,7 @@ function inspView(pl){
   const hit = x => (!ff || x.fmt === ff) && (!q || [x.hook, x.fmt, x.why, x.note, x.kw, x.url].join(" ").toLowerCase().includes(q));
   const opt = n => `<option value="${esc(n)}" ${ed && ed.fmt === n ? "selected" : ""}>${esc(n)}</option>`, known = LEX.map(x => x.de);
   const n = p => all.filter(x => inspPlat(x) === p).length;
-  let h = `<div class="chips" style="margin:0 0 4px"><a class="chip ${!tt ? "on" : ""}" href="#/material/inspiration">Instagram · ${n("ig")}</a><a class="chip ${tt ? "on" : ""}" href="#/material/tiktok">TikTok · ${n("tt")}</a></div>
+  let h = `<div class="chips" style="margin:0 0 4px"><a class="chip ${!tt ? "on" : ""}" href="#/studio/ideen">Instagram · ${n("ig")}</a><a class="chip ${tt ? "on" : ""}" href="#/studio/ideen/tt">TikTok · ${n("tt")}</a></div>
   <section class="glass reveal"><span class="kick acc">So studierst du virale ${tt ? "TikToks" : "Reels"}</span><ul class="ak-ex">${tt ? `
     <li><span class="ak-tag q">Quelle: Mino</span>Auf TikTok suchen, die Suche ist dort besser als bei Instagram. Nur Videos mit über 50.000 Likes in deinem Format nehmen und den Hook Wort für Wort abschreiben.</li>
     <li><span class="ak-tag q">Quelle: Hootsuite, Reflect Digital</span>TikTok wertet aus, was gesagt wird, was als Text im Bild steht und was in der Beschreibung steht. Notier, welches Schlüsselwort das Video benutzt und wo.</li>
@@ -1416,7 +1460,7 @@ function inspView(pl){
     <form id="inspform" style="margin-top:8px"><input type="hidden" name="plat" value="${pl}">
       <div class="fld"><label for="in_url">Link zum ${tt ? "TikTok" : "Reel"}</label><input type="url" id="in_url" name="url" inputmode="url" placeholder="${tt ? "https://www.tiktok.com/@…/video/…" : "https://www.instagram.com/reel/…"}" value="${esc(ed ? ed.url : "")}"></div>
       <div class="fld"><label for="in_hook">Hook, Wort für Wort</label><span class="hint">Der erste Satz und der Text im Bild (Mino).</span><textarea id="in_hook" name="hook" rows="3">${esc(ed ? ed.hook : "")}</textarea></div>
-      <div class="fld"><label for="in_fmt">Format</label><span class="hint">Erklärungen zu jedem Format im <a href="#/studio/formate">Format-Lexikon</a>.</span><select id="in_fmt" name="fmt"><option value="">Format wählen</option>${known.map(opt).join("")}${ed && ed.fmt && !known.includes(ed.fmt) ? opt(ed.fmt) : ""}<option value="__neu">Anderes Format …</option></select>
+      <div class="fld"><label for="in_fmt">Format</label><span class="hint">Erklärungen zu jedem Format im <a href="#/wissen/formate">Format-Lexikon</a>.</span><select id="in_fmt" name="fmt"><option value="">Format wählen</option>${known.map(opt).join("")}${ed && ed.fmt && !known.includes(ed.fmt) ? opt(ed.fmt) : ""}<option value="__neu">Anderes Format …</option></select>
         <input type="text" name="fmtneu" aria-label="Anderes Format" placeholder="Eigenes Format, z. B. Storytime" style="margin-top:8px"></div>
       ${tt ? `<div class="fld"><label for="in_kw">Schlüsselwort</label><span class="hint">Welches Suchwort benutzt das Video, und wo: gesagt, als Text im Bild, in der Beschreibung?</span><input type="text" id="in_kw" name="kw" value="${esc(ed ? ed.kw || "" : "")}"></div>` : ""}
       <div class="fld"><label for="in_why">Warum funktioniert es?</label><span class="hint">Welche Wörter lösen ein Gefühl aus, was wird versprochen (Mino, Understand)?</span><textarea id="in_why" name="why" rows="3">${esc(ed ? ed.why : "")}</textarea></div>
@@ -1436,18 +1480,17 @@ function inspView(pl){
 }
 function wissenView(){
   const q = (UI.q || "").toLowerCase().trim(), hit = w => !q || (w.title + " " + w.body).toLowerCase().includes(q);
-  let h = pageHead("Zum Nachschlagen", "Wissen") + `<div class="wrap"><section class="glass reveal"><p style="margin:0 0 12px">Wenn du bei einem Schritt hängst. Hier steht, was Mino Lee, Ronny Mitchell, Sam Gaudet und Alex Hormozi sagen, nach Themen sortiert.</p>
-    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><div class="chips" style="margin-top:12px"><a class="chip on" href="#/material">Alles Material: PDFs, Vorlagen, Videos</a><a class="chip" href="#/wissen/begriffe">Begriffe Deutsch und Englisch</a></div></section>`;
+  let h = areaHead("wissen", "wissen") + `<section class="glass reveal">
+    <input type="text" id="q" aria-label="Wissen durchsuchen" placeholder="Suchen, z. B. Hook, Licht, UGC" value="${esc(UI.q || "")}"><div class="chips" style="margin-top:12px"><a class="chip" href="#/wissen/begriffe">Begriffe Deutsch und Englisch</a></div></section>`;
   h += `<section class="glass reveal" style="padding:6px 18px">${D.wissen.filter(hit).map(w => `<a class="item" href="#/wissen/${w.id}"><span class="num acc" style="color:var(--acc);width:24px">${w.n ? pad(w.n) : "··"}</span><span class="t"><b>${esc(w.title)}</b>${q ? `<small>${esc(snip(w.body, q))}</small>` : ""}</span></a>`).join("") || `<div class="empty" style="padding:12px 0">Nichts gefunden.</div>`}</section>`;
-  const srcs = Object.values(D.sources).filter(s => !q || (s.t + " " + s.sum + " " + s.who).toLowerCase().includes(q));
-  for (const g of [...new Set(srcs.map(s => s.who))]) h += `<section class="glass reveal"><span class="kick acc">${esc(g)}</span>${srcs.filter(s => s.who === g).map(s => `<a class="src-card" href="${esc(s.url)}" target="_blank" rel="noopener"><b>${esc(s.t)} ${IC.ext}</b>${s.sum ? `<small>${esc(s.sum)}</small>` : ""}</a>`).join("")}</section>`;
+  h += `<p class="tiny muted" style="margin:0 4px 16px">PDFs, Vorlagen und die Videos der Creator findest du unter <a href="#/material">Material</a>.</p>`;
   return h + `</div>`;
 }
 function snip(t, q){ const i = t.toLowerCase().indexOf(q); if (i < 0) return ""; return "… " + t.slice(Math.max(0, i - 40), i + 80).replace(/[#*_>|]/g, "").replace(/\s+/g, " ") + " …"; }
 function kapView(id){
   const w = D.wissen.find(x => x.id === id); if (!w) return pageHead("Wissen", "Nicht gefunden");
   const steps = STEPS.filter(s => w.n && s.ch.includes(w.n));
-  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Wissen</a><span class="kick acc" style="display:block;margin-top:16px">${w.n ? "Kapitel " + w.n : "Werkzeug"}</span><h1 class="h-xl" style="margin-top:8px">${esc(w.title)}</h1></div>
+  return `${topbar()}<div class="wrap page-top"><a class="chip" href="#/wissen">${IC.left.replace("<svg", '<svg width="15" height="15"')} Nachschlagen</a><span class="kick acc" style="display:block;margin-top:16px">${w.n ? "Kapitel " + w.n : "Werkzeug"}</span><h1 class="h-xl" style="margin-top:8px">${esc(w.title)}</h1></div>
     <div class="wrap"><section class="glass md reveal">${md(w.body)}</section>
     ${steps.length ? `<section class="glass"><span class="kick">Schritte auf deinem Weg dazu</span><div class="list" style="margin-top:4px">${steps.map(s => `<a class="item" href="#/weg/${s.id}"><span class="chk ${isDone(s.id) ? "done" : ""}"></span><span class="t"><b>${esc(s.title)}</b></span></a>`).join("")}</div></section>` : ""}
     ${srcList(w.refs)}</div>`;
@@ -1455,14 +1498,11 @@ function kapView(id){
 
 function helpHTML(){
   return `<span class="kick acc">So funktioniert Brand-Weg</span><h2 class="h-l" style="margin:8px 0 6px">Ein Ort für deine Personal Brand</h2>
-    <div class="md"><ul><li><b>Heute</b> zeigt nur den nächsten Schritt und wie viele Videos du gepostet hast.</li>
+    <div class="md"><p>Unten sind fünf Reiter. Wenn du nicht weißt, was du tun sollst: Tipp auf <b>Heute</b> und mach den Schritt, der dort steht.</p><ul><li><b>Heute</b> zeigt deinen nächsten Schritt, die vier Knöpfe, die du oft brauchst, und wie viele Videos du gepostet hast.</li>
     <li><b>Weg</b> ist der ganze Plan nach Mino Lee. Ohne Termine: Du machst den nächsten Schritt, wenn du so weit bist.</li>
-    <li><b>Studio</b> ist für Content Creation und Verteilen: Videos von der Idee bis zum Posten, das Hook-Labor, der Teleprompter und alles zum Algorithmus.</li>
-    <li><b>Lernen</b> ist die Lernakademie: Fähigkeiten einzeln üben, passend zu deinen Aufgaben. Übungen haken keinen Schritt im Weg ab.</li>
-    <li><b>Brand</b> ist deine Identität und Strategie: Profil, Look, Markenkern, Themenbaum, Säulen und Formate. Dort steht auch alles, was du in den Schritten einträgst.</li>
-    <li><b>Zahlen</b> ist Analytics: Aufrufe, Ausreißer, bestes gegen schwächstes Video, Retention.</li>
-    <li><b>Material</b> sammelt alle PDFs, Vorlagen und Videos an einem Ort. Unter „Inspiration“ speicherst du virale Reels und TikToks mit Link, Hook und Format, um sie zu studieren.</li>
-    <li><b>Wissen</b> (Buch oben rechts) ist zum Nachschlagen. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
+    <li><b>Studio</b> ist für deine Videos: Videos von der Idee bis zum Posten, Ideen von fremden Reels und TikToks, Hooks testen, Posten und deine Zahlen.</li>
+    <li><b>Brand</b> ist, wer du bist und worüber du redest: Profil, Look, Markenkern und Strategie. Dort steht auch alles, was du in den Schritten einträgst.</li>
+    <li><b>Wissen</b> ist zum Lernen und Nachschauen: Fähigkeiten üben, Wissen nachschlagen, Video-Formate und alle PDFs, Vorlagen und Videos. Dort gibt es auch alle Begriffe auf Deutsch und Englisch.</li></ul>
     <h4>Am Android-Handy</h4><p>In Chrome danielgit8.github.io/brand-weg/ öffnen und mit deinem Cockpit-Konto anmelden. Dann „Als App installieren“ tippen. Kommt der Knopf nicht, oben rechts auf die drei Punkte und „App installieren“ oder „Zum Startbildschirm hinzufügen“. Laptop und Handy bleiben gleich, ein eigenes Konto brauchst du nicht.</p></div>
     ${installEv ? `<button class="btn block" data-act="install" style="margin-top:12px">Als App installieren</button>` : ""}
     <p class="tiny muted" style="margin:16px 0 8px">${user ? `Angemeldet als ${esc(user.email)}.` : "Nicht angemeldet, nur auf diesem Gerät."}</p>

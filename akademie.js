@@ -162,7 +162,7 @@ lessons: [
  task:"Such ein Video mit vielen Aufrufen in deinem Format und schreib auf: erster Satz, Text im Bild, Aufbau in 3 bis 5 Teilen, Länge, Schluss.",
  use:null, res:"Aufbau des Vorbild-Videos",
  chk:["Der erste Satz steht wörtlich da.", "Du hast nur Sichtbares notiert, keine Vermutungen.", "Der Aufbau hat 3 bis 5 Teile."],
- go:["Vorbilder unter Material, Inspiration sammeln", "#/material/inspiration"]},
+ go:["Vorbilder im Studio unter Ideen sammeln", "#/studio/ideen"]},
 
 {id:"i6", sk:"ideen", t:"Strukturen auf eigene Inhalte übertragen",
  goal:"Du nutzt den Aufbau eines fremden Videos für deinen eigenen Inhalt.",
@@ -634,7 +634,7 @@ lessons: [
  task:"Ordne deinen letzten drei Videos ein Ziel und die passende Zahl zu. Trag die Zahlen nach.",
  use:"posted", res:"Ziel und Kennzahl meiner letzten Videos",
  chk:["Zu jedem Ziel gehört eine Zahl.", "Likes stehen nicht als Hauptzahl da.", "Die Zahlen sind eingetragen."],
- go:["Zahlen", "#/zahlen"]},
+ go:["Zahlen im Studio", "#/studio/zahlen"]},
 
 {id:"a3", sk:"auswertung", t:"Zuschauerbindung und frühe Ausstiege einordnen",
  goal:"Du erkennst, wo Leute aussteigen, und hast eine Vermutung, warum.",
@@ -656,7 +656,7 @@ lessons: [
  task:"Schau bei deinen letzten Videos auf Kommentare, Speichern und Teilen. Schreib zu dem auffälligsten eine Vermutung.",
  use:"posted", res:"Was mir auffällt und meine Vermutung",
  chk:["Du hast mindestens zwei Videos verglichen.", "Die Vermutung ist als solche gekennzeichnet.", "Du hast echte Kommentare aus deiner Zielgruppe gezählt."],
- go:["Zahlen", "#/zahlen"]},
+ go:["Zahlen im Studio", "#/studio/zahlen"]},
 
 {id:"a5", sk:"auswertung", t:"Ähnliche Beiträge vergleichen",
  goal:"Du vergleichst zwei ähnliche Videos Punkt für Punkt.",
@@ -667,7 +667,7 @@ lessons: [
  task:"Nimm zwei ähnliche Videos und vergleich sie in Minos sechs Punkten.",
  use:"posted", res:"Mein Vergleich in sechs Punkten",
  chk:["Die Videos haben dasselbe Format.", "Alle sechs Punkte sind ausgefüllt.", "Du hast höchstens zwei Unterschiede als wichtig markiert."],
- go:["Zahlen: bestes gegen schwächstes Video", "#/zahlen"]},
+ go:["Zahlen im Studio: bestes gegen schwächstes Video", "#/studio/zahlen"]},
 
 {id:"a6", sk:"auswertung", t:"Beobachtung und vermutete Ursache unterscheiden",
  goal:"Du trennst, was du gesehen hast, von dem, was du vermutest.",

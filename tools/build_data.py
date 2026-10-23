@@ -14,8 +14,8 @@ def clean(t):
     t = re.sub(r"(\d\.?)\s?–\s?(\d)", r"\1 bis \2", t)
     t = t.replace(" – ", ", ").replace(" — ", ", ")
     t = t.replace("Brand-Profil", "„Brand“").replace("im „Brand“", "unter „Brand“")
-    t = t.replace("Content-Werkzeugkasten", "Video-Werkstatt")
-    t = t.replace("Gewohnheit „Video gepostet“ abhaken", "In der Werkstatt auf „Gepostet“ stellen")
+    t = t.replace("Alle Schritte: Content-Werkzeugkasten", "Alle Schritte: im Studio").replace("Content-Werkzeugkasten", "Studio")
+    t = t.replace("Gewohnheit „Video gepostet“ abhaken", "Im Studio auf „Gepostet“ stellen")
     return t.strip()
 
 
@@ -126,7 +126,7 @@ step(id="s01", ph="p1", title="Kurs-Tag 1: Dein erstes Video",
 Unten eintragen. Daraus baut die App dein Skript.
 
 **2. Skript laut lesen**
-Auf „Skript in die Werkstatt“ tippen, dann einmal laut lesen und ändern, was sich nicht nach dir anhört.
+Auf „Skript ins Studio“ tippen, dann einmal laut lesen und ändern, was sich nicht nach dir anhört.
 
 **3. Filmen**
 - CapCut öffnen, Kamera, Teleprompter an, Skript einfügen
