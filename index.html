@@ -600,8 +600,10 @@ const postedWeek = () => { const m = monday(); return postedDates().filter(d => 
 const stepVideo = id => ST.videos.find(v => v.step === id);
 const lines = s => String(s || "").split("\n").map(x => x.trim()).filter(Boolean);
 const flabel = k => ((F[k] || {}).label || k).replace(/^Kurs-Tag \d+: /, "");
-function fillTpl(tpl){ return esc(tpl).replace(/\{(\w+)\}/g, (_, k) => { const v = (ST.prof[k] || "").trim(); return v ? esc(v).replace(/\n+/g, " ") : `<span class="miss">[${esc(flabel(k))}]</span>`; }); }
-const fillPlain = tpl => tpl.replace(/\{(\w+)\}/g, (_, k) => (ST.prof[k] || "").trim().replace(/\n+/g, " ") || `[${flabel(k)}]`);
+// {feld|klein}: erster Buchstabe klein, wenn die Antwort mitten im Satz steht
+const tplVal = (k, klein) => { const v = (ST.prof[k] || "").trim().replace(/\n+/g, " "); return klein && v ? v[0].toLowerCase() + v.slice(1) : v; };
+function fillTpl(tpl){ return esc(tpl).replace(/\{(\w+)(\|klein)?\}/g, (_, k, kl) => { const v = tplVal(k, kl); return v ? esc(v) : `<span class="miss">[${esc(flabel(k))}]</span>`; }); }
+const fillPlain = tpl => tpl.replace(/\{(\w+)(\|klein)?\}/g, (_, k, kl) => tplVal(k, kl) || `[${flabel(k)}]`);
 function newVideo(typ, extra = {}){
   const t = D.types[typ] || D.types.freund;
   const v = {id:uid(), typ, yt:typ === "youtube" ? ytBlank() : undefined, title:extra.title || t.label, stage:extra.stage || 0, idee:extra.idee || "", fuer:"", pillar:"", hook:extra.hook || "", skript:extra.skript ?? t.tpl, checks:{}, step:extra.step || null, version:extra.version || null,
