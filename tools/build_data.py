@@ -38,6 +38,10 @@ FIELDS["einwaende"] = {"label": "Ihre typischen Einwände und meine Antwort", "h
 FIELDS["keywords"] = {"label": "Meine Keyword-Bank", "hint": "Wörter, die deine Zuschauer selbst benutzen. Mit Google Trends prüfen, welches mehr Menschen interessiert (Mino).", "rows": 3, "sec": "hooks"}
 FIELDS["versprechen"] = {"label": "Mein eines Versprechen", "hint": "Wobei hilfst du, in einem Satz? Eins, nicht zehn (Sam Gaudet, die vier P).", "rows": 2, "sec": "themen"}
 FIELDS["proofstack"] = {"label": "Woran ich gerade öffentlich arbeite (Proof Stacking)", "hint": "Ein laufendes Ziel, das du offen zeigst und mit jedem Ergebnis weiter belegst. Sam baut gerade öffentlich einen Account nur mit dem iPhone auf 100.000 Follower.", "rows": 2, "sec": "experte"}
+FIELDS["ruf"] = {"label": "Wofür ich bekannt sein will", "hint": "Der Ruf, der dich zu deinem Ziel bringt (Caleb Ralston, Brand-Journey). Hängst du: Welcher Ruf würde garantieren, dass du dein Ziel nie erreichst? Dann das Gegenteil.", "rows": 2, "sec": "weg"}
+FIELDS["assoz_ja"] = {"label": "2 Dinge, mit denen meine Marke verbunden sein soll", "hint": "Eins pro Zeile. Damit zeigst du dich immer wieder, wie Michael Jordan in jedem Spiel mit Nike (Caleb Ralston).", "rows": 2, "sec": "haltung"}
+FIELDS["assoz_nein"] = {"label": "2 Dinge, mit denen meine Marke nie verbunden sein soll", "hint": "Eins pro Zeile, egal wie verlockend. Dein Filter für Themen, Leute und Taktiken (Caleb Ralston).", "rows": 2, "sec": "haltung"}
+FIELDS["gegen"]["hint"] = "3 bis 5 Punkte reichen (Sam Gaudet). Die stärkste davon ist deine konträre Überzeugung, mit der du dich immer wieder zeigst (Caleb Ralston)."
 SECTIONS.insert(1, {"id": "dran", "title": "Dranbleiben", "why": "Die meisten scheitern nicht am Wissen, sondern daran, dass sie aufhören (Leitfaden Kapitel 1)."})
 FIELDS["zahlziel"] = {"label": "Mein Zahlenziel für 6 Monate", "hint": "Eins, nicht zwei (Mino). Zum Beispiel 100.000 Follower oder 10.000 $ im Monat. Sichtbar aufschreiben, etwa als Hintergrundbild.", "rows": 2, "sec": "dran"}
 FIELDS["huerden"] = {"label": "Meine Hürden und wie ich sie umdeute", "hint": "Pro Hürde: die schlimmste realistische Folge und warum sich das Posten trotzdem lohnt.", "rows": 4, "sec": "dran"}
@@ -397,7 +401,7 @@ step(id="s10s", ph="p1", title="Deine Strategie auf einer Seite",
 **Zur Kennzeichnung:** Dass alles auf einer Seite steht, ist eine Zusammenstellung und kommt nicht aus den Quellen. Woher jede Frage kommt, steht am jeweiligen Block.""",
      sheet=[
          {"t": "Für wen ich Videos mache", "src": "Mino, Ideal Viewer · Signal-Wörter: Sam Gaudet", "f": ["person", "schmerz", "wunsch", "einwaende", "signal"]},
-         {"t": "Wer ich für sie bin", "src": "Mino, If you're in college (Ziel, Lage, Problem) · Kurs-Tag 4", "f": ["rolle", "ziel", "lage", "problem", "helfen"]},
+         {"t": "Wer ich für sie bin", "src": "Mino, If you're in college (Ziel, Lage, Problem) · Kurs-Tag 4 · Ruf: Caleb Ralston", "f": ["rolle", "ziel", "ruf", "lage", "problem", "helfen"]},
          {"t": "Worüber ich rede", "src": "Mino, Kurs-Tag 6 und „become the niche“ · Versprechen: Sam Gaudet, die vier P", "f": ["nische", "versprechen", "saeulen"]},
          {"t": "Wie ich es zeige", "src": "Mino, Kurs-Tag 6 (Format) · Wiedererkennbarer Look", "f": ["format", "look"]},
          {"t": "Was die erste Woche gezeigt hat", "src": "Mino, Kurs-Tag 7", "f": ["k7_rueckblick"]},
@@ -493,13 +497,15 @@ step(id="s24", ph="p4", title="Dein Blickwinkel: Skripte genau auf die Persona",
      body=task("mv6c2xm32ktods"), fields=["selten"])
 
 step(id="s25", ph="p4", title="Markenkern: Woran du glaubst und wogegen du bist",
-     src="Ronny Mitchell · Sam Gaudet", refs=["mv7szw0gj14n3r", "mv7tlfsamgaudt"], ch=[2, 9],
-     why="Dogma und Gegenposition machen aus Followern Fans (Ronny). 3 bis 5 Gegenpositionen reichen (Sam).",
+     src="Ronny Mitchell · Sam Gaudet · Caleb Ralston", refs=["mv7szw0gj14n3r", "mv7tlfsamgaudt", "mvcralston02"], ch=[2, 9],
+     why="Dogma und Gegenposition machen aus Followern Fans (Ronny). 3 bis 5 Gegenpositionen reichen (Sam). Marke entsteht, wenn du dich immer wieder mit denselben Dingen zeigst (Caleb).",
      body="""- **Dogma-Interview mit Claude:** Lebensgeschichte per Diktat erzählen, so früh du dich erinnerst. Dann Claude bitten, Rückfragen zu stellen, welche Überzeugungen daraus kommen. 3 bis 5 Sätze unten eintragen.
 - **Gegenposition:** Pro Lebensbereich einen Satz: Was glaube ich anders als die meisten? Nicht nur in der Nische, auch zu Leben, Geld, Beziehungen.
 - **Interessen außerhalb der Nische** zeigen, sobald die Basis steht. Damit Leute merken, dass du einer wie sie bist.
-- Auch als Lernender hast du eine Sicht. Teil sie als das, was du bisher gemerkt hast, nicht als Expertenurteil.""",
-     fields=["glaube", "gegen", "interessen"])
+- Auch als Lernender hast du eine Sicht. Teil sie als das, was du bisher gemerkt hast, nicht als Expertenurteil.
+- **Brand-Journey (Caleb Ralston):** vom Ziel rückwärts denken. Was will ich erreichen, wofür muss ich dafür bekannt sein, was muss ich dafür tun, was muss ich lernen? Den Ruf unten eintragen.
+- **Zwei Dinge ja, zwei Dinge nie (Caleb):** Womit soll deine Marke verbunden sein, womit niemals? Das wird dein Filter für Themen, Leute und Taktiken.""",
+     fields=["ruf", "glaube", "gegen", "assoz_ja", "assoz_nein", "interessen"])
 
 step(id="s26", ph="p4", title="Einfluss-Check und deine Beweise",
      src="Ronny Mitchell · Alex Hormozi", refs=["mv7t8c82qujgd1", "mvahormozi04"], ch=[9],
@@ -557,7 +563,8 @@ STAGES = [
         "Ein Thema, ein Problem. Die Idee muss in 10 Wörtern erklärbar sein (Mino).",
         "Nachfrage prüfen: Gibt es zu dem Thema Videos mit vielen Aufrufen? (Ronny)",
         "10 Ideen in 10 Minuten: erst 4 Minuten Begriffe sammeln, dann Ideen (Mino).",
-        "Nur, was du wirklich lösen oder erzählen kannst (Ronny)."]},
+        "Nur, was du wirklich lösen oder erzählen kannst (Ronny).",
+        "Idee = ein schmerzhaftes Problem deines Zuschauers plus deine Lösung. Nicht das Thema mit den meisten Aufrufen suchen (Caleb Ralston)."]},
     {"id": "hook", "label": "Hook", "tips": [
         "Keine Begrüßung, keine Vorstellung. Du sprichst zu Fremden (Mino).",
         "Erster Satz in 1,5 Sekunden, höchstens 15 Wörter. Ein 10-jähriges Kind muss ihn verstehen (Mino).",
