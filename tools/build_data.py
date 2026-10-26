@@ -82,7 +82,7 @@ TYPES = {
     "freund": {"label": "Freund-Video", "src": "Mino", "tip": "Ziel, Lebenslage und Problem erzählen. Du gibst Wert als Freund, nicht als Experte.",
                "tpl": "Hook:\n\nMein Ziel:\n\nMeine Lage:\n\nMein Problem gerade:\n\nWas ich heute gemerkt habe:"},
     "lern": {"label": "Lernvideo", "src": "Mino, Educational", "tip": "Der Zuschauer lernt etwas. Erklärung ist 60 bis 70 % des Videos.",
-             "tpl": "Hook (klares Ergebnis):\n\nLösung in einem Satz:\n\nEinwand („Jetzt denkst du wahrscheinlich …“):\n\nErklärung mit Warum und Beispiel:\n\nZurück zum Hook:"},
+             "tpl": "Hook (klares Ergebnis):\n\nLösung in einem Satz:\n\nEinwand („Jetzt denkst du bestimmt …“):\n\nErklärung mit Warum und Beispiel:\n\nZurück zum Hook:"},
     "geschichte": {"label": "Geschichte (5 Stufen)", "src": "Mino, how i script videos", "tip": "60 bis 90 Sekunden. Kurze Sätze, höchstens 12 Wörter.",
                    "tpl": "1 Hook mit bekanntem Schmerz (max. 15 Wörter):\n\n2 Vorgeschichte mit Ort, Alter, Zahl (2 bis 4 Sätze):\n\n3 Wendepunkt, ein einziger Moment (1 bis 2 Sätze):\n\n4 Erkenntnis mit echtem Ergebnis (2 bis 3 Sätze):\n\n5 Lockerer Aufruf (optional):"},
     "meinung": {"label": "Meinung (BEST)", "src": "Ronny Mitchell", "tip": "Starke Aussage, Begründung, Geschichte, was der Zuschauer tun soll.",
@@ -94,7 +94,7 @@ TYPES = {
     "youtube": {"label": "YouTube-Video (Sams Vorlage)", "src": "Sam Gaudet, YouTube-Skript-Vorlage", "tip": "Langes Video: Recherche, Titel, Thumbnail, Hook mit Versprechen, Beweis, Plan, dann Punkt für Punkt.",
              "tpl": ""},
     "sucht": {"label": "Geschichte mit Suchtschleife", "src": "Kallaway", "tip": "Einsatz, große Frage, Kopf-Finte, neuer Haken. Die Schleife wiederholen, bis das Video endet.",
-              "tpl": "Erster und letzter Satz zuerst schreiben, dann die Mitte.\n\nEinsatz (Stakes): wer, was auf dem Spiel steht, bis wann:\n\nGroße Frage (Big Question), mit genug Details zum Mitraten:\n\nWas der Zuschauer jetzt vermutet:\n\nKopf-Finte (Head Fake), anders als vermutet, aber logisch:\n\nNeuer Haken (Re-Hook), z. B. „Das wäre super gewesen, wenn nicht …“:\n\nLetzter Satz, den man weitererzählt:"},
+              "tpl": "Erster und letzter Satz zuerst schreiben, dann die Mitte.\n\nEinsatz (Stakes): wer, was auf dem Spiel steht, bis wann:\n\nGroße Frage (Big Question), mit genug Details zum Mitraten:\n\nWas der Zuschauer jetzt vermutet:\n\nKopf-Finte (Head Fake), anders als vermutet, aber logisch:\n\nNeuer Haken (Re-Hook), z. B. „Wär mega gewesen, wenn nicht …“:\n\nLetzter Satz, den man weitererzählt:"},
     "vlog": {"label": "Ohne Skript (Vlog)", "src": "Mino, Minimum Viable Vlog", "tip": "Für volle Tage: zwei Fragen beantworten und frei erzählen.",
              "tpl": "Hook, meine Lektion in 1 bis 2 Sätzen:\n\nWas heute passiert ist (frei erzählen):\n\nPraktischer Tipp und positives Ende:"},
 }
