@@ -45,6 +45,7 @@ FIELDS["gegen"]["hint"] = "3 bis 5 Punkte reichen (Sam Gaudet). Die stärkste da
 SECTIONS.insert(1, {"id": "dran", "title": "Dranbleiben", "why": "Die meisten scheitern nicht am Wissen, sondern daran, dass sie aufhören (Leitfaden Kapitel 1)."})
 FIELDS["zahlziel"] = {"label": "Mein Zahlenziel für 6 Monate", "hint": "Eins, nicht zwei (Mino). Zum Beispiel 100.000 Follower oder 10.000 $ im Monat. Sichtbar aufschreiben, etwa als Hintergrundbild.", "rows": 2, "sec": "dran"}
 FIELDS["huerden"] = {"label": "Meine Hürden und wie ich sie umdeute", "hint": "Pro Hürde: die schlimmste realistische Folge und warum sich das Posten trotzdem lohnt.", "rows": 4, "sec": "dran"}
+FIELDS["kompetenz"] = {"label": "Mein Kompetenzziel", "hint": "Was du lernen und können willst, nicht nur eine Zahl. Follower folgen dir, während du irgendwo hingehst (Ronny Mitchell, neue Ära). Zum Beispiel: frei vor der Kamera sprechen und 100 Videos selbst schneiden.", "rows": 2, "sec": "dran"}
 FIELDS["partner"] = {"label": "Wer mich zur Rechenschaft zieht", "hint": "Mino zahlt jedem Freund 30 $, wenn er einen Tag nicht postet. Und: 1 bis 2 Leute, die Content ernst nehmen.", "rows": 2, "sec": "dran"}
 
 # Antworten aus den Kurs-Tagen (Abschnitt „Aus den Kurs-Tagen“)
@@ -365,7 +366,7 @@ step(id="s07", ph="p1", title="Kurs-Tag 4: Road-to-Video über dein Ziel und Pro
 **Schnitt-Trick:** in den ersten 3 bis 4 Sek. B-Roll-Schnitte unter 1 Sek.
 
 **Hinweis:** Den „Tag X“-Hook nennt Mino in anderen Videos schwach. Als Rahmen in Bio und Serie ist er gut, später muss jeder Hook auch allein neugierig machen.""",
-     fields=["helfen", "ziel", "k4_geschichte", "k4_jetzt", "bio", "mail"], video="freund",
+     fields=["helfen", "ziel", "kompetenz", "k4_geschichte", "k4_jetzt", "bio", "mail"], video="freund",
      tpl="Heute ist Tag X auf dem Weg zu {ziel}. Warum? Nun … {k4_geschichte} {k4_jetzt} Folg mir, um die Reise mitzuerleben.")
 
 step(id="s08", ph="p1", title="Kurs-Tag 5: Video ohne Skript",
