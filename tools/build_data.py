@@ -94,7 +94,7 @@ TYPES = {
     "youtube": {"label": "YouTube-Video (Sams Vorlage)", "src": "Sam Gaudet, YouTube-Skript-Vorlage", "tip": "Langes Video: Recherche, Titel, Thumbnail, Hook mit Versprechen, Beweis, Plan, dann Punkt für Punkt.",
              "tpl": ""},
     "sucht": {"label": "Geschichte mit Suchtschleife", "src": "Kallaway", "tip": "Einsatz, große Frage, Kopf-Finte, neuer Haken. Die Schleife wiederholen, bis das Video endet.",
-              "tpl": "Erster und letzter Satz zuerst schreiben, dann die Mitte.\n\nEinsatz (Stakes): wer, was auf dem Spiel steht, bis wann:\n\nGroße Frage (Big Question), mit genug Details zum Mitraten:\n\nWas der Zuschauer jetzt vermutet:\n\nKopf-Finte (Head Fake), anders als vermutet, aber logisch:\n\nNeuer Haken (Re-Hook), z. B. „Wär mega gewesen, wenn nicht …“:\n\nLetzter Satz, den man weitererzählt:"},
+              "tpl": "Erster und letzter Satz zuerst schreiben, dann die Mitte.\n\nEinsatz (Stakes): wer, was auf dem Spiel steht, bis wann:\n\nGroße Frage (Big Question), mit genug Details zum Mitraten:\n\nWas der Zuschauer jetzt vermutet:\n\nKopf-Finte (Head Fake), anders als vermutet, aber logisch:\n\nNeuer Haken (Re-Hook), z. B. „Das wär echt gut gewesen, wenn nicht …“:\n\nLetzter Satz, den man weitererzählt:"},
     "vlog": {"label": "Ohne Skript (Vlog)", "src": "Mino, Minimum Viable Vlog", "tip": "Für volle Tage: zwei Fragen beantworten und frei erzählen.",
              "tpl": "Hook, meine Lektion in 1 bis 2 Sätzen:\n\nWas heute passiert ist (frei erzählen):\n\nPraktischer Tipp und positives Ende:"},
 }
