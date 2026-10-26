@@ -1430,7 +1430,9 @@ function materialView(){
     ${s.files ? `<div class="row" style="gap:8px;margin-top:8px">${s.files.map(f => `<button class="btn ghost" data-act="pdf" data-p="${esc(f.p)}">PDF öffnen: ${esc(f.n.replace(/\.pdf$/i, ""))}</button>`).join("")}</div>` : ""}
     ${s.more ? `<details style="margin-top:8px"><summary class="tiny muted">${s.more.length} weitere Links</summary><div class="chips" style="margin-top:8px">${s.more.map(m => `<a class="chip" href="${esc(m.u)}" target="_blank" rel="noopener" style="white-space:normal">${esc(m.l || "Link")}</a>`).join("")}</div></details>` : ""}
     ${used(id) ? `<div class="chips" style="margin-top:10px"><span class="tiny faint" style="align-self:center">Kommt vor in:</span>${used(id)}</div>` : ""}</div>`;
-  const list = all.filter(hit), pdfs = list.filter(([, s]) => s.files), tools = list.filter(([, s]) => !s.files && !isVideo(s)), vids = list.filter(([, s]) => !s.files && isVideo(s));
+  // PDFs in Google Drive zählen auch als PDF, sie öffnen sich über den Link
+  const isPdf = s => s.files || /drive\.google\.com\/file\//.test(s.url);
+  const list = all.filter(hit), pdfs = list.filter(([, s]) => isPdf(s)), tools = list.filter(([, s]) => !isPdf(s) && !isVideo(s)), vids = list.filter(([, s]) => !isPdf(s) && isVideo(s));
   let h = `<section class="glass reveal"><input type="text" id="mq" aria-label="Material durchsuchen" placeholder="Suchen, z. B. Hooks, Schnitt, UGC" value="${esc(UI.mq || "")}">
     <div class="chips" style="margin-top:12px"><button class="chip" data-act="jump" data-t="mat-pdf">PDFs · ${pdfs.length}</button><button class="chip" data-act="jump" data-t="mat-tools">Vorlagen und Werkzeuge · ${tools.length}</button><button class="chip" data-act="jump" data-t="mat-vid">Videos · ${vids.length}</button></div></section>`;
   if (pdfs.length) h += `<section class="glass reveal" id="mat-pdf"><span class="kick acc">PDFs zum Lesen</span>${!user ? `<p class="tiny muted" style="margin:6px 0 0">Die PDFs liegen in deinem Konto. Zum Öffnen anmelden.</p>` : ""}${pdfs.map(card).join("")}</section>`;
