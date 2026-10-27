@@ -51,9 +51,9 @@ FIELDS["partner"] = {"label": "Wer mich zur Rechenschaft zieht", "hint": "Mino z
 # Antworten aus den Kurs-Tagen (Abschnitt „Aus den Kurs-Tagen“)
 SECTIONS.append({"id": "kurs", "title": "Antworten aus den Kurs-Tagen", "why": "Die Fragen aus Minos 7-Tage-Kurs. Aus ihnen baut die App deine Skripte."})
 K = {
-    "k1_wer": ("Kurs-Tag 1: Wer ich bin, in wenigen Wörtern", "Alter plus ein Wort, zum Beispiel „15-jähriger Schüler“. Steht im Skript nach: „… an denen ich als …“", 1),
-    "k1_angst": ("Kurs-Tag 1: Meine größte Angst beim Posten", "Wird im Skript zu: „Ich persönlich habe Angst davor, …“", 2),
-    "k1_botschaft": ("Kurs-Tag 1: Was ich jemandem mit derselben Angst sage", "Wie bei Mino: „Wenn du dieselbe Angst hast, …, dann mach einfach mit.“ Steht im Skript nach „Also, …“", 2),
+    "k1_wer": ("Kurs-Tag 1: Wer ich bin, in wenigen Wörtern", "Dein Alter, gern mit ein, zwei Wörtern dazu, zum Beispiel „15“ oder „17 und Azubi“. Steht im Skript nach „Ich bin …“", 1),
+    "k1_angst": ("Kurs-Tag 1: Meine größte Angst beim Posten", "Wird im Skript zu: „Ehrlich gesagt hab ich Angst, …“", 2),
+    "k1_botschaft": ("Kurs-Tag 1: Was ich jemandem mit derselben Angst sage", "Ein eigener Satz an Leute mit derselben Angst, wie bei Mino. Zum Beispiel „Wenn du auch grad bei null stehst, mach einfach mit.“", 2),
     "k2_momente": ("Kurs-Tag 2: Die 3 Momente der letzten 7 Tage mit dem stärksten Gefühl", "Freude, Ekel, Angst, Wut oder Traurigkeit. Je 1 Satz, banal ist okay.", 3),
     "k2_ereignis": ("Kurs-Tag 2: Der stärkste Moment fürs Skript", "„Letzte Woche …“", 2),
     "k2_besonders": ("Kurs-Tag 2: Was den Moment besonders machte", "2 Sätze.", 2),
@@ -75,7 +75,7 @@ for k, (l, h, r) in K.items():
     FIELDS[k] = {"label": l, "hint": h, "rows": r, "sec": "kurs"}
 # Hinweise für die Skript-Bausteine
 FIELDS["lage"]["hint"] = "Ein Satz: dein Alter und was du gerade startest. Ziel, Lage und Problem ordnen dich für Fremde in 3 bis 5 Sekunden ein (Mino)."
-FIELDS["warum"]["hint"] = "Wird im Skript zu: „Ich starte diese Content-Challenge, weil …“. Dein Anker für Tage ohne Aufrufe."
+FIELDS["warum"]["hint"] = "Wird im Skript zu: „… jeden Tag ein Video, weil …“. Dein Anker für Tage ohne Aufrufe."
 
 # ---------- Video-Arten mit Skript-Vorlage ----------
 TYPES = {
@@ -311,7 +311,7 @@ Auf „Skript ins Studio“ tippen, dann einmal laut lesen und ändern, was sich
 
 **Dazu: Ziele auf Papier.** Ein Zahlenziel für 6 Monate, nicht zwei (Mino).""",
      fields=["k1_wer", "warum", "k1_angst", "k1_botschaft", "zahlziel"], video="freund",
-     tpl="Heute ist Tag 1 von 7, an denen ich als {k1_wer} jeden Tag ein Video poste. Ich starte diese Content-Challenge, weil {warum}. Ich persönlich habe Angst davor, {k1_angst}. Also, {k1_botschaft|klein} Wir sehen uns morgen bei Tag 2!")
+     tpl="Ich bin {k1_wer} und poste ab heute 7 Tage lang jeden Tag ein Video, weil {warum|klein}. Ehrlich gesagt hab ich Angst, {k1_angst|klein}. Ich mach's trotzdem und zeig dir, wie's weitergeht. {k1_botschaft|satz} Tag 1, morgen kommt Tag 2.")
 
 step(id="s02", ph="p1", title="Deine Hürden aufschreiben und umdeuten",
      src="Mino, If you're in college", refs=["muyyxm20972jcz"], ch=[1],

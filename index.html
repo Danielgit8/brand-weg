@@ -614,10 +614,17 @@ const postedWeek = () => { const m = monday(); return postedDates().filter(d => 
 const stepVideo = id => ST.videos.find(v => v.step === id);
 const lines = s => String(s || "").split("\n").map(x => x.trim()).filter(Boolean);
 const flabel = k => ((F[k] || {}).label || k).replace(/^Kurs-Tag \d+: /, "");
-// {feld|klein}: erster Buchstabe klein, wenn die Antwort mitten im Satz steht
-const tplVal = (k, klein) => { const v = (ST.prof[k] || "").trim().replace(/\n+/g, " "); return klein && v ? v[0].toLowerCase() + v.slice(1) : v; };
-function fillTpl(tpl){ return esc(tpl).replace(/\{(\w+)(\|klein)?\}/g, (_, k, kl) => { const v = tplVal(k, kl); return v ? esc(v) : `<span class="miss">[${esc(flabel(k))}]</span>`; }); }
-const fillPlain = tpl => tpl.replace(/\{(\w+)(\|klein)?\}/g, (_, k, kl) => tplVal(k, kl) || `[${flabel(k)}]`);
+// {feld|klein}: Antwort mitten im Satz, erster Buchstabe klein, Punkt am Ende weg
+// {feld|satz}: Antwort als eigener Satz, erster Buchstabe groß, mit Satzzeichen am Ende
+const tplVal = (k, mod) => {
+  let v = (ST.prof[k] || "").trim().replace(/\n+/g, " ");
+  if (!v) return v;
+  if (mod === "|klein") v = (v[0].toLowerCase() + v.slice(1)).replace(/[.!]+$/, "");
+  if (mod === "|satz") v = v[0].toUpperCase() + v.slice(1) + (/[.!?]$/.test(v) ? "" : ".");
+  return v;
+};
+function fillTpl(tpl){ return esc(tpl).replace(/\{(\w+)(\|klein|\|satz)?\}/g, (_, k, m) => { const v = tplVal(k, m); return v ? esc(v) : `<span class="miss">[${esc(flabel(k))}]</span>`; }); }
+const fillPlain = tpl => tpl.replace(/\{(\w+)(\|klein|\|satz)?\}/g, (_, k, m) => tplVal(k, m) || `[${flabel(k)}]`);
 function newVideo(typ, extra = {}){
   const t = D.types[typ] || D.types.freund;
   const v = {id:uid(), typ, yt:typ === "youtube" ? ytBlank() : undefined, title:extra.title || t.label, stage:extra.stage || 0, idee:extra.idee || "", fuer:"", pillar:"", hook:extra.hook || "", skript:extra.skript ?? t.tpl, checks:{}, step:extra.step || null, version:extra.version || null,
