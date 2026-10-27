@@ -634,6 +634,11 @@ for n in sorted(CH):
     i = CH[n]
     WISSEN.append({"id": "k%d" % n, "n": n, "title": i["title"].split(" · ", 1)[1], "body": clean(i["body"]), "refs": [r for r in i.get("rel", [])]})
 WISSEN.append({"id": "formate", "n": None, "title": "Format-Tabelle: 25 Formate bewertet", "body": clean(fmt["body"]), "refs": fmt.get("rel", [])})
+# Skript-Strukturen aus dem Google Doc „Script Storytelling Structures“ (Ressource im Cockpit, Beispiele zeigen per rel darauf)
+sdoc = next((i for i in src["items"] if "1KGX9GOV6r3q5u6TOt9qVlIm6yoXmk43PuoAmeV0or54" in json.dumps(i.get("links", []))), None)
+if sdoc:
+    WISSEN.append({"id": "strukturen", "n": None, "title": "Skript-Strukturen: 13 Vorlagen zum Erzählen und Erklären", "body": clean(sdoc["body"]),
+                   "refs": [sdoc["id"]] + [i["id"] for i in src["items"] if sdoc["id"] in i.get("rel", [])]})
 
 # TikTok läuft seit 22.10.2026 mit Instagram mit: Hinweise dort ergänzen, wo es im Kurs passt.
 # (Anker, Text) – fehlt der Anker, kommt der Text ans Ende des Schritts.
@@ -652,7 +657,7 @@ for st in S:
         a, txt = TT[st["id"]]
         st["body"] = st["body"].replace(a, a + "\n" + txt, 1) if a and a in st["body"] else st["body"].rstrip() + "\n\n" + txt
 
-CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney"), ("Kallaway", "Kallaway"), ("Jun-Yuh", "Jun Yuh"), ("Shan-Hanif", "Shan Hanif")]
+CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney"), ("Kallaway", "Kallaway"), ("Jun-Yuh", "Jun Yuh"), ("Shan-Hanif", "Shan Hanif"), ("Storytelling-Strukturen", "Storytelling-Strukturen")]
 SRC = {}
 for i in src["items"]:
     if i["kind"] != "resource" or i.get("archived"):
