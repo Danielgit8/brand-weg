@@ -95,6 +95,8 @@ TYPES = {
              "tpl": ""},
     "sucht": {"label": "Geschichte mit Suchtschleife", "src": "Kallaway", "tip": "Einsatz, große Frage, Kopf-Finte, neuer Haken. Die Schleife wiederholen, bis das Video endet.",
               "tpl": "Erster und letzter Satz zuerst schreiben, dann die Mitte.\n\nEinsatz (Stakes): wer, was auf dem Spiel steht, bis wann:\n\nGroße Frage (Big Question), mit genug Details zum Mitraten:\n\nWas der Zuschauer jetzt vermutet:\n\nKopf-Finte (Head Fake), anders als vermutet, aber logisch:\n\nNeuer Haken (Re-Hook), z. B. „Das wär echt gut gewesen, wenn nicht …“:\n\nLetzter Satz, den man weitererzählt:"},
+    "paisa": {"label": "PAISA (Copywriting)", "src": "Max Lengsfeld", "tip": "Erst die Bühne bauen, dann die Lösung. Der erste Satz verkauft nichts, er bringt nur zum Anhalten.",
+              "tpl": "Problem, Versprechen oder Beweis (erster Satz):\n\nAgitation, was passiert, wenn sich nichts ändert:\n\nInvalidation, warum die üblichen Lösungen nicht reichen:\n\nSolution, deine Lösung:\n\nAction, ein leichter nächster Schritt:"},
     "vlog": {"label": "Ohne Skript (Vlog)", "src": "Mino, Minimum Viable Vlog", "tip": "Für volle Tage: zwei Fragen beantworten und frei erzählen.",
              "tpl": "Hook, meine Lektion in 1 bis 2 Sätzen:\n\nWas heute passiert ist (frei erzählen):\n\nPraktischer Tipp und positives Ende:"},
 }
@@ -254,6 +256,71 @@ HOOKS = [
      "Halt den Gegenstand in die Kamera, bevor du sprichst.",
      "Das ist ein Springseil. Mehr brauchst du nicht für bessere Ausdauer. 10 Minuten am Tag.",
      "Bild-Hooks wirken laut Kallaway viel stärker als nur Mund und Untertitel. Die Augen sind schneller als die Ohren.", "Kallaway · Mino, Bild-Hook"),
+
+    # Seine eigene Sammlung (29.10.2026): Wortlaut von ihm, nur die Lücken als [Beispiel] gesetzt.
+    # Nicht alle bestehen jeden Punkt im Hook-Check (z. B. ohne Zahl), das ist so gewollt.
+    ("Für Creator", "Deine Reels laufen nicht? Check als Erstes mal das hier.",
+     "Keine Lücke. Direkt danach zeigst du im Bild, was man checken soll.",
+     "Deine Reels laufen nicht? Check als Erstes mal das hier.",
+     "Fängt mit einem Problem an, das der Zuschauer kennt. Laut Max steigt ein guter erster Satz mit Problem, Versprechen oder Beweis ein.", "Deine Sammlung · Max Lengsfeld, PAISA"),
+    ("Für Creator", "Hätt ich das mal gewusst, bevor ich mit [dem Posten] angefangen hab.",
+     "Womit du angefangen hast, z. B. „dem Posten“ oder „Französisch“.",
+     "Hätt ich das mal gewusst, bevor ich mit dem Posten angefangen hab.",
+     "Du teilst einen Fehler, den du selbst gemacht hast. Das macht dich nahbar: Freund statt Experte.", "Deine Sammlung · Mino, Freund statt Experte"),
+    ("Für Creator", "Bei [Klimmzügen] machen die meisten genau diesen Fehler.",
+     "Dein Thema, z. B. „Klimmzügen“ oder „Hooks“.",
+     "Bei Hooks machen die meisten genau diesen Fehler.",
+     "Jeder will wissen, ob er den Fehler auch macht. Den Fehler dann wirklich zeigen, sonst ist es ein leerer Teaser.", "Deine Sammlung · Kallaway, leerer Teaser"),
+    ("Für Creator", "Seit ich diese eine Sache anders mache, ist [Posten] viel einfacher.",
+     "Was leichter geworden ist. Nur nehmen, wenn es bei dir wirklich so war.",
+     "Seit ich diese eine Sache anders mache, ist Posten viel einfacher.",
+     "Dein eigenes Ergebnis ist der Beweis. Laut Max überzeugt ein Versprechen erst mit Beweis.", "Deine Sammlung · Max Lengsfeld, Überzeugungsformel"),
+    ("Für Creator", "Bevor du dein nächstes Reel postest, mach kurz das hier.",
+     "Keine Lücke. Danach eine Sache, die in unter einer Minute geht.",
+     "Bevor du dein nächstes Reel postest, mach kurz das hier.",
+     "Spricht genau die Leute an, die gleich posten wollen, und verspricht etwas Schnelles.", "Deine Sammlung · Mino, Hook-Bank"),
+
+    ("Erklären", "Drei einfache Tipps, mit denen du [deine Aussprache] besser hinkriegst.",
+     "Das, was besser werden soll, möglichst genau.",
+     "Drei einfache Tipps, mit denen du deine Aussprache besser hinkriegst.",
+     "Wer weiß, dass drei Punkte kommen, bleibt bis zum dritten. Der Check mag „Tipps“ nicht (Ronny), ein genaues Thema in der Lücke gleicht das aus.", "Deine Sammlung · Ronny, ein Thema"),
+    ("Erklären", "Du hast Probleme mit [Klimmzügen]? So kriegst du’s am einfachsten hin.",
+     "Das Problem in den Worten deiner Zuschauer.",
+     "Du hast Probleme mit Klimmzügen? So kriegst du’s am einfachsten hin.",
+     "Problem als Frage, dann die Lösung. Genau der Einstieg, den Max für den ersten Satz empfiehlt.", "Deine Sammlung · Max Lengsfeld, PAISA"),
+    ("Erklären", "Hör auf mit [stundenlangem Planen], wenn du [mehr posten] willst.",
+     "Erst das, womit man aufhören soll, dann das Ziel als Tätigkeit.",
+     "Hör auf mit stundenlangem Planen, wenn du mehr posten willst.",
+     "Eine Gegenposition zu dem, was viele machen. Im Video musst du dann erklären, warum.", "Deine Sammlung · Sam Gaudet, drei C"),
+    ("Erklären", "Du willst [Französisch] verstehen? So geht’s am schnellsten.",
+     "Das Thema, das man verstehen will.",
+     "Du willst Französisch verstehen? So geht’s am schnellsten.",
+     "Ein Wunsch als Frage und ein klares Versprechen. Das „am schnellsten“ musst du im Video auch einlösen.", "Deine Sammlung · Max Lengsfeld, Überzeugungsformel"),
+    ("Erklären", "Wenn du dir zu [Hooks] nur eine Sache merkst, dann die hier.",
+     "Dein Thema als Nomen.",
+     "Wenn du dir zu Hooks nur eine Sache merkst, dann die hier.",
+     "Verspricht genau eine Sache, das wirkt machbar. So bleibt es bei einer Hauptaussage pro Video.", "Deine Sammlung"),
+
+    ("Produkt zeigen", "Du nutzt [CapCut]? Dann kennst du das Problem wahrscheinlich. Das hier hilft.",
+     "Das Produkt, das deine Zuschauer schon haben.",
+     "Du nutzt CapCut? Dann kennst du das Problem wahrscheinlich. Das hier hilft.",
+     "Spricht nur Leute an, die das Produkt haben, und nennt ihr Problem. Der Köder muss dem Fisch schmecken, nicht dem Fischer.", "Deine Sammlung · Max Lengsfeld, Köder"),
+    ("Produkt zeigen", "Ich hab [Claude] ausprobiert, und das hat sich seitdem verändert.",
+     "Das Produkt. Danach zeigst du das echte Vorher und Nachher.",
+     "Ich hab Claude ausprobiert, und das hat sich seitdem verändert.",
+     "Vorher und Nachher aus deinem Alltag ist der Beweis, ohne den keiner dir glaubt.", "Deine Sammlung · Max Lengsfeld, Beweis"),
+    ("Produkt zeigen", "Hätte nicht gedacht, dass [CapCut] das so viel einfacher macht.",
+     "Das Produkt. Gleich danach zeigen, was „das“ ist.",
+     "Hätte nicht gedacht, dass CapCut das so viel einfacher macht.",
+     "Echte Überraschung wirkt glaubwürdiger als Werbung. Zeig sofort im Bild, was einfacher wurde.", "Deine Sammlung · Kallaway, Bild-Hook"),
+    ("Produkt zeigen", "Bevor du dir [ein Mikro] kaufst, schau dir kurz das hier an.",
+     "Was man kaufen will, mit Artikel.",
+     "Bevor du dir ein Mikro kaufst, schau dir kurz das hier an.",
+     "Erwischt Leute kurz vor einer Entscheidung. Hilft nur, wenn du wirklich etwas zeigst, das Geld oder Ärger spart.", "Deine Sammlung"),
+    ("Produkt zeigen", "Genau deshalb steigen gerade so viele auf [CapCut] um.",
+     "Das Produkt. Nur sagen, wenn wirklich viele wechseln.",
+     "Genau deshalb steigen gerade so viele auf CapCut um.",
+     "Was viele machen, will man verstehen. Laut Max braucht es keine Übertreibung, nur die echten Punkte.", "Deine Sammlung · Max Lengsfeld, Limonade"),
 ]
 
 # ---------- Der Weg ----------
@@ -657,7 +724,7 @@ for st in S:
         a, txt = TT[st["id"]]
         st["body"] = st["body"].replace(a, a + "\n" + txt, 1) if a and a in st["body"] else st["body"].rstrip() + "\n\n" + txt
 
-CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney"), ("Kallaway", "Kallaway"), ("Jun-Yuh", "Jun Yuh"), ("Shan-Hanif", "Shan Hanif"), ("Storytelling-Strukturen", "Storytelling-Strukturen"), ("Skool", "Calvin (Skool Deutsch)"), ("Fabian-Kowallik", "Fabian Kowallik")]
+CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney"), ("Kallaway", "Kallaway"), ("Jun-Yuh", "Jun Yuh"), ("Shan-Hanif", "Shan Hanif"), ("Storytelling-Strukturen", "Storytelling-Strukturen"), ("Skool", "Calvin (Skool Deutsch)"), ("Fabian-Kowallik", "Fabian Kowallik"), ("Max-Lengsfeld", "Max Lengsfeld (Copywriting)")]
 SRC = {}
 for i in src["items"]:
     if i["kind"] != "resource" or i.get("archived"):
