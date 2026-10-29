@@ -75,7 +75,7 @@ for k, (l, h, r) in K.items():
     FIELDS[k] = {"label": l, "hint": h, "rows": r, "sec": "kurs"}
 # Hinweise für die Skript-Bausteine
 FIELDS["lage"]["hint"] = "Ein Satz: dein Alter und was du gerade startest. Ziel, Lage und Problem ordnen dich für Fremde in 3 bis 5 Sekunden ein (Mino)."
-FIELDS["warum"]["hint"] = "Wird im Skript zu: „… jeden Tag ein Video, weil …“. Dein Anker für Tage ohne Aufrufe."
+FIELDS["warum"]["hint"] = "Wird im Skript zu: „Warum? Weil …“. Dein Anker für Tage ohne Aufrufe."
 
 # ---------- Video-Arten mit Skript-Vorlage ----------
 TYPES = {
@@ -311,7 +311,7 @@ Auf „Skript ins Studio“ tippen, dann einmal laut lesen und ändern, was sich
 
 **Dazu: Ziele auf Papier.** Ein Zahlenziel für 6 Monate, nicht zwei (Mino).""",
      fields=["k1_wer", "warum", "k1_angst", "k1_botschaft", "zahlziel"], video="freund",
-     tpl="Tag 1. Ich bin {k1_wer} und poste ab heute 7 Tage lang jeden Tag ein Video, weil {warum|klein}. Ehrlich gesagt hab ich Angst, {k1_angst|klein}. Ich mach's trotzdem und zeig dir, wie's weitergeht. {k1_botschaft|satz} Bis morgen.")
+     tpl="Tag 1 von 7: Ich bin {k1_wer} und poste ab heute jeden Tag ein Video. Warum? Weil {warum|klein}. Ehrlich gesagt hab ich Angst, {k1_angst|klein}. Ich mach's trotzdem und zeig dir, wie's weitergeht. {k1_botschaft|satz} Bis morgen.")
 
 step(id="s02", ph="p1", title="Deine Hürden aufschreiben und umdeuten",
      src="Mino, If you're in college", refs=["muyyxm20972jcz"], ch=[1],
