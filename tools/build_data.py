@@ -311,7 +311,7 @@ Auf „Skript ins Studio“ tippen, dann einmal laut lesen und ändern, was sich
 
 **Dazu: Ziele auf Papier.** Ein Zahlenziel für 6 Monate, nicht zwei (Mino).""",
      fields=["k1_wer", "warum", "k1_angst", "k1_botschaft", "zahlziel"], video="freund",
-     tpl="Ich bin {k1_wer} und poste ab heute 7 Tage lang jeden Tag ein Video, weil {warum|klein}. Ehrlich gesagt hab ich Angst, {k1_angst|klein}. Ich mach's trotzdem und zeig dir, wie's weitergeht. {k1_botschaft|satz} Das war Tag 1. Bis morgen.")
+     tpl="Tag 1. Ich bin {k1_wer} und poste ab heute 7 Tage lang jeden Tag ein Video, weil {warum|klein}. Ehrlich gesagt hab ich Angst, {k1_angst|klein}. Ich mach's trotzdem und zeig dir, wie's weitergeht. {k1_botschaft|satz} Bis morgen.")
 
 step(id="s02", ph="p1", title="Deine Hürden aufschreiben und umdeuten",
      src="Mino, If you're in college", refs=["muyyxm20972jcz"], ch=[1],
