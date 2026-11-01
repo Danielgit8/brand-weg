@@ -353,8 +353,8 @@ def step(**kw):
 step(id="s01", ph="p1", title="Kurs-Tag 1: Dein erstes Video",
      src="Mino, Kurs & Workbook Tag 1", refs=["muwc3ej574xmr4", "mv7nrb4z5wjppk"], ch=[1],
      why="Heute zählt nur, dass es online ist. Es darf schlecht sein. Plan etwa 60 bis 90 Minuten ein.",
-     body="""**1. Vier Fragen beantworten (5 Min.)**
-Unten eintragen. Daraus baut die App dein Skript.
+     body="""**1. Alter eintragen (1 Min.)**
+Unten eintragen, dann steht dein Skript fertig da. Aufbau nach Minos Original, dazu was in Ausreißer-Videos von Martin Wang funktioniert hat: Startpunkt in Zahlen, eine Person direkt ansprechen, etwas steht auf dem Spiel.
 
 **2. Skript laut lesen**
 Auf „Skript ins Studio“ tippen, dann einmal laut lesen und ändern, was sich nicht nach dir anhört.
@@ -377,8 +377,8 @@ Auf „Skript ins Studio“ tippen, dann einmal laut lesen und ändern, was sich
 - Nicht schlafen gehen, bevor das Video online ist (Mino)
 
 **Dazu: Ziele auf Papier.** Ein Zahlenziel für 6 Monate, nicht zwei (Mino).""",
-     fields=["k1_wer", "warum", "k1_angst", "k1_botschaft", "zahlziel"], video="freund",
-     tpl="Ich bin {k1_wer} und poste ab heute 7 Tage lang jeden Tag ein Video, weil {warum|klein}. Ehrlich gesagt hab ich Angst, {k1_angst|klein}. Ich mach's trotzdem und zeig dir, wie's weitergeht. {k1_botschaft|satz} Das war Tag 1. Bis morgen.")
+     fields=["k1_wer", "zahlziel"], video="freund",
+     tpl="Ich bin {k1_wer} und poste ab heute 7 Tage lang jeden Tag ein Video.\nIch hab null Erfahrung, [null Follower] und will einfach lernen, wie man Videos macht, die Leute wirklich anschauen.\nEhrlich gesagt hab ich Angst, was andere denken, weil ich ja noch gar nichts erreicht hab. Vielleicht kennst du das.\nIch mach's trotzdem, und du kannst zuschauen, ob ich die 7 Tage durchzieh.\nUnd falls du auch schon mal überlegt hast, Videos zu machen: Mach einfach mit. Wir fangen beide bei null an.\nDas war Tag 1. Bis morgen.")
 
 step(id="s02", ph="p1", title="Deine Hürden aufschreiben und umdeuten",
      src="Mino, If you're in college", refs=["muyyxm20972jcz"], ch=[1],
