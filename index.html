@@ -285,6 +285,15 @@ body.login #nav{display:none}
 @media (hover:hover) and (pointer:fine){.item:hover .t b{color:#fff}.chip:hover{background:rgba(255,255,255,.1)}}
 @media (max-width:420px){.stat b{font-size:25px}.grid2{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important}body::after{animation:none}}
+.br-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px}
+.br-card{display:flex;flex-direction:column;gap:4px;text-align:left;background:none;border:0;padding:0;color:var(--ink);font:inherit;cursor:pointer;min-width:0}
+.br-th{position:relative;display:block;aspect-ratio:9/16;border-radius:16px;background:rgba(255,255,255,.06) center/cover no-repeat;box-shadow:inset 0 0 0 1px var(--line);margin-bottom:4px;transition:transform 160ms var(--ease-out)}
+.br-card:active .br-th{transform:scale(.97)}
+.br-th i{position:absolute;right:8px;bottom:8px;font:600 11.5px/1 var(--fm);font-style:normal;background:rgba(0,0,0,.62);color:#fff;padding:5px 7px;border-radius:999px}
+.br-card b{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br-card small{font-size:12px;color:var(--muted)}
+.br-vid{width:100%;max-height:52svh;border-radius:18px;background:#000;display:block;margin:4px 0 14px}
+.btn[disabled]{opacity:.6;pointer-events:none}
 </style>
 </head>
 <body>
@@ -551,7 +560,7 @@ function md(src){
 }
 
 /* ---------- Zustand und Abgleich ---------- */
-const blank = () => ({v:1, done:{}, prof:{}, videos:[], stats:[], posts:[], open:{}, brand:{}, tree:[], aka:{done:{}, res:{}, chk:{}}, insp:[], updated:0});
+const blank = () => ({v:1, done:{}, prof:{}, videos:[], broll:[], stats:[], posts:[], open:{}, brand:{}, tree:[], aka:{done:{}, res:{}, chk:{}}, insp:[], updated:0});
 let ST = blank();
 try { const j = JSON.parse(localStorage.getItem(LKEY) || "null"); if (j && j.v) ST = {...blank(), ...j}; } catch (e) {}
 let sb = null, user = null, sync = "lokal", pushT = null, authChecked = false, skipLogin = false;
@@ -764,6 +773,7 @@ const stepLink = id => { const i = STEPS.findIndex(s => s.id === id); return i <
 const SUBS = {
   studio: {kick:"Videos machen", lead:"Hier machst du deine Videos, von der Idee bis zum Posten.", subs:[
     ["werk", "Videos", "#/studio", () => "Jedes Video läuft gleich ab: Idee, Hook, Skript, Dreh, Schnitt, Check, Posten. Brauchst du ab dem ersten Schritt."],
+    ["broll", "B-Roll", "#/studio/broll", () => "Deine Zwischenbilder an einem Ort: hochladen, nach Art sortieren und beim Schneiden aufs Handy laden."],
     ["ideen", "Ideen", "#/studio/ideen", () => "Fremde Reels und TikToks, die gut laufen, speichern und abschauen, wie sie gemacht sind."],
     ["hooks", "Hooks", "#/studio/hooks", () => `Der Hook ist der erste Satz deines Videos. Hier prüfst du ihn und sammelst gute Hooks. Richtig dran ist das ab ${stepLink("s11")}.`],
     ["verteilen", "Posten", "#/studio/verteilen", () => "Worauf du beim Hochladen achtest und wie Instagram und TikTok entscheiden, wem sie dein Video zeigen."],
@@ -1061,6 +1071,7 @@ function studioView(a, b){
   let h = areaHead("studio", tab);
   if (tab === "ideen") h += inspView(b === "tt" ? "tt" : "ig");
   else if (tab === "zahlen") h += zahlenView();
+  else if (tab === "broll") h += brollView();
   else if (tab === "hooks") h += hookLab();
   else if (tab === "verteilen") h += distView();
   else {
@@ -1690,6 +1701,128 @@ document.addEventListener("change", async e => {
   if (!d || !d.v || typeof d.prof !== "object" || typeof d.done !== "object") return toast("Die Datei ist keine Brand-Weg-Sicherung.");
   if (!confirm(`Sicherung${j.saved ? " vom " + fmtD(j.saved.slice(0, 10)) : ""} einspielen? Dein jetziger Stand wird dabei ersetzt.`)) return;
   ST = {...blank(), ...d}; save(true); closeSheet(); render(); toast("Sicherung eingespielt");
+});
+/* --- B-Roll: eigene Zwischenbilder, Dateien im Cockpit-Speicher unter files/<user>/brandweg/broll/ --- */
+const BRK = [["halb", "0,5x"], ["screen", "Bildschirm"], ["zeit", "Zeitraffer"], ["sonst", "Sonstiges"]];
+const brLabel = k => (BRK.find(x => x[0] === k) || BRK[3])[1];
+const brDur = s => s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}` : "";
+const brMB = b => (b / 1048576).toLocaleString("de-DE", {maximumFractionDigits:1}) + " MB";
+const brGet = id => (ST.broll || []).find(x => x.id === id);
+function brollView(){
+  const all = ST.broll || [], f = UI.brK || "", list = f ? all.filter(x => x.kind === f) : all, busy = UI.brBusy;
+  const n = k => all.filter(x => x.kind === k).length, used = all.reduce((s, x) => s + (x.size || 0), 0);
+  return `<section class="glass reveal"><p style="margin:0 0 14px">Clips, die du nebenbei filmst: Handy auf 0,5x abstellen, Bildschirm abfilmen, Zeitraffer. Tätigkeiten mindestens 30 Sekunden, Bildschirm und Gehen etwa 10 (Mino).</p>
+    <div class="row"><button class="btn" data-act="bradd" ${busy ? "disabled" : ""}>${busy ? esc(busy) : "Clips hochladen"}</button><button class="btn ghost" data-act="brcam" ${busy ? "disabled" : ""}>Jetzt filmen</button></div>
+    ${busy ? `<p class="tiny muted" style="margin:10px 0 0">Lass die App so lange offen.</p>` : ""}
+    ${!user ? `<p class="small muted" style="margin:12px 0 0">Zum Hochladen musst du angemeldet sein. Die Clips liegen in deinem Cockpit-Konto.</p>` : ""}
+    <input type="file" id="brfile" accept="video/*" multiple hidden><input type="file" id="brcamin" accept="video/*" capture="environment" hidden></section>
+  <section class="glass reveal"><div class="chips" style="margin:0 0 14px"><button class="chip ${!f ? "on" : ""}" data-act="brk" data-k="">Alle · ${all.length}</button>${BRK.map(([k, l]) => `<button class="chip ${f === k ? "on" : ""}" data-act="brk" data-k="${k}">${l} · ${n(k)}</button>`).join("")}</div>
+  ${list.length ? `<div class="br-grid">${list.map(x => `<button class="br-card" data-act="bropen" data-id="${x.id}"><span class="br-th" style="${x.thumb ? `background-image:url('${x.thumb}')` : ""}">${x.dur ? `<i>${brDur(x.dur)}</i>` : ""}</span><b>${esc(x.note || x.name)}</b><small>${brLabel(x.kind)}${x.used ? " · benutzt" : ""}</small></button>`).join("")}</div>`
+    : `<div class="empty">${all.length ? "Von dieser Art noch nichts." : "Noch keine Clips. Für Kurs-Tag 3 brauchst du 5 bis 10."}</div>`}
+  ${all.length ? `<p class="tiny faint" style="margin:14px 0 0">Belegt: ${brMB(used)}. Der kostenlose Speicher (1 GB) teilt sich mit dem Cockpit, große Clips werden deshalb beim Hochladen verkleinert.</p>` : ""}</section>`;
+}
+function brSheet(x){
+  return `<span class="kick">B-Roll · ${brDur(x.dur) || "Clip"}</span>
+    <video id="brvid" class="br-vid" controls playsinline muted loop ${x.thumb ? `poster="${x.thumb}"` : ""}></video>
+    <div class="chips" style="margin:0 0 12px">${BRK.map(([k, l]) => `<button class="chip ${x.kind === k ? "on" : ""}" data-act="brkind" data-id="${x.id}" data-k="${k}">${l}</button>`).join("")}</div>
+    <textarea rows="2" data-brnote="${x.id}" placeholder="Was ist drauf? Zum Beispiel: VARG spielen, Laptop am Schreibtisch">${esc(x.note)}</textarea>
+    <label class="row small" style="margin:12px 0 16px;gap:8px"><input type="checkbox" data-brused="${x.id}" ${x.used ? "checked" : ""}> Schon in einem Video benutzt</label>
+    <div class="row"><button class="btn" data-act="brdl" data-id="${x.id}">Aufs Gerät laden</button><button class="btn ghost" data-act="brdel" data-id="${x.id}">Löschen</button></div>
+    <p class="tiny faint" style="margin:12px 0 0">${esc(x.name)} · ${brMB(x.size || 0)}${x.added ? " · " + new Date(x.added).toLocaleDateString("de-DE") : ""}</p>`;
+}
+async function brUrl(x){
+  UI.brUrls ||= {}; const c = UI.brUrls[x.id]; if (c && c.exp > Date.now()) return c.u;
+  const {data, error} = await sb.storage.from("files").createSignedUrl(x.path, 3600);
+  if (error || !data) return null; UI.brUrls[x.id] = {u:data.signedUrl, exp:Date.now() + 50 * 60000}; return data.signedUrl;
+}
+async function brOpen(id){
+  const x = brGet(id); if (!x) return; openSheet(brSheet(x));
+  if (!sb || !user) return; const u = await brUrl(x), v = $("#brvid"); if (u && v) v.src = u;
+}
+// Länge, Größe und ein kleines Vorschaubild aus dem Video lesen
+function brMeta(f){
+  return new Promise(res => {
+    const v = document.createElement("video"), u = URL.createObjectURL(f); v.muted = true; v.playsInline = true; v.preload = "auto";
+    const done = r => { clearTimeout(to); URL.revokeObjectURL(u); res(r); }, to = setTimeout(() => done({}), 15000);
+    v.onloadedmetadata = () => { v.currentTime = Math.min(1, (v.duration || 0) / 2); };
+    v.onseeked = () => { const w = 180, h = Math.round(w * (v.videoHeight / v.videoWidth || 16 / 9)), c = document.createElement("canvas"); c.width = w; c.height = h; let thumb = "";
+      try { c.getContext("2d").drawImage(v, 0, 0, w, h); thumb = c.toDataURL("image/jpeg", .6); } catch (_) {}
+      done({dur:v.duration || 0, w:v.videoWidth, h:v.videoHeight, thumb}); };
+    v.onerror = () => done({});
+    v.src = u;
+  });
+}
+// Große Clips im Browser neu aufnehmen: höchstens 1280 px, ohne Ton, Datenrate so, dass es unter 40 MB bleibt. Läuft in Echtzeit.
+async function brShrink(f, onP){
+  const mime = ["video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9", "video/webm"].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
+  if (!mime) throw new Error("kein Recorder");
+  const v = document.createElement("video"), u = URL.createObjectURL(f); v.muted = true; v.playsInline = true; v.src = u;
+  await new Promise((r, j) => { v.onloadedmetadata = r; v.onerror = j; });
+  const sc = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight)), c = document.createElement("canvas");
+  c.width = Math.round(v.videoWidth * sc / 2) * 2; c.height = Math.round(v.videoHeight * sc / 2) * 2;
+  const g = c.getContext("2d"), bps = Math.min(4e6, Math.floor(40 * 8 * 1048576 / Math.max(1, v.duration || 1)));
+  const rec = new MediaRecorder(c.captureStream(30), {mimeType:mime, videoBitsPerSecond:bps}), parts = [];
+  rec.ondataavailable = e => { if (e.data.size) parts.push(e.data); };
+  const stopped = new Promise(r => rec.onstop = r), ended = new Promise(r => v.onended = r);
+  // Pro Bildschirmbild zeichnen. requestVideoFrameCallback feuert bei einem Video außerhalb der Seite nicht (getestet), requestAnimationFrame pausiert im Hintergrund, deshalb App offen lassen.
+  let run = true, last = -1; const draw = () => { if (!run) return; g.drawImage(v, 0, 0, c.width, c.height); const p = Math.floor(100 * v.currentTime / (v.duration || 1)); if (p !== last) { last = p; onP(p); } requestAnimationFrame(draw); };
+  // Wechselt er kurz die App, Video und Aufnahme anhalten, sonst fehlen die Bilder dazwischen
+  const vis = () => { if (document.hidden) { v.pause(); if (rec.state === "recording") rec.pause(); } else { if (rec.state === "paused") rec.resume(); v.play().catch(() => {}); } };
+  document.addEventListener("visibilitychange", vis);
+  rec.start(1000); await v.play(); draw(); await ended;
+  run = false; document.removeEventListener("visibilitychange", vis); rec.stop(); await stopped; URL.revokeObjectURL(u);
+  return new File(parts, f.name.replace(/\.\w+$/, "") + "-klein." + (mime.includes("mp4") ? "mp4" : "webm"), {type:mime.split(";")[0]});
+}
+function brBusy(t){ UI.brBusy = t; const b = $('[data-act="bradd"]'); if (b) b.textContent = t; }
+async function brUpload(files){
+  if (!sb || !user) return toast("Melde dich an, dann kannst du Clips hochladen.");
+  if (!navigator.onLine) return toast("Zum Hochladen brauchst du Internet.");
+  const kind = UI.brK || "sonst"; let ok = 0;
+  for (const [i, f0] of files.entries()) {
+    const tag = files.length > 1 ? ` (${i + 1}/${files.length})` : "";
+    UI.brBusy = "Liest Clip" + tag; render();
+    const meta = await brMeta(f0); let f = f0;
+    if (f.size > 45 * 1048576) { try { f = await brShrink(f0, p => brBusy(`Verkleinert ${p} %${tag}`)); } catch (e) { toast(`„${f0.name}“ ließ sich nicht verkleinern.`); continue; } }
+    if (f.size > 50 * 1048576) { toast(`„${f0.name}“ ist zu groß. Film den Clip etwas kürzer.`); continue; }
+    brBusy("Lädt hoch" + tag);
+    const id = uid(), safe = f.name.normalize("NFKD").replace(/[^\w.\-]+/g, "_").slice(-60) || "clip.mp4", path = `${user.id}/brandweg/broll/${id}-${safe}`;
+    const {error} = await sb.storage.from("files").upload(path, f, {contentType:f.type || "video/mp4", upsert:false});
+    if (error) { toast(`„${f0.name}“ konnte nicht hochgeladen werden.`); continue; }
+    ST.broll = [{id, path, name:f0.name, size:f.size, type:f.type || "video/mp4", dur:meta.dur || 0, thumb:meta.thumb || "", kind, note:"", used:false, added:Date.now()}, ...(ST.broll || [])];
+    save(true); ok++;
+  }
+  UI.brBusy = ""; render(); if (ok) toast(ok === 1 ? "Clip gespeichert" : `${ok} Clips gespeichert`);
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act, x = b.dataset.id ? brGet(b.dataset.id) : null;
+  if (act === "bradd") return $("#brfile").click();
+  if (act === "brcam") return $("#brcamin").click();
+  if (act === "brk") { UI.brK = b.dataset.k; return render(); }
+  if (act === "bropen") return brOpen(b.dataset.id);
+  if (!x) return;
+  if (act === "brkind") { x.kind = b.dataset.k; save(true); $$('[data-act="brkind"]').forEach(c => c.classList.toggle("on", c.dataset.k === x.kind)); return render(); }
+  if (act === "brdl") {
+    if (!sb || !user || !navigator.onLine) return toast("Zum Laden brauchst du Internet und dein Konto.");
+    b.textContent = "Lädt …"; const {data, error} = await sb.storage.from("files").download(x.path); b.textContent = "Aufs Gerät laden";
+    if (error || !data) return toast("Laden ging gerade nicht.");
+    const u = URL.createObjectURL(data), a = document.createElement("a"); a.href = u; a.download = x.name.replace(/\.\w+$/, "") + "." + (x.type.includes("webm") ? "webm" : "mp4"); document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 10000);
+    return toast("Liegt jetzt in deinen Downloads");
+  }
+  if (act === "brdel") {
+    if (!confirm("Diesen Clip wirklich löschen?")) return;
+    if (sb && user) { const {error} = await sb.storage.from("files").remove([x.path]); if (error) return toast("Löschen ging gerade nicht."); }
+    ST.broll = ST.broll.filter(y => y !== x); save(true); closeSheet(); return render();
+  }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if ((t.id === "brfile" || t.id === "brcamin") && t.files.length) { const fs = [...t.files]; t.value = ""; return brUpload(fs); }
+  if (t.dataset.brused) { const x = brGet(t.dataset.brused); if (x) { x.used = t.checked; save(true); render(); } }
+});
+document.addEventListener("input", e => {
+  const t = e.target; if (!t.dataset.brnote) return; const x = brGet(t.dataset.brnote); if (!x) return;
+  x.note = t.value; save(true); const c = $(`[data-act="bropen"][data-id="${x.id}"] b`); if (c) c.textContent = x.note || x.name;
 });
 document.addEventListener("submit", async e => {
   e.preventDefault();
