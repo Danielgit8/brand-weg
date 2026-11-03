@@ -724,7 +724,7 @@ for st in S:
         a, txt = TT[st["id"]]
         st["body"] = st["body"].replace(a, a + "\n" + txt, 1) if a and a in st["body"] else st["body"].rstrip() + "\n\n" + txt
 
-CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney"), ("Kallaway", "Kallaway"), ("Jun-Yuh", "Jun Yuh"), ("Shan-Hanif", "Shan Hanif"), ("Storytelling-Strukturen", "Storytelling-Strukturen"), ("Skool", "Calvin (Skool Deutsch)"), ("Fabian-Kowallik", "Fabian Kowallik"), ("Max-Lengsfeld", "Max Lengsfeld (Copywriting)"), ("Sebiforce", "sebiforce (Instagram)")]
+CREATORS = [("Mino-Lee", "Mino Lee"), ("Ronny-Mitchell", "Ronny Mitchell"), ("Sam-Gaudet", "Sam Gaudet"), ("Alex-Hormozi", "Alex Hormozi"), ("Julian-Treasure", "Julian Treasure"), ("Caleb-Ralston", "Caleb Ralston"), ("Ekko-Amaryllis", "Ekko Amaryllis"), ("Richard-Yu", "Richard Yu"), ("Robert-McKeaveney", "Robert McKeaveney"), ("Kallaway", "Kallaway"), ("Jun-Yuh", "Jun Yuh"), ("Shan-Hanif", "Shan Hanif"), ("Storytelling-Strukturen", "Storytelling-Strukturen"), ("Skool", "Calvin (Skool Deutsch)"), ("Fabian-Kowallik", "Fabian Kowallik"), ("Max-Lengsfeld", "Max Lengsfeld (Copywriting)"), ("Sebiforce", "sebiforce (Instagram)"), ("Torben-Platzer", "Torben Platzer")]
 SRC = {}
 for i in src["items"]:
     if i["kind"] != "resource" or i.get("archived"):
@@ -758,3 +758,9 @@ for bad in ("Daniel", "Mama", "15 Jahre"):
     assert bad not in txt, "persönliche Angabe in data.js: " + bad
 OUT.write_text("window.BW=" + txt + ";\n", encoding="utf-8")
 print("ok", len(S), "Schritte,", len(WISSEN), "Kapitel,", len(SRC), "Quellen,", len(txt), "Zeichen")
+
+# Neues Wissen gleich in den Skill content-experte übernehmen (liegt lokal neben brand-weg, nicht im Repo)
+SYNC = OUT.parent.parent / "content-experte/scripts/sync_wissen.py"
+if SYNC.exists():
+    import subprocess
+    subprocess.run([sys.executable, "-I", str(SYNC), str(OUT)])
