@@ -1254,7 +1254,9 @@ function videoView(id){
       <div class="row" style="margin-top:12px"><button class="btn" data-act="tp">${IC.play} Teleprompter</button><button class="btn ghost" data-act="copyscript">Kopieren</button>${v.skript.trim() ? "" : `<button class="chip" data-act="tplvideo">Vorlage einfügen</button>`}</div>`;
   } else {
     body = `<span class="kick acc">${cur + 1} ${esc(s.label)}</span><div class="checks" style="margin-top:6px">${s.checks.map((c, i) => `<label><input type="checkbox" data-chk="${s.id}${i}" ${v.checks[s.id + i] ? "checked" : ""}><span>${esc(c)}</span></label>`).join("")}</div>
-      ${s.id === "posten" ? `<div class="fld"><label>Wo postest du es?</label><div class="chips" style="margin-top:8px">${PLATFORMS.map(p => `<button class="chip ${(v.platforms || []).includes(p) ? "on" : ""}" data-act="vplat" data-p="${esc(p)}">${esc(p)}</button>`).join("")}</div></div>${ttBox(v)}` : ""}
+      ${s.id === "posten" ? `<div class="fld"><label for="vf_igcap">Caption für Instagram</label><span class="hint">Kurz, höchstens ein Hashtag (Mino). Am Ende gern eine Frage, auf die Leute antworten.</span><textarea id="vf_igcap" rows="3" data-v="igcap">${esc(v.igcap || "")}</textarea>
+        <div class="row" style="gap:8px;margin-top:10px"><button class="chip" data-act="copyigcap">Caption kopieren</button></div></div>
+      <div class="fld"><label>Wo postest du es?</label><div class="chips" style="margin-top:8px">${PLATFORMS.map(p => `<button class="chip ${(v.platforms || []).includes(p) ? "on" : ""}" data-act="vplat" data-p="${esc(p)}">${esc(p)}</button>`).join("")}</div></div>${ttBox(v)}` : ""}
       <div class="tiny faint" style="margin-top:10px">Quelle: ${esc(s.src || "")}</div>`;
   }
   if (s && s.tips) body += `<ul class="tips">${s.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
@@ -1370,8 +1372,8 @@ function ttBox(v){
   const checks = ["Dieselbe Datei aus CapCut genommen, nicht das Instagram-Video mit Wasserzeichen", "Text und Untertitel in TikTok eingefügt", "Schlüsselwort im ersten Satz gesagt und als Text im Bild", "Beschreibung beginnt mit dem Schlüsselwort"];
   return `<div class="ak-mat" style="margin-top:14px"><span class="kick acc">Auch auf TikTok</span>
     <div class="checks" style="margin-top:6px">${checks.map((c, i) => `<label><input type="checkbox" data-chk="tt${i}" ${v.checks["tt" + i] ? "checked" : ""}><span>${esc(c)}</span></label>`).join("")}</div>
-    <div class="fld"><label for="vf_ttcap">Beschreibung für TikTok</label><span class="hint">Mit dem Schlüsselwort anfangen, so wie Leute danach suchen würden.</span><textarea id="vf_ttcap" rows="3" data-v="ttcap">${esc(v.ttcap || "")}</textarea></div>
-    <div class="row" style="gap:8px;margin-top:10px"><button class="chip" data-act="copyttcap">Beschreibung kopieren</button><a class="chip" href="https://www.tiktok.com/upload" target="_blank" rel="noopener">TikTok öffnen ${IC.ext}</a>
+    <div class="fld"><label for="vf_ttcap">Caption für TikTok</label><span class="hint">Mit dem Schlüsselwort anfangen, so wie Leute danach suchen würden.</span><textarea id="vf_ttcap" rows="3" data-v="ttcap">${esc(v.ttcap || "")}</textarea></div>
+    <div class="row" style="gap:8px;margin-top:10px"><button class="chip" data-act="copyttcap">Caption kopieren</button><a class="chip" href="https://www.tiktok.com/upload" target="_blank" rel="noopener">TikTok öffnen ${IC.ext}</a>
     ${v.ttPosted ? `<span class="tiny saved" style="align-self:center">Auf TikTok gepostet am ${fmtD(v.ttPosted)}</span><button class="chip" data-act="ttundo">Zurücknehmen</button>` : `<button class="btn ok" data-act="ttposted">Auf TikTok gepostet</button>`}</div>
     <p class="tiny faint" style="margin:10px 0 0">Quelle: ManyChat (Wasserzeichen, Text in der App), Hootsuite (Schlüsselwort)</p></div>`;
 }
@@ -1632,6 +1634,7 @@ document.addEventListener("click", async e => {
   if (act === "next") { if (v.posted) v.view = Math.min((v.view ?? D.stages.length) + 1, D.stages.length); else v.stage = Math.min(v.stage + 1, D.stages.length - 1); return save(); }
   if (act === "ttposted") { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); v.ttPosted = dkey(); const a = v.platforms || (v.platforms = []); if (!a.includes("TikTok")) a.push("TikTok"); save(); return toast("Auf TikTok gepostet"); }
   if (act === "ttundo") { delete v.ttPosted; return save(); }
+  if (act === "copyigcap") { try { await navigator.clipboard.writeText(v.igcap || ""); toast("Caption kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
   if (act === "copyttcap") { try { await navigator.clipboard.writeText(v.ttcap || ""); toast("Beschreibung kopiert"); } catch (_) { toast("Kopieren ging nicht"); } return; }
   if (act === "posted") {
     const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2);
