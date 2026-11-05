@@ -64,8 +64,8 @@ K = {
     "k3_zweifel": ("Kurs-Tag 3: Der Zweifel deines jüngeren Ichs", "In seinen Worten.", 2),
     "k3_antwort": ("Kurs-Tag 3: Deine Antwort darauf", "Mit konkreten Zahlen, 3 bis 4 Sätze.", 3),
     "k3_botschaft": ("Kurs-Tag 3: Die Botschaft, die du damals gebraucht hättest", "Kurz.", 2),
-    "k4_geschichte": ("Kurs-Tag 4: Eine persönliche Geschichte zu deinem Ziel", "4 bis 5 Sätze.", 4),
-    "k4_jetzt": ("Kurs-Tag 4: Warum dieses Ziel, warum jetzt?", "5 bis 6 Sätze.", 4),
+    "k4_geschichte": ("Kurs-Tag 4: Eine persönliche Geschichte zu deinem Ziel", "4 bis 5 Sätze, z. B. „In den letzten [Monaten] …“. Darf ganz unspektakulär sein (Mino).", 4),
+    "k4_jetzt": ("Kurs-Tag 4: Warum dieses Ziel, warum jetzt?", "5 bis 6 Sätze, z. B. „Ich zieh das durch, weil …“ (Mino).", 4),
     "k5_passiert": ("Kurs-Tag 5: Was ist heute passiert?", "", 2),
     "k5_gelernt": ("Kurs-Tag 5: Was habe ich gelernt oder gemerkt?", "Das wird dein Hook: 1 bis 2 Sätze, als überraschende Aussage an eine Person.", 2),
     "k6_ideen": ("Kurs-Tag 6: 10 Ideen in 10 Minuten", "Erst 4 Minuten Begriffe zu deiner Nische sammeln, dann Ideen daraus. Eine pro Zeile.", 6),
@@ -434,7 +434,7 @@ step(id="s07", ph="p1", title="Kurs-Tag 4: Road-to-Video über dein Ziel und Pro
 
 **Hinweis:** Den „Tag X“-Hook nennt Mino in anderen Videos schwach. Als Rahmen in Bio und Serie ist er gut, später muss jeder Hook auch allein neugierig machen.""",
      fields=["helfen", "ziel", "kompetenz", "k4_geschichte", "k4_jetzt", "bio", "mail"], video="freund",
-     tpl="Heute ist Tag X auf dem Weg zu {ziel}. Warum? Nun … {k4_geschichte} {k4_jetzt} Folg mir, um die Reise mitzuerleben.")
+     tpl="Tag X auf dem Weg zu {ziel}. Warum {ziel}? Also … {k4_geschichte} {k4_jetzt} Folg mir, wenn du sehen willst, ob ich {ziel} schaffe.")
 
 step(id="s08", ph="p1", title="Kurs-Tag 5: Video ohne Skript",
      src="Mino, Kurs & Workbook Tag 5", refs=["muwc3ej574xmr4"], ch=[7],
