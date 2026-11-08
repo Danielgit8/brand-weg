@@ -6,8 +6,8 @@
   "start_url": "/brand-weg/",
   "scope": "/brand-weg/",
   "display": "standalone",
-  "background_color": "#060608",
-  "theme_color": "#060608",
+  "background_color": "#F3EBDD",
+  "theme_color": "#F3EBDD",
   "lang": "de",
   "icons": [
     {
