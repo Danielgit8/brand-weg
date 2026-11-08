@@ -69,6 +69,8 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;paddin
 }
 .cover{margin:22px 0 0;border:1px solid var(--linie-stark);padding:8px;background:var(--leinen)}
 .cover img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;filter:saturate(.92) contrast(1.02)}
+.cover img{transition:filter 900ms var(--ease-papier)}
+#app.anim .cover.rv:not(.in) img{filter:saturate(.3) blur(6px)}
 .cover figcaption{font:italic 400 13.5px/1.3 var(--f-text);color:var(--tinte-3);padding:8px 2px 0}
 @media (max-width:480px){.seal{width:58px;height:58px;right:14px;top:4px}.rubrik{padding-right:66px}.wrap{padding:0 16px}.mast h1{font-size:clamp(46px,15vw,112px)}}
 
@@ -256,7 +258,7 @@ body.login #nav{display:none}
 const CONFIG = {url:"https://yzntbxbdxtdqgddyicdn.supabase.co", key:"sb_publishable_0hu09OCTj9H1dnam_ztXYQ_0OfPEk1R"};
 const ROW = "__brandweg", LKEY = "brandweg-state-v1";
 // Titelbild: leer lassen oder z. B. "assets/titel.jpg" eintragen, sobald er ein eigenes Foto hat.
-const COVER = "";
+const COVER = "assets/titel.jpg";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -383,7 +385,7 @@ function hero(word, kick, nr, rub){
     <div class="rubrik"><span class="lbl">Nº ${nr} · ${esc(rub)}</span></div>
     <h1 aria-label="${esc(word)}">${[...word].map((c, i) => `<span class="ch" aria-hidden="true" style="--i:${i}">${esc(c)}</span>`).join("")}</h1>
     <div class="rule2"></div><p class="deck">${esc(kick)}</p>
-    ${COVER ? `<figure class="cover rv"><img src="${COVER}" alt="" loading="lazy"><figcaption>Titelbild</figcaption></figure>` : ""}</header>`;
+    ${COVER ? `<figure class="cover rv"><img src="${COVER}" alt="Rohmilchkäse, Sauerteigbrot und Butter auf einem Holztisch" fetchpriority="high"><figcaption>Rohmilchkäse, Sauerteig und gesalzene Butter.</figcaption></figure>` : ""}</header>`;
 }
 const secH = (i, nr, extra = "") => `<div class="sec-h"><span class="lbl">Nº ${nr}.${i + 1}</span>${extra}</div>`;
 function field(x, store){
