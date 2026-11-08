@@ -139,41 +139,39 @@ function toast(t){ const el = $("#toast"); el.textContent = t; el.classList.add(
 // Jede Gruppe ist eine Karte. Felder: k = Schlüssel, l = Frage, h = Hilfe, p = Beispiel (Platzhalter), src = Quelle
 const GRUND = [
   {t:"Mein Ikigai", lead:"Ikigai heißt ungefähr: wofür du morgens aufstehst. Dein Thema liegt da, wo sich alle vier Fragen überschneiden.", f:[
-    {k:"liebe", l:"Was ich liebe", h:"Worüber könntest du stundenlang reden, auch ohne Geld dafür zu bekommen?", p:"[Krafttraining, gutes Essen, mein Darm ...]"},
-    {k:"kann", l:"Was ich kann", h:"Was kannst du schon, oder was lernst du gerade so gut, dass du es zeigen kannst?", p:"[Rezepte für Muskelaufbau, regelmäßig trainieren ...]"},
-    {k:"braucht", l:"Was Leute brauchen", h:"Bei welchen Problemen kannst du helfen? Was fragen dich Leute?", p:"[Wie man dranbleibt, was man essen soll ...]"},
-    {k:"zahlt", l:"Wofür Leute zahlen", h:"Wofür geben Leute in dem Bereich schon Geld aus?", p:"[Community, Trainingspläne, E-Books ...]"},
-    {k:"ikigai", l:"Mein Ikigai in einem Satz", h:"Wenn du alles oben zusammennimmst: was ist es?", p:"[Ich zeig, wie man ...]"}]},
+    {k:"liebe", l:"Was ich liebe", h:"Worüber könntest du stundenlang reden, auch ohne Geld dafür zu bekommen?"},
+    {k:"kann", l:"Was ich kann", h:"Was kannst du schon, oder was lernst du gerade so gut, dass du es zeigen kannst?"},
+    {k:"braucht", l:"Was Leute brauchen", h:"Bei welchen Problemen kannst du helfen? Was fragen dich Leute?"},
+    {k:"zahlt", l:"Wofür Leute zahlen", h:"Wofür geben Leute in dem Bereich schon Geld aus?"},
+    {k:"ikigai", l:"Mein Ikigai in einem Satz", h:"Wenn du alles oben zusammennimmst: was ist es?"}]},
   {t:"Nische und Traumzuschauer", lead:"Für wen genau machst du die Videos? Je klarer, desto leichter fallen dir Themen ein.", f:[
-    {k:"nische", l:"Mein Thema", h:"Lieber klein anfangen und dann wachsen: erst der Teich, dann der See, dann der Ozean.", src:"Caleb Ralston", p:"[Muskelaufbau und Darmgesundheit für Jugendliche]"},
-    {k:"zuschauer", l:"Mein Traumzuschauer", h:"Eine echte Person, oft dein jüngeres Ich in einer ganz konkreten Situation. Alter, Alltag, was gerade nervt.", src:"Mino Lee", p:"[Er ist [16], dünn, will Muskeln aufbauen und weiß nicht, wo er anfangen soll ...]"},
-    {k:"problem", l:"Sein größtes Problem", h:"Was hält ihn gerade auf?", p:"[Er isst zu wenig und gibt nach zwei Wochen Training auf]"},
-    {k:"wunsch", l:"Was er sich wünscht", h:"Wie sieht es aus, wenn es klappt?", p:"[Sichtbar Muskeln, mehr Energie, keine Bauchschmerzen]"}]},
+    {k:"nische", l:"Mein Thema", h:"Lieber klein anfangen und dann wachsen: erst der Teich, dann der See, dann der Ozean.", src:"Caleb Ralston"},
+    {k:"zuschauer", l:"Mein Traumzuschauer", h:"Eine echte Person, oft dein jüngeres Ich in einer ganz konkreten Situation. Alter, Alltag, was gerade nervt.", src:"Mino Lee"},
+    {k:"problem", l:"Sein größtes Problem", h:"Was hält ihn gerade auf?"},
+    {k:"wunsch", l:"Was er sich wünscht", h:"Wie sieht es aus, wenn es klappt?"}]},
   {t:"Positionierung", lead:"Ein Satz, den du jedem sagen kannst, der fragt, was du machst.", f:[
-    {k:"pos", l:"Ich helfe [wem] bei [was], indem ich [wie].", h:"Kurz und konkret, so wie du es laut sagen würdest.", p:"Ich helfe [Jungs, die dünn sind], [Muskeln aufzubauen], indem ich [meinen Weg mit Training und Rezepten zeige]."},
-    {k:"anders", l:"Was mich von anderen unterscheidet", h:"Deine Geschichte, dein Alter, deine Art. Nicht besser, sondern anders.", p:"[Ich fang selbst gerade an und zeig alles ehrlich]"}]},
+    {k:"pos", l:"Ich helfe [wem] bei [was], indem ich [wie].", h:"Kurz und konkret, so wie du es laut sagen würdest."},
+    {k:"anders", l:"Was mich von anderen unterscheidet", h:"Deine Geschichte, dein Alter, deine Art. Nicht besser, sondern anders."}]},
   {t:"Meine Geschichte", lead:"Leute vertrauen dir, wenn sie wissen, wer du bist. Du entscheidest, was du teilst.", f:[
-    {k:"story", l:"Was ich von mir erzählen will", h:"Nur das, womit du dich wohlfühlst. Du musst gar nichts teilen.", p:"[Warum ich mit Training angefangen hab ...]"},
-    {k:"privat", l:"Was privat bleibt", h:"Damit du beim Drehen nicht jedes Mal neu überlegen musst.", p:"[...]"}]},
+    {k:"story", l:"Was ich von mir erzählen will", h:"Nur das, womit du dich wohlfühlst. Du musst gar nichts teilen."},
+    {k:"privat", l:"Was privat bleibt", h:"Damit du beim Drehen nicht jedes Mal neu überlegen musst."}]},
   {t:"Meine Grundsätze", lead:"Wonach du entscheidest, ob ein Video zu dir passt.", f:[
-    {k:"werte", l:"Daran halte ich mich", h:"Ein Grundsatz pro Zeile.", p:"Ich mach, was ich liebe.\nJedes Video soll helfen.\nIch bleib ich."}]}
+    {k:"werte", l:"Daran halte ich mich", h:"Ein Grundsatz pro Zeile."}]}
 ];
 const STRAT = [
   {t:"Content-Säulen", lead:"Jedes Video passt in eine Säule. So gehen dir die Ideen nicht aus und dein Profil wirkt klar.", pillars:true},
   {t:"Plattformen und Formate", lead:"Wo du postest und wie deine Videos aussehen.", f:[
-    {k:"plattform", l:"Wo ich poste", h:"Eine Hauptplattform, die anderen bekommen dasselbe Video.", p:"[Instagram als Hauptplattform, TikTok mit demselben Video]"},
-    {k:"formate", l:"Formate, die mir liegen", h:"Was du gern drehst und was schnell geht.", p:"[Rezept zum Nachkochen, Tipp vor der Kamera, Ausschnitt aus dem Training]"}]},
+    {k:"plattform", l:"Wo ich poste", h:"Eine Hauptplattform, die anderen bekommen dasselbe Video."},
+    {k:"formate", l:"Formate, die mir liegen", h:"Was du gern drehst und was schnell geht."}]},
   {t:"Mein Wochenablauf", lead:"Ein fester Ablauf, damit du nicht jeden Tag neu überlegen musst. Film, was du sowieso machst, statt extra etwas herzustellen.", days:true, src:"Alex Hormozi: einfangen statt herstellen"},
   {t:"Zeit sparen", lead:"Regeln, damit Content nicht den ganzen Tag frisst.", f:[
-    {k:"regeln", l:"Meine Regeln", h:"Ein Punkt pro Zeile.", p:"Höchstens [60 Minuten] am Tag für Content.\nSchlichter Schnitt, kein langes Rendern.\nDrehen, was ich eh mache."}]},
+    {k:"regeln", l:"Meine Regeln", h:"Ein Punkt pro Zeile."}]},
   {t:"Geld, später", lead:"Erst Vertrauen, dann Angebote. Hier sammelst du nur Ideen.", f:[
-    {k:"geld", l:"Wie ich später Geld verdiene", h:"Kein Druck, nur aufschreiben.", p:"[Community für [9 €] im Monat, E-Book zum eigenen Ernährungsplan ...]"}]}
+    {k:"geld", l:"Wie ich später Geld verdiene", h:"Kein Druck, nur aufschreiben."}]}
 ];
 const DAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
-const DAY_EX = {Mo:"[Training filmen]", Mi:"[Rezept filmen]", Fr:"[Schneiden und posten]"};
-const PIL_EX = ["[Training]", "[Ernährung und Rezepte]", "[Darm und Gesundheit]", "[Mein Weg]"];
 const STAGES = ["Idee", "Gedreht", "Gepostet"];
-const IDEAS = ["Der beste Käse für Muskelaufbau", "Das beste Brot für den Darm", "Wie ich es schaffe, regelmäßig ins Studio zu gehen", "Mein Rezept für Muskelaufbau"];
+const IDEAS = ["Was steckt eigentlich in Supermarkt-Brot?", "Rohmilchkäse: was ist das und warum ess ich ihn?", "So frischst du Sauerteig auf", "Mein Einkauf für echtes Essen"];
 const grundFields = GRUND.flatMap(g => g.f.map(x => x.k));
 
 /* ---------- Zustand und Abgleich ---------- */
@@ -244,9 +242,9 @@ function hero(word, kick){
 }
 function field(x, store){
   const v = store[x.k] || "";
-  const tall = /\n/.test(x.p || "") || ["zuschauer", "story"].includes(x.k);
+  const tall = ["zuschauer", "story", "werte", "regeln"].includes(x.k);
   return `<div class="fld"><label for="f-${x.k}">${esc(x.l)}</label><span class="hint">${esc(x.h)}${x.src ? ` <span class="src">${esc(x.src)}</span>` : ""}</span>
-    <textarea id="f-${x.k}" data-k="${x.k}" rows="${tall ? 4 : 2}" placeholder="${esc(x.p || "")}">${esc(v)}</textarea></div>`;
+    <textarea id="f-${x.k}" data-k="${x.k}" rows="${tall ? 4 : 2}">${esc(v)}</textarea></div>`;
 }
 function grundView(){
   const n = N(), done = grundFields.filter(k => (n.g[k] || "").trim()).length, pct = Math.round(done / grundFields.length * 100);
@@ -259,8 +257,8 @@ function stratView(){
   const n = N();
   const card = s => {
     let body;
-    if (s.pillars) body = `<div class="grid2">${[0, 1, 2, 3].map(i => `<input type="text" data-pil="${i}" value="${esc(n.pil[i] || "")}" placeholder="${esc(PIL_EX[i])}" aria-label="Säule ${i + 1}">`).join("")}</div>`;
-    else if (s.days) body = `<div class="days">${DAYS.map(d => `<b>${d}</b><input type="text" data-day="${d}" value="${esc(n.days[d] || "")}" placeholder="${esc(DAY_EX[d] || "")}" aria-label="${d}">`).join("")}</div>`;
+    if (s.pillars) body = `<div class="grid2">${[0, 1, 2, 3].map(i => `<input type="text" data-pil="${i}" value="${esc(n.pil[i] || "")}" aria-label="Säule ${i + 1}">`).join("")}</div>`;
+    else if (s.days) body = `<div class="days">${DAYS.map(d => `<b>${d}</b><input type="text" data-day="${d}" value="${esc(n.days[d] || "")}" aria-label="${d}">`).join("")}</div>`;
     else body = s.f.map(x => field(x, n.s)).join("");
     return `<section class="card"><h2>${esc(s.t)}</h2><p class="lead">${esc(s.lead)}${s.src ? ` <span class="src">${esc(s.src)}</span>` : ""}</p>${body}</section>`;
   };
@@ -273,7 +271,7 @@ function vidCard(v, pills){
     <button class="stage s${v.st}" data-act="stage" data-id="${v.id}" title="Eine Stufe weiter">${STAGES[v.st]}</button></div>
     ${open ? `<div class="vid-e" data-vid="${v.id}">
       <div class="fld"><label>Titel</label><input type="text" data-v="t" value="${esc(v.t)}"></div>
-      <div class="fld"><label>Hook</label><span class="hint">Der erste Satz. Kurz, konkret, so wie du redest.</span><textarea data-v="hook" rows="2" placeholder="[Diesen Käse ess ich jeden Tag für meine Muskeln]">${esc(v.hook || "")}</textarea></div>
+      <div class="fld"><label>Hook</label><span class="hint">Der erste Satz. Kurz, konkret, so wie du redest.</span><textarea data-v="hook" rows="2">${esc(v.hook || "")}</textarea></div>
       <div class="grid2"><div class="fld"><label>Säule</label><select data-v="pil"><option value="">keine</option>${pills.map(p => `<option ${p === v.pil ? "selected" : ""}>${esc(p)}</option>`).join("")}</select></div>
         <div class="fld"><label>Link</label><input type="url" data-v="link" value="${esc(v.link || "")}" placeholder="https://"></div></div>
       ${v.st === 2 ? `<div class="grid2"><div class="fld"><label>Aufrufe</label><input type="text" inputmode="numeric" data-v="views" value="${esc(v.views || "")}" placeholder="[1200]"></div>
@@ -295,7 +293,7 @@ function vidsView(){
     <section class="card"><form class="add" id="addvid"><input type="text" id="newvid" placeholder="Neue Video-Idee" aria-label="Neue Video-Idee"><button class="btn" type="submit">Speichern</button></form>
       <p class="tiny muted" style="margin:10px 0 0">Tipp auf die Stufe, um ein Video weiterzuschieben. Tipp auf den Titel für Hook, Säule und Zahlen.</p></section>
     <section class="card"><div class="filter">${[["alle", "Alle"], ["0", "Ideen"], ["1", "Gedreht"], ["2", "Gepostet"]].map(([k, l]) => `<button class="chip ${f === k ? "on" : ""}" data-act="filter" data-f="${k}">${l} <span class="num">${cnt(k)}</span></button>`).join("")}</div>
-      ${list.map(v => vidCard(v, pills)).join("") || (vs.length ? `<p class="empty">Hier ist gerade nichts.</p>` : `<p class="empty">Noch keine Videos.</p><button class="btn ghost block" data-act="seed">Ideen aus meinem Journal übernehmen</button>`)}</section>
+      ${list.map(v => vidCard(v, pills)).join("") || (vs.length ? `<p class="empty">Hier ist gerade nichts.</p>` : `<p class="empty">Noch keine Videos.</p><button class="btn ghost block" data-act="seed">Erste Ideen übernehmen</button>`)}</section>
     ${best && num(best.views) ? `<section class="card"><h2>Bestes Video bisher</h2><p class="lead" style="margin:0">${esc(best.t)}: ${fmtN(num(best.views))} Aufrufe${num(best.fol) != null ? `, ${fmtN(num(best.fol))} neue Follower` : ""}. Was hat da geklappt? Mach mehr davon.</p></section>` : ""}
     <section class="card"><h2>Follower</h2><p class="lead">Einmal pro Woche reicht.</p>
       <form class="add" id="addfol"><input type="text" inputmode="numeric" id="newfol" placeholder="Follower heute, z. B. [120]" aria-label="Follower heute"><button class="btn" type="submit">Eintragen</button></form>
