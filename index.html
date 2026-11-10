@@ -352,7 +352,8 @@ const KURS_PLAN = [
   {st:"s", k:"geld", l:"Geld später über", h:"Steht auch in Strategie."},
   {st:"g", k:"privat", l:"Meine Grenzen", h:"Was privat bleibt. Steht auch in Grundlagen."},
   {st:"kurs", k:"vorbilder", l:"Was ich mir von meinen Vorbildern abschaue", h:"Die Art, nicht der Inhalt."},
-  {st:"kurs", k:"video1", l:"Mein erstes Video nach dem Kurs", h:"Idee, Hook, Format."}
+  {st:"kurs", k:"video1", l:"Mein erstes Video nach dem Kurs", h:"Idee, Hook, Format."},
+  {st:"kurs", k:"satz", l:"Mein Satz, wenn jemand zweifelt", h:"Für Kommentare, die dich oder deine Tipps infrage stellen."}
 ];
 const DAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 const STAGES = ["Idee", "Gedreht", "Gepostet"];
@@ -438,7 +439,7 @@ function hero(word, kick, nr, rub){
 const secH = (i, nr, extra = "") => `<div class="sec-h"><span class="lbl">Nº ${nr}.${i + 1}</span>${extra}</div>`;
 function field(x, store){
   const v = store[x.k] || "";
-  const tall = ["zuschauer", "story", "werte", "regeln", "vorbilder", "edge"].includes(x.k);
+  const tall = ["zuschauer", "story", "werte", "regeln", "vorbilder", "edge", "satz"].includes(x.k);
   return `<div class="fld"><label for="f-${x.k}">${esc(x.l)}</label><span class="hint">${esc(x.h)}${x.src ? ` <span class="src">${esc(x.src)}</span>` : ""}</span>
     <textarea id="f-${x.k}" data-k="${x.k}" rows="${tall ? 4 : 2}">${esc(v)}</textarea></div>`;
 }
