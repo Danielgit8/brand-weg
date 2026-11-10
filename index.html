@@ -361,7 +361,7 @@ const IDEAS = ["Was steckt eigentlich in Supermarkt-Brot?", "Rohmilchkäse: was 
 const grundFields = GRUND.flatMap(g => g.f.map(x => x.k));
 
 /* ---------- Zustand und Abgleich ---------- */
-const blankNeu = () => ({g:{}, s:{}, pil:["", "", "", ""], days:{}, vids:[], fol:[], kurs:{}});
+const blankNeu = () => ({g:{}, s:{}, pil:["", "", "", "", ""], days:{}, vids:[], fol:[], kurs:{}});
 let ST = {v:1, updated:0};
 try { const j = JSON.parse(localStorage.getItem(LKEY) || "null"); if (j && j.v) ST = j; } catch (e) {}
 const N = () => { if (!ST.neu) ST.neu = blankNeu(); const n = ST.neu; for (const [k, v] of Object.entries(blankNeu())) if (n[k] == null) n[k] = v; return n; };
@@ -451,10 +451,10 @@ function grundView(){
     ${fleuron("Alles speichert sich von selbst.")}</main>`;
 }
 function stratView(){
-  const n = N(), R = ["I", "II", "III", "IV"];
+  const n = N(), R = ["I", "II", "III", "IV", "V"];
   const card = (s, i) => {
     let body;
-    if (s.pillars) body = `<div class="grid2">${[0, 1, 2, 3].map(j => `<div class="pil"><b>${R[j]}</b><input type="text" data-pil="${j}" value="${esc(n.pil[j] || "")}" placeholder="Säule ${j + 1}" aria-label="Säule ${j + 1}"></div>`).join("")}</div>`;
+    if (s.pillars) body = `<div class="grid2">${[0, 1, 2, 3, 4].map(j => `<div class="pil"><b>${R[j]}</b><input type="text" data-pil="${j}" value="${esc(n.pil[j] || "")}" placeholder="Säule ${j + 1}" aria-label="Säule ${j + 1}"></div>`).join("")}</div>`;
     else if (s.days) body = `<div class="days">${DAYS.map(d => `<b>${d}</b><input type="text" data-day="${d}" value="${esc(n.days[d] || "")}" aria-label="${d}">`).join("")}</div>`;
     else body = s.f.map(x => field(x, n.s)).join("");
     return `<section class="sec rv ${i ? "" : "first"}" style="--d:${Math.min(i + 1, 6)}">${secH(i, "2", s.src ? `<span class="src">${esc(s.src)}</span>` : "")}<h2>${head2(s.t)}</h2><p class="lead">${esc(s.lead)}</p>${body}</section>`;
@@ -462,14 +462,14 @@ function stratView(){
   return hero("Strategie", "Wie ich Videos mache, ohne dass es ausufert.", "02", "Plan") + `<main class="wrap" data-store="s">${STRAT.map(card).join("")}${fleuron("Alles speichert sich von selbst.")}</main>`;
 }
 function kursView(){
-  const n = N(), R = ["I", "II", "III", "IV"];
+  const n = N(), R = ["I", "II", "III", "IV", "V"];
   const val = x => (n[x.st] || {})[x.k] || "";
   const done = KURS_PLAN.filter(x => val(x).trim()).length;
   let nr = 0;
   const groups = KURS.map((g, i) => `<section class="sec rv" style="--d:${Math.min(i + 2, 6)}">${secH(i + 1, "4", `<span class="lbl">${g.r.length} Regeln</span>`)}<h2>${head2(g.t)}</h2><p class="lead">${esc(g.lead)}</p>
     <ol class="rules">${g.r.map(r => `<li><b>${++nr}</b><span>${esc(r)}</span></li>`).join("")}</ol></section>`).join("");
   const plan = KURS_PLAN.map(x => `<div data-store="${x.st}">${field(x, n[x.st])}</div>`).join("")
-    + `<div class="fld"><label>Content-Säulen</label><span class="hint">Stehen auch in Strategie.</span><div class="grid2">${[0, 1, 2, 3].map(j => `<div class="pil"><b>${R[j]}</b><input type="text" data-pil="${j}" value="${esc(n.pil[j] || "")}" placeholder="Säule ${j + 1}" aria-label="Säule ${j + 1}"></div>`).join("")}</div></div>`;
+    + `<div class="fld"><label>Content-Säulen</label><span class="hint">Stehen auch in Strategie.</span><div class="grid2">${[0, 1, 2, 3, 4].map(j => `<div class="pil"><b>${R[j]}</b><input type="text" data-pil="${j}" value="${esc(n.pil[j] || "")}" placeholder="Säule ${j + 1}" aria-label="Säule ${j + 1}"></div>`).join("")}</div></div>`;
   return hero("Kurs", "Was ich aus Millie Adrians Creator-Plan mitnehme.", "04", "Leçon") + `<main class="wrap">
     <section class="sec rv first" style="--d:1">${secH(0, "4", `<span class="src">Millie Adrian</span>`)}<h2>Der <em>Kurs</em></h2>
       <p class="lead">Hier steht, was aus dem Kurs dauerhaft gilt, und unten deine Endfassungen, sobald du mit dem Doc durch bist.</p>
